@@ -1,0 +1,23 @@
+name: CVR-site
+output_dir: ../docs
+navbar:
+  title: CVR-site
+  left:
+  - text: Home
+    href: index.html
+  - text: About
+    href: about.html
+  - text: License
+    href: license.html
+  right:
+  - text: Getting Started
+    href: start.html
+  - icon: fab fa-github
+    text: Source code
+    href: https://github.com/DrThomasOneil/CVR-site
+output:
+  workflowr::wflow_html:
+    toc: yes
+    toc_float: yes
+    theme: cosmo
+    highlight: textmate
