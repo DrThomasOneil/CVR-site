@@ -6,7 +6,7 @@ output:
 editor_options:
   chunk_output_type: console
 ---
-
+ 
 #{.tabset .tabset-fade}
 This page will hopefully outline everything one needs to know to get started with the programmatic analysis we use in CVR. 
 
