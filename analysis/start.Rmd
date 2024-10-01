@@ -1,0 +1,56 @@
+---
+title: ""
+---
+#{.tabset .tabset-fade}
+This page will hopefully outline everything one needs to know to get started with the programmatic analysis we use in CVR. 
+
+## Downloading R
+
+- R for [Windows](https://cran.csiro.au/bin/windows/) or [Mac](https://cran.csiro.au/bin/macosx/)
+- [RStudio](https://posit.co/download/rstudio-desktop/)
+
+## Installing packages
+
+Most generic packages can be installed using the function
+
+```{r, echo=T, eval=F}
+install.packages("readxl")
+install.packages("Seurat", version = "5.0.1")
+
+```
+
+<hr>
+However, bioinformatic packages are typically stored on bioconductor. When installing an R package from bioconductor, we need to first install BiocManager (a library that allows us to access bioconductor within R)
+
+```{r,echo=T, eval=F}
+install.packages("BiocManager")
+```
+
+Then we can install packages using:
+
+```{r, eval=F}
+BiocManager::install("limma")
+```
+
+<hr>
+
+**Packages only need to be downloaded once**. After this, you can **load** only the packages needed for each R session. 
+
+```{r, eval=F}
+
+library(ggplot2)
+library(readxl)
+library(Seurat)
+
+```
+
+
+<details><summary>Notes:</summary>
+<br>
+
+There is usually always some weird package issues that can occur when you first install packages from bioconductor. If you run into any issues, restart your R session after installing the packages.  
+
+If all else fails - Just use Google!
+
+<hr>
+
