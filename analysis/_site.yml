@@ -10,6 +10,8 @@ navbar:
   - text: License
     href: license.html
   right:
+  - text: Getting Started
+    href: start.html
   - icon: fab fa-github
     text: Source code
     href: https://github.com/DrThomasOneil/CVR-site
