@@ -317,7 +317,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span> 0
 </p>
@@ -360,15 +360,99 @@ results.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree87ddf272d1453f6e20b5aa05b2742831e52b4902targetblank87ddf27a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20241002code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20241002)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20241002code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20241002)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree8c2ad9c59d9482c3385c50db667213586ab5d6b2targetblank8c2ad9ca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/87ddf272d1453f6e20b5aa05b2742831e52b4902" target="_blank">87ddf27</a>
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/8c2ad9c59d9482c3385c50db667213586ab5d6b2" target="_blank">8c2ad9c</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree87ddf272d1453f6e20b5aa05b2742831e52b4902targetblank87ddf27a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree8c2ad9c59d9482c3385c50db667213586ab5d6b2targetblank8c2ad9ca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -378,7 +462,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/87ddf272d1453f6e20b5aa05b2742831e52b4902" target="_blank">87ddf27</a>.
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/8c2ad9c59d9482c3385c50db667213586ab5d6b2" target="_blank">8c2ad9c</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -396,6 +480,9 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    analysis/.DS_Store
     Ignored:    assets/.DS_Store
+
+Untracked files:
+    Untracked:  assets/apps/app1.png
 
 Unstaged changes:
     Deleted:    analysis/license.Rmd
@@ -443,6 +530,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DrThomasOneil/CVR-site/blob/8c2ad9c59d9482c3385c50db667213586ab5d6b2/analysis/apps.Rmd" target="_blank">8c2ad9c</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-10-11
+</td>
+<td>
+Update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/6aa27db1972a6a5cb17e228123b57ce09b00f1e8/docs/apps.html" target="_blank">6aa27db</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-10-11
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -600,10 +721,148 @@ channel values. The default is to set a single cofactor, which may be
 comparable to setting the same axes setting in FlowJo for all channels.
 Each channel may need to be adjusted individually, and this app allows
 you to do this comparatively rapidly.</p>
+<div id="step-1-r-set-up" class="section level3">
+<h3>Step 1: R set up</h3>
+<p>I’ve made a template folder for this analysis: <a
+href="https://github.com/DrThomasOneil/CVR-site/raw/refs/heads/master/assets/apps/flow_template.zip">download</a></p>
+<p>The folder structure when unzipped will be:</p>
+<pre class="r"><code>flow_template
+  |
+  |_app_flow.R
+  |
+  |_flow
+  |  |_sample1.csv
+  |  |_sample2.cs
+  |_meta
+  |_output</code></pre>
+<p><strong>Open the</strong> <code>app_flow.R</code>
+<strong>file.</strong></p>
+<p>Here you’ll see a few lines that you need to run first.</p>
+<p>To set your working directory:<br />
+<code>wd &lt;- dirname(rstudioapi::getActiveDocumentContext()$path)</code><br />
+<code>setwd(wd)</code></p>
+<p>In case you’ve buggered with the folder structure:<br />
+<code>if(!file.exists("flow")){dir.create("flow")}</code><br />
+<code>if(!file.exists("meta")){dir.create("meta")}</code><br />
+<code>if(!file.exists("output")){dir.create("output"); dir.create("output/rds"); dir.create("output/features")}</code></p>
+<p>And packages you’ll need to install and load:</p>
+<pre class="r"><code>library(Spectre)
+library(Seurat)
+library(ggplot2)
+library(shiny)
+library(DT)
+library(data.table)</code></pre>
 </div>
-<div id="step-1-r-set-up" class="section level2">
-<h2>Step 1: R set up</h2>
-<p>I’ve made a template folder in R</p>
+<div id="step-2-add-flow-data-to-the-flow-folder"
+class="section level3">
+<h3>Step 2: Add flow data to the ‘flow’ folder</h3>
+<p>From FlowJo, you’ll want to export your parent population (e.g. CD4+
+T cells, MNPs, B cells, All Immune cells) as a csv.</p>
+<p>You’ll need to export as <strong>Scale values</strong>, and make sure
+you select compensated channels.</p>
+<p>Export/move these files to the <code>/flow</code> folder.</p>
+</div>
+<div id="step-3-adjust-cofactors-and-filters" class="section level3">
+<h3>Step 3: Adjust cofactors and filters</h3>
+<p>In the original Spectre script, you have the option to set a single
+cofactor. This is almost equivalent to setting the scale once in flowjo
+to apply to all channels. We know using tissue and different
+samples/batches sometimes requires drastically different scalings.</p>
+<p>To do this manually, I might think would be a bit of a nightmare. So
+I’ve made the first app so that you are able to view and set thresholds
+per marker per sample.</p>
+<p>To get started, run the app using:<br />
+<code>source("https://raw.githubusercontent.com/CVR-MucosalImmunology/Rshiny/refs/heads/main/flow_setup.R");shinyApp(ui,server);rm(ui,server)</code></p>
+<details>
+<summary>
+App Window
+</summary>
+<img
+src="/Users/thomasoneil/Documents/GitHub/CVR-site/assets/apps/app1.png" />
+<hr>
+</details>
+<hr>
+<div id="how-to-use" class="section level4">
+<h4>How to use:</h4>
+<ol style="list-style-type: decimal">
+<li>You’ll first load in a sample by selecting one and clicking
+<strong>Update sample</strong>.</li>
+<li>This will load in the channels. Select the channel you want to
+adjust, and then a Y channel. Click both <strong>Update axes</strong>
+and <strong>Update plot</strong>.</li>
+<li>Adjust the <code>arcsinh cofactor</code> and <code>filter</code>
+values on the right for each channel. Adjust the filter to remove lower
+outlier values. Increasing the <code>cofactor</code> value squishes
+values into the negative more. You might notice that when you use a
+value that is two low, it starts to split the negative into two
+populations. This value therefore needs to be somewhat informed by the
+user.</li>
+<li>Once you’re happy with the threshold, click <code>Add Data</code>.
+You’ll notice that the table on the right hand side updates.</li>
+<li>Not every marker needs to be adjusted - just markers you wish to
+view after analysis (including markers you don’t plan on clustering
+with).</li>
+<li>Click <code>Save</code> when you’re done. This should then add a
+<code>.csv</code> file to the <code>meta/</code> folder in your root
+directory. If you want to come back and adjust any values, you have the
+option to do so by just directly editing this file.</li>
+<li>Repeat this for all samples you want to integrate!</li>
+</ol>
+<details>
+<summary>
+Notes:
+</summary>
+<ul>
+<li>You’ll notice two extra buttons. Phenotypic and Cluster marker.
+These are redundant and I’ll probably remove these at a later time.</li>
+<li>As I said in step 6, you can just directly adjust the csv’s in
+excel. Make sure not to change anything unncessarily. The rpca app
+relies on this.</li>
+</ul>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.4.0 (2024-04-24)
+Platform: aarch64-apple-darwin20
+Running under: macOS Sonoma 14.3
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Australia/Sydney
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] workflowr_1.7.1
+
+loaded via a namespace (and not attached):
+ [1] vctrs_0.6.5       httr_1.4.7        cli_3.6.3         knitr_1.48       
+ [5] rlang_1.1.4       xfun_0.47         stringi_1.8.4     processx_3.8.4   
+ [9] promises_1.3.0    jsonlite_1.8.8    glue_1.7.0        rprojroot_2.0.4  
+[13] git2r_0.33.0      htmltools_0.5.8.1 httpuv_1.6.15     ps_1.8.0         
+[17] sass_0.4.9        fansi_1.0.6       rmarkdown_2.28    jquerylib_0.1.4  
+[21] tibble_3.2.1      evaluate_1.0.0    fastmap_1.2.0     yaml_2.3.10      
+[25] lifecycle_1.0.4   whisker_0.4.1     stringr_1.5.1     compiler_4.4.0   
+[29] fs_1.6.4          pkgconfig_2.0.3   Rcpp_1.0.13       rstudioapi_0.16.0
+[33] later_1.3.2       digest_0.6.37     R6_2.5.1          utf8_1.2.4       
+[37] pillar_1.9.0      callr_3.7.6       magrittr_2.0.3    bslib_0.8.0      
+[41] tools_4.4.0       cachem_1.1.0      getPass_0.2-4    </code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 
