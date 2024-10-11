@@ -12,7 +12,8 @@ editor_options:
 Go to:
 
 - [About](https://drthomasoneil.github.io/CVR-site/about.html)
+- [Custom Functions](https://drthomasoneil.github.io/CVR-site/functions.html)
 - [ShinyApps](https://drthomasoneil.github.io/CVR-site/apps.html)
-  - Flow Analysis using Spectre 
+  - Flow Analysis using Spectre
 - [Getting Started](https://drthomasoneil.github.io/CVR-site/start.html)
 - [Github](https://github.com/DrThomasOneil/CVR-site)

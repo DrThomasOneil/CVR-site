@@ -1,0 +1,364 @@
+---
+title: "Custom Functions"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+    code_folding: show
+editor_options:
+  chunk_output_type: console
+---
+
+# {.tabset .tabset-fade}
+
+## Loading functions
+
+Here I'll drop custom functions that I contain in a github file. 
+
+It can be accessed using: 
+
+```{r, eval=F}
+source("https://raw.githubusercontent.com/DrThomasOneil/scrnaCVR/refs/heads/main/R/functions.r")
+```
+
+## loadPack
+
+This function runs automatically. It'll load the packages that I typically use, which just saves me having to load packages manually everytime. 
+
+```{r, folding = 'hide'}
+loadPack <- function() {
+  library(cli)
+  cat("\n--------------------------------------\n")
+  cat(style_bold(col_magenta("\n***Installing General Packages***\n\n")))
+  not <- c(); not2 <- c()
+  packages1 <- c("ggplot2", "rstudioapi", "rmarkdown", 'tidyr', "cli", "knitr", "dplyr", "Seurat","SeuratObject",
+                 "DoubletFinder", "SeuratDisk", "flipPlots",'stringr', "crayon","Matrix", "cowplot", 'scater', "BiocParallel",
+                 "ComplexHeatmap","readxl", "ggpubr")#, "Test")
+  for (i in 1:length(packages1)){
+    if(requireNamespace(packages1[i], quietly = TRUE)==F) {
+      cat(paste(style_bold(col_red(packages1[i])), "has not been installed\n"))
+      not <- c(not,i)
+    } else {
+      suppressWarnings(suppressMessages(library(as.character(packages1[i]), character.only = TRUE)))
+      cat(col_yellow(packages1[i]), "is loaded!\n")
+    }
+  }
+  cat("\n--------------------------------------\n")
+  if (length(not) > 0){
+    cat(style_bold(bg_red("\n  **IMPORTANT**  ")),
+        style_bold(col_yellow("\n\nYou need to install: \n")),
+        
+        paste(paste(c(packages1[not]), collapse=", ")),
+        "\n\n--------------------------------------",
+        "\n\n Use:\n - install.packages(),\n - BiocManager::install() or, \n - use Google to find installation instructions.\n\n", style_bold(col_green("Then run this function again!\n\n")))
+  } else {
+    cat("",col_green(style_bold("\n All packages are loaded!\n\n Happy Coding! :)\n\n")))
+  }
+}
+```
+
+<details><summary>Example use:</summary>
+
+```{r}
+loadPack()
+```
+
+</details><hr><br><br>
+
+## plotSankey
+
+This generates a sankey diagram using **Seurat data**. This might be useful to see how two vectors relate to each other. This was made by Brian Gloss. 
+
+An example of its use would be to transfer labels from one single cell dataset to another, and visualise how much of cluster aligns with the new annotations. And this can be done for multiple meta data columns. 
+
+```{r}
+plotSankey<-function(seuratObj,idvar=c("varRes.0.3","emt_res.0.3")){
+  require(flipPlots)
+  message('try install_github("Displayr/flipPlots") if this doesnt work')
+  require(dplyr)
+  seuratObj@meta.data[,match(idvar,colnames(seuratObj@meta.data))] %>% arrange(.[,1]) %>% group_by_all() %>% summarise(COUNT = n()) ->> my.data
+  #my.data<-as.factor(my.data[,1])
+  SankeyDiagram(my.data[, -grep("COUNT",colnames(my.data))],link.color = "Source",weights = my.data$COUNT,,max.categories = 100)
+}
+
+```
+
+<details><summary>Example use:</summary>
+
+This might look strange, but its because the data had been integrated and this is just looking at the old annotations (Integrated_05) and the new labels of just one dataset. 
+
+```{r message=FALSE, warning=FALSE, include=F, eval=F}
+seu_obj <- readRDS("/Users/thomasoneil/Library/CloudStorage/OneDrive-SharedLibraries-TheUniversityofSydney(Staff)/HIV Pathogenesis & Mucosal Immunology - Documents/Kirstie/Anja/merged_Martin_GCA-SB-HealthyAdult_20220119_annotated_TO.rds")
+seu_obj<-seu_obj[,!is.na(seu_obj$Integrated_05)]
+```
+
+
+```{r message=FALSE, warning=FALSE, eval=F}
+plotSankey(seu_obj[,seu_obj$Integrated_05!=0], 
+           c("merged_clusters_anno", 
+             "Integrated_05", 
+             "Age"))
+```
+
+[ ](assets/func1.png)
+
+</details><hr><br><br>
+
+## Proportion plots
+
+This is used to get proportions of some categorical value in groups. E.g. Clusters proportions of inflamed and uninflamed tissues. 
+
+```{r}
+proportions <- function(data, ident.1, ident.2, position) {
+  x<- FetchData(data,c(ident.1,ident.2))
+  colnames(x) <- c('ident.2', 'ident.1')
+  x%>% 
+    group_by(ident.1) %>%
+    mutate(prop=1/length(ident.2)) %>%
+    ungroup() %>%
+    group_by(ident.2,ident.1) %>%
+    summarise(totprop=sum(prop)) %>%
+    
+    ggplot(aes(x=ident.2,fill=ident.1,y=totprop)) +
+      geom_bar(position=position, stat='identity') + 
+      theme(axis.text.x =element_text(angle = 45,hjust=1))+
+      scale_y_continuous(name="Cluster Proportion")+ 
+      theme_classic()
+}
+```
+
+<details><summary>Example use:</summary>
+
+This might look strange, but its because the data had been integrated and this is just looking at the old annotations (Integrated_05) and the new labels of just one dataset. 
+
+```{r message=FALSE, warning=FALSE, eval=F}
+
+proportions(seu_obj, 
+            "Age", # x axis
+            "Integrated_05", # proportions
+            "fill") # or stack
+
+```
+
+[ ](assets/func2.png)
+
+</details><hr><br><br>
+
+## Process data
+
+This function just summarises the standard processing of single cell RNA data. You can go in and uncomment the umap and tsne if you wish. 
+
+```{r}
+process <- function(dat=dat, umap=T, tsne=F, dimuse = 1:30, features=2000, verbose=F, reduction.name=NULL){
+  dat <- NormalizeData(dat, verbose=verbose)
+  dat <- FindVariableFeatures(dat, nfeatures=features, verbose=verbose)
+  dat <- ScaleData(dat, features=VariableFeatures(dat), verbose=verbose)
+  dat <- RunPCA(dat, verbose=verbose, reduction.name = paste0("pca", reduction.name))
+  if(umap) {
+    dat <- RunUMAP(dat, dims=dimuse, verbose=verbose, reduction = paste0("pca", reduction.name), reduction.name = paste0("umap", reduction.name))
+  }
+  if(tsne){
+     dat <- RunTSNE(dat, dims=dimuse, check_duplicates=F, verbose=verbose, reduction = paste0("pca", reduction.name),reduction.name = paste0("tsne", reduction.name))
+  } 
+  return(dat)
+}
+```
+
+<br><hr><details><summary>Example use:</summary>
+
+```{r message=FALSE, warning=FALSE, eval=F}
+
+seu_obj <- process(
+  seu_obj, 
+  umap=T, tsne = F, # can change these to generate UMAPs or TSNEs. Default is UMAP only as its quicker. 
+  dimuse = 1:30,    # can set 1:whatever dimensions you want to use
+  features = 2000,  # number of variable features to use. Adjust if using platforms like Xenium or CosMX
+  verbose= F,       # change to T if you want to see the output as its running. 
+  reduction.name = NULL # change this if you want to add a unique name to your reductions. E.g. if you're testing a number of dimensions, features, or are running this pre-integration
+)
+
+```
+
+</details><hr><br><br>
+
+## Human Protein Atlas
+
+Currently, this one is quite hideous. I downloaded the protein and the RNA data from the [Human Protein Atlas](https://www.proteinatlas.org/). This function is basically used to get a general idea of what an unknown gene might be associated with. 
+
+I then filtered quite a bit out. The R script used to generate the data can be found [here](https://github.com/DrThomasOneil/LabCode/tree/main/HPA). (I think I filtered out tissues and cell-types not relevant to our group)
+
+When you source these functions from Github, this function reads in the data as an object `HPA` and loads the function  `hpa`
+
+```{r}
+hpa <- function(gene="CD14", log=F) {
+  if(log==T) {
+    p2 <- ggplot(HPA[[1]][HPA[[1]]$Gene.name==gene,], aes(Cell.type, log(Exp), fill=Tissue))+geom_col()+theme_classic()+RotatedAxis()+NoLegend()+ylab("Protein Exp")
+    p1 <- ggplot(HPA[[1]][HPA[[1]]$Gene.name==gene,], aes(Tissue, log(Exp), fill=Tissue))+geom_col()+theme_classic()+RotatedAxis()+NoLegend()+geom_vline(xintercept = c(4.5,7.5))+ggtitle(gene)+ylab("Protein Exp")
+    p3 <-ggplot(HPA[[2]][HPA[[2]]$Gene.name==gene,], aes(Cell.type, log(nTPM+1), fill=Cell.type))+geom_col()+theme_classic()+RotatedAxis()+NoLegend()+geom_vline(xintercept = c(4.5,6.5,8.5,13.5,15.5,17.5))
+    p4 <-ggplot(HPA[[3]][HPA[[3]]$Gene.name==gene,], aes(Cell.type, log(nTPM+1), fill=Tissue))+geom_col()+theme_classic()+RotatedAxis()+theme(legend.position = 'top', legend.direction= "horizontal")+geom_vline(xintercept = c(2.5,4.5,6.5,8.5,10.5))  
+  }
+  else{
+    p2 <- ggplot(HPA[[1]][HPA[[1]]$Gene.name==gene,], aes(Cell.type, Exp, fill=Tissue))+geom_col()+theme_classic()+RotatedAxis()+NoLegend()+ylab("Protein Exp")
+    p1 <- ggplot(HPA[[1]][HPA[[1]]$Gene.name==gene,], aes(Tissue, Exp, fill=Tissue))+geom_col()+theme_classic()+RotatedAxis()+NoLegend()+geom_vline(xintercept = c(4.5,7.5))+ggtitle(gene)+ylab("Protein Exp")
+    p3 <-ggplot(HPA[[2]][HPA[[2]]$Gene.name==gene,], aes(Cell.type, nTPM, fill=Cell.type))+geom_col()+theme_classic()+RotatedAxis()+NoLegend()+geom_vline(xintercept = c(4.5,6.5,8.5,13.5,15.5,17.5))
+    p4 <-ggplot(HPA[[3]][HPA[[3]]$Gene.name==gene,], aes(Cell.type, nTPM, fill=Tissue))+geom_col()+theme_classic()+RotatedAxis()+theme(legend.position = 'top', legend.direction= "horizontal")+geom_vline(xintercept = c(2.5,4.5,6.5,8.5,10.5))
+  }
+  print(plot_grid(p1,p2,p3,p4))
+}
+```
+
+```{r, include=F, eval=F}
+source("https://raw.githubusercontent.com/tomoneil58/LabCode/main/HPA/HPA.R")
+```
+
+<br><hr><details><summary>Example use:</summary>
+
+**Top panels are protein**: Protein expression a bit strange. As I understand it, they've scored its expression from 1-3. On the left is scored per tissue, and on the right stacked tissue scores per cell type.  
+
+**Bottom panels are RNA**: Left is celltype only. Right should be similar but stacked with tissues. 
+
+```{r eval=T, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, eval=F}
+hpa("CD14")
+```
+
+[ ](assets/func3.png)
+
+</details><hr><br><br>
+
+## Label transfer Heatmap
+
+This one has a lot of options but does quite a bit under the hood. 
+
+It needs two RNA datasets tour query data, a reference data. There are then several options 
+
+- the identities you want to compare - default will just be the current `idents`. 
+- `norm` will let you choose whether to scale prediction scores by the max predicted score. Can be misleading, which is why the default is `false`.
+- `crow` and `ccol` are about clustering rows and columns by similarities. Turn these off if you have a preferred order you want. 
+- `return.plot` and `return.seurat` do not work together. If both `false` it will only return a plot. See example uses below. 
+- `col.name` will let you set a custom column name for `return.seurat`. E.g. predicted_GCA. 
+- `var.feat` is empty by default, which will use the reference variable features. Otherwise, you can specify features to use for integration. 
+
+```{r}
+predictHeat <- function(ref, query, refID = "ident", queryID = "ident", norm=F, crow=T,ccol=T, return.plot=F, return.seurat=F, col.name="predictedID", var.feat="") {
+  if(length(var.feat)==1) {
+    predictions <- TransferData(
+      anchorset = FindTransferAnchors(reference = ref, query = query, features=VariableFeatures(ref)),
+      refdata = FetchData(ref, refID)[,1]
+    )
+  } else {
+    predictions <- TransferData(
+      anchorset = FindTransferAnchors(reference = ref, query = query, features=var.feat),
+      refdata = FetchData(ref, refID)[,1]
+    )
+  }
+  predictions$orig =FetchData(query, queryID)[,1]
+  df <- as.data.frame(matrix(data=NA,ncol=length(unique(predictions$orig)), nrow=length(unique(predictions$predicted.id))))
+  colnames(df) = unique(predictions$orig); 
+  rownames(df) = paste0("prediction.score.",gsub(" ", ".",unique(predictions$predicted.id)))
+  df2 <- as.data.frame(matrix(data=NA,ncol=length(unique(predictions$orig)), nrow=length(unique(predictions$predicted.id))))
+  colnames(df2) = unique(predictions$orig); 
+  rownames(df2) = paste0("prediction.score.",gsub(" ", ".",unique(predictions$predicted.id)))
+  for(col in 1:ncol(df)) {
+    for(row in 1:nrow(df)){
+      x = mean(predictions[predictions$orig==colnames(df)[col], rownames(df)[row]])
+      x2 = mean(predictions[predictions$orig==colnames(df)[col], 
+                            rownames(df)[row]]/
+                  predictions[predictions$orig==colnames(df)[col], 
+                              "prediction.score.max"])
+      if(is.na(x) | is.infinite(x)){x=0}
+      if(is.na(x2) | is.infinite(x2)){x2=0}
+      df[row,col] <-x 
+      df2[row,col] <-x2
+    }
+  }
+  if (norm) {df = df2}
+  if(!ccol) {ccol = F}
+  if(!crow) {crow =F}
+  print(ComplexHeatmap::Heatmap(na.omit(df), cluster_columns = ccol, cluster_rows = crow))
+  #dont return both a metatable
+  if(return.plot*return.seurat ==1) {
+    cat(style_bold(col_red("\n***ERROR***\n\n")))    
+    cat(style_bold(col_yellow("\n***ERROR***\n\n")))
+  } else {
+    if(return.plot){
+      plot = ComplexHeatmap::Heatmap(na.omit(df), cluster_columns = ccol, cluster_rows = crow)
+      return(plot)
+    } 
+    if(return.seurat){
+      query <- AddMetaData(query, metadata = predictions$predicted.id, col.name=col.name)
+      return(query)
+    } 
+  }
+}
+```
+
+<br><hr><details><summary>Example use:</summary>
+
+```{r, include=F, eval=F}
+ref <- seu_obj
+query<-seu_obj
+ref <- FindVariableFeatures(ref)
+query <- FindVariableFeatures(query)
+
+```
+
+Just output the plot
+
+```{r eval=T, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, fig.show='hide', eval=F}
+
+plot <- predictHeat(ref, query, 
+                     refID = "Integrated_05", queryID = "merged_clusters_anno", 
+                     norm=F, 
+                     crow=T,ccol=T, 
+                     return.plot=T, # as TRUE will assign the plot
+                     return.seurat=F, 
+                     col.name="predictedID", var.feat="")
+
+```
+
+[ ](assets/func4.png)
+
+Assign a new column called `predictedID` to the query dataset - the function outputs the plot anyways. But then we can use something like plotSankey to see how the cells were labelled. 
+
+```{r, fig.height=5, fig.width=10, message=FALSE, warning=FALSE, fig.show='hide', eval=F}
+
+query <- predictHeat(ref, query, 
+                     refID = "Integrated_05", queryID = "merged_clusters_anno", 
+                     norm=T, 
+                     crow=T,ccol=T, 
+                     return.plot=F,
+                     return.seurat=T, #as TRUE will save the predicted scores as 'predictedID' 
+                     col.name="predictedID", var.feat="")
+plotSankey(query, c("merged_clusters_anno", "predictedID"))
+```
+
+[ ](assets/func5.png)
+
+</details><hr><br><br>
+
+## Top DE markers
+
+This is just summarised script for finding the top differentially expressed markers
+
+```{r}
+topm <- function(data, min.diff.pct = 0.01, n=40, logfc = 0.1) {
+  FindAllMarkers(data, only.pos=T, min.diff.pct = min.diff.pct, logfc.threshold = logfc) %>%
+    filter(p_val_adj <0.0001) %>%
+    group_by(cluster) %>%
+    top_n(n=n, wt = avg_log2FC)
+}
+```
+
+
+<br><hr><details><summary>Example use:</summary>
+
+```{r, message=F, warning=F, eval=F}
+top20markers <- topm(ref, 
+                     min.diff.pct = 0.1, 
+                     logfc = 0.2,
+                     n=20)
+knitr::kable(top20markers[1:10,])
+```
+
+</details><hr><br><br>
+<br><br><hr><br>
