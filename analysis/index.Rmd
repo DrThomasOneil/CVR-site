@@ -8,4 +8,9 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+Go to:
+
+- [About](https://drthomasoneil.github.io/CVR-site/about.html)
+- [ShinyApps](https://drthomasoneil.github.io/CVR-site/apps.html)
+- [Getting Started](https://drthomasoneil.github.io/CVR-site/start.html)
+- [Github](https://github.com/DrThomasOneil/CVR-site)
