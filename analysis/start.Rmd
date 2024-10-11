@@ -58,5 +58,5 @@ There is usually always some weird package issues that can occur when you first 
 
 If all else fails - Just use Google!
 
-<hr>
+<hr> 
 
