@@ -7,9 +7,11 @@ navbar:
     href: index.html
   - text: About
     href: about.html
-  - text: License
-    href: license.html
+  - text: ShinyApps
+    href: apps.html
   right:
+  - text: Getting Started
+    href: start.html
   - icon: fab fa-github
     text: Source code
     href: https://github.com/DrThomasOneil/CVR-site
