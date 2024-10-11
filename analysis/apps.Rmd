@@ -4,6 +4,7 @@ site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
     toc: false
+    code_folding: show
 editor_options:
   chunk_output_type: console
 ---
@@ -20,7 +21,7 @@ Particularly, it allows you to set individual cofactors for scaling channel valu
 
 ### Step 1: R set up
 
-I've made a template folder for this analysis: [download](https://github.com/DrThomasOneil/CVR-site/raw/refs/heads/master/assets/apps/flow_template.zip)
+I've made a template folder for this analysis: [download](https://github.com/DrThomasOneil/CVR-site/raw/refs/heads/master/docs/assets/apps/flow_template.zip)
 
 The folder structure when unzipped will be: 
 
@@ -80,7 +81,9 @@ To get started, run the app using:
 `source("https://raw.githubusercontent.com/CVR-MucosalImmunology/Rshiny/refs/heads/main/flow_setup.R");shinyApp(ui,server);rm(ui,server)`
 
 <details><summary>App Window</summary>
-![ ](/Users/thomasoneil/Documents/GitHub/CVR-site/assets/apps/app1.png)
+<br>
+![ ](assets/app1.png)
+
 <hr>
 </details>
 <hr>
@@ -98,8 +101,9 @@ To get started, run the app using:
 <details><summary>Notes:</summary>
 
 - You'll notice two extra buttons. Phenotypic and Cluster marker. These are redundant and I'll probably remove these at a later time. 
-- As I said in step 6, you can just directly adjust the csv's in excel. Make sure not to change anything unncessarily. The rpca app relies on this.
+- As I said in step 6, you can just directly adjust the csv's in excel. Make sure not to change anything unnecessarily. The rpca app relies on this.
 
+</details>
 
 
 
