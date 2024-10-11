@@ -1,0 +1,27 @@
+---
+title: "Home"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+#{.tabset .tabset-fade}
+This page will contain instructions on how to use different shiny apps for surface level analysis of flow and spatial/single cell transcriptomic data. 
+
+## Flow Cytometry{.tabset .tabset-fade}
+
+I've built a flow cytometry app which automates a lot of the repetitive processes involved in the Spectre R package. 
+
+Particularly, it allows you to set individual cofactors for scaling channel values. The default is to set a single cofactor, which may be comparable to setting the same axes setting in FlowJo for all channels. Each channel may need to be adjusted individually, and this app allows you to do this comparatively rapidly. 
+
+## Step 1: R set up
+
+
+
+
+
+
+
