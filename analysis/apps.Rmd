@@ -19,6 +19,8 @@ Particularly, it allows you to set individual cofactors for scaling channel valu
 
 ## Step 1: R set up
 
+I've made a template folder in R 
+
 
 
 
