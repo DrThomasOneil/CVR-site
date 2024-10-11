@@ -106,4 +106,52 @@ To get started, run the app using:
 </details>
 
 
+### Step 4: RPCA integration
+
+After you've set the co-factors and filters, you can run the rpca integration app. 
+
+`source("https://raw.githubusercontent.com/CVR-MucosalImmunology/Rshiny/refs/heads/main/flow_integration.R");shinyApp(ui,server);rm(ui,server)`
+
+This app takes the files in the `flow/` and corresponding `meta/` folder. This is where it becomes very efficient. 
+
+You can choose which samples you want to integrate. It'll then load the markers to choose from. Click **Run RPCA** and wait. Depending on the number of samples, it may take a while. If you're worried, go to the RStudio window and you'll see the functions running in the background. 
+
+Some things to consider:    
+- To run quickly, this function cuts the samples down to 6000 cells. If you want to run more cells, let me know and we can adjust the script to choose cell numbers, or change the code itself. 
+- ...
+
+<details><summary>View App:</summary>
+
+![ ](assets/app2.png)
+
+</details>
+
+To do this manually could take quite a while. Now you're able to rapidly remove samples that aren't working, remove or add markers to check how they alter the clustering, etc. 
+
+#### Visualisation
+
+You can now check where markers are lying on the Umap by selecting a marker and clicking **Update**.
+
+
+#### SOMS clustering
+
+You can also very rapidly test out different k cluster values. Change the `clusters` value and click **Update K**. 
+
+#### Export data
+
+When you're happy with integration and SOMS clustering, you can export all data and graphs. Change the `prefix` to make the output files unique (in case you want to export more than once).
+
+What is exported is:    
+- Pre and post integration graphs
+- SOMS cluster umap
+- The expression plots of each marker used for clustering
+- The rmd of the data. 
+
+
+
+
+
+
+
+
 
