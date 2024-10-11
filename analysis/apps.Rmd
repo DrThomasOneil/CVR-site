@@ -116,9 +116,10 @@ This app takes the files in the `flow/` and corresponding `meta/` folder. This i
 
 You can choose which samples you want to integrate. It'll then load the markers to choose from. Click **Run RPCA** and wait. Depending on the number of samples, it may take a while. If you're worried, go to the RStudio window and you'll see the functions running in the background. 
 
-Some things to consider:    
+Some things to consider:
+
 - To run quickly, this function cuts the samples down to 6000 cells. If you want to run more cells, let me know and we can adjust the script to choose cell numbers, or change the code itself.   
-- ...
+- ...   
 
 <details><summary>View App:</summary>
 
@@ -141,7 +142,8 @@ You can also very rapidly test out different k cluster values. Change the `clust
 
 When you're happy with integration and SOMS clustering, you can export all data and graphs. Change the `prefix` to make the output files unique (in case you want to export more than once).
 
-What is exported is:    
+What is exported is:  
+
 - Pre and post integration graphs   
 - SOMS cluster umap   
 - The expression plots of each marker used for clustering   
