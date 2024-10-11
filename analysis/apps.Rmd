@@ -142,12 +142,13 @@ You can also very rapidly test out different k cluster values. Change the `clust
 
 When you're happy with integration and SOMS clustering, you can export all data and graphs. Change the `prefix` to make the output files unique (in case you want to export more than once).
 
-What is exported is:  
-
+What is exported is:    
+  
 - Pre and post integration graphs   
 - SOMS cluster umap   
 - The expression plots of each marker used for clustering   
 - The rmd of the data   
+
 
 
 
