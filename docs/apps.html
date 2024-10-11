@@ -30,6 +30,7 @@
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
@@ -228,6 +229,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -281,6 +285,14 @@ $(document).ready(function () {
 </div><!--/.navbar -->
 
 <div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
 
@@ -444,15 +456,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree8c2ad9c59d9482c3385c50db667213586ab5d6b2targetblank8c2ad9ca">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree630cbd141714acc881cc2ef60a06a365ac0b5ecftargetblank630cbd1a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/8c2ad9c59d9482c3385c50db667213586ab5d6b2" target="_blank">8c2ad9c</a>
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/630cbd141714acc881cc2ef60a06a365ac0b5ecf" target="_blank">630cbd1</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree8c2ad9c59d9482c3385c50db667213586ab5d6b2targetblank8c2ad9ca"
+id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree630cbd141714acc881cc2ef60a06a365ac0b5ecftargetblank630cbd1a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -462,7 +474,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/8c2ad9c59d9482c3385c50db667213586ab5d6b2" target="_blank">8c2ad9c</a>.
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/630cbd141714acc881cc2ef60a06a365ac0b5ecf" target="_blank">630cbd1</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -479,13 +491,12 @@ were generated:
 Ignored files:
     Ignored:    .DS_Store
     Ignored:    analysis/.DS_Store
-    Ignored:    assets/.DS_Store
-
-Untracked files:
-    Untracked:  assets/apps/app1.png
+    Ignored:    static/
 
 Unstaged changes:
     Deleted:    analysis/license.Rmd
+    Deleted:    assets/apps/app1.png
+    Deleted:    assets/apps/flow_template.zip
 
 </code></pre>
 <p>
@@ -530,6 +541,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DrThomasOneil/CVR-site/blob/630cbd141714acc881cc2ef60a06a365ac0b5ecf/analysis/apps.Rmd" target="_blank">630cbd1</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-10-11
+</td>
+<td>
+Update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/ed05ec9c71b325cc943d7433c3263c7a6cae2a02/docs/apps.html" target="_blank">ed05ec9</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-10-11
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -724,7 +769,7 @@ you to do this comparatively rapidly.</p>
 <div id="step-1-r-set-up" class="section level3">
 <h3>Step 1: R set up</h3>
 <p>I’ve made a template folder for this analysis: <a
-href="https://github.com/DrThomasOneil/CVR-site/raw/refs/heads/master/assets/apps/flow_template.zip">download</a></p>
+href="https://github.com/DrThomasOneil/CVR-site/raw/refs/heads/master/docs/assets/apps/flow_template.zip">download</a></p>
 <p>The folder structure when unzipped will be:</p>
 <pre class="r"><code>flow_template
   |
@@ -777,8 +822,7 @@ per marker per sample.</p>
 <summary>
 App Window
 </summary>
-<img
-src="/Users/thomasoneil/Documents/GitHub/CVR-site/assets/apps/app1.png" />
+<p><br> <img src="assets/app1.png" /></p>
 <hr>
 </details>
 <hr>
@@ -816,9 +860,10 @@ Notes:
 <li>You’ll notice two extra buttons. Phenotypic and Cluster marker.
 These are redundant and I’ll probably remove these at a later time.</li>
 <li>As I said in step 6, you can just directly adjust the csv’s in
-excel. Make sure not to change anything unncessarily. The rpca app
+excel. Make sure not to change anything unnecessarily. The rpca app
 relies on this.</li>
 </ul>
+</details>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -913,6 +958,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
