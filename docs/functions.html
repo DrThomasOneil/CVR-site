@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Custom Functions</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CVR-site</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="functions.Rmd">Functions</a>
+</li>
+<li>
+  <a href="apps.html">ShinyApps</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="start.html">Getting Started</a>
+</li>
+<li>
+  <a href="https://github.com/DrThomasOneil/CVR-site">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Custom Functions</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2024-10-11
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>CVR-site/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20241002code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20241002)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20241002code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20241002)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetreeaa8d9996d5c4a60043f40cbdd50001b71831ae9atargetblankaa8d999a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/aa8d9996d5c4a60043f40cbdd50001b71831ae9a" target="_blank">aa8d999</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetreeaa8d9996d5c4a60043f40cbdd50001b71831ae9atargetblankaa8d999a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/aa8d9996d5c4a60043f40cbdd50001b71831ae9a" target="_blank">aa8d999</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    analysis/.DS_Store
+    Ignored:    data/.DS_Store
+    Ignored:    static/
+
+Untracked files:
+    Untracked:  data/merged_Martin_GCA-SB-HealthyAdult_20220119_annotated_TO.rds
+
+Unstaged changes:
+    Deleted:    analysis/license.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/functions.Rmd</code>) and HTML
+(<code>docs/functions.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DrThomasOneil/CVR-site/blob/aa8d9996d5c4a60043f40cbdd50001b71831ae9a/analysis/functions.Rmd" target="_blank">aa8d999</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-10-11
+</td>
+<td>
+Update
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="section" class="section level1 tabset tabset-fade">
+<h1 class="tabset tabset-fade"></h1>
+<div id="loading-functions" class="section level2">
+<h2>Loading functions</h2>
+<p>Here I’ll drop custom functions that I contain in a github file.</p>
+<p>It can be accessed using:</p>
+<pre class="r"><code>source(&quot;https://raw.githubusercontent.com/DrThomasOneil/scrnaCVR/refs/heads/main/R/functions.r&quot;)</code></pre>
+</div>
+<div id="loadpack" class="section level2">
+<h2>loadPack</h2>
+<p>This function runs automatically. It’ll load the packages that I
+typically use, which just saves me having to load packages manually
+everytime.</p>
+<pre class="r"><code>loadPack &lt;- function() {
+  library(cli)
+  cat(&quot;\n--------------------------------------\n&quot;)
+  cat(style_bold(col_magenta(&quot;\n***Installing General Packages***\n\n&quot;)))
+  not &lt;- c(); not2 &lt;- c()
+  packages1 &lt;- c(&quot;ggplot2&quot;, &quot;rstudioapi&quot;, &quot;rmarkdown&quot;, &#39;tidyr&#39;, &quot;cli&quot;, &quot;knitr&quot;, &quot;dplyr&quot;, &quot;Seurat&quot;,&quot;SeuratObject&quot;,
+                 &quot;DoubletFinder&quot;, &quot;SeuratDisk&quot;, &quot;flipPlots&quot;,&#39;stringr&#39;, &quot;crayon&quot;,&quot;Matrix&quot;, &quot;cowplot&quot;, &#39;scater&#39;, &quot;BiocParallel&quot;,
+                 &quot;ComplexHeatmap&quot;,&quot;readxl&quot;, &quot;ggpubr&quot;)#, &quot;Test&quot;)
+  for (i in 1:length(packages1)){
+    if(requireNamespace(packages1[i], quietly = TRUE)==F) {
+      cat(paste(style_bold(col_red(packages1[i])), &quot;has not been installed\n&quot;))
+      not &lt;- c(not,i)
+    } else {
+      suppressWarnings(suppressMessages(library(as.character(packages1[i]), character.only = TRUE)))
+      cat(col_yellow(packages1[i]), &quot;is loaded!\n&quot;)
+    }
+  }
+  cat(&quot;\n--------------------------------------\n&quot;)
+  if (length(not) &gt; 0){
+    cat(style_bold(bg_red(&quot;\n  **IMPORTANT**  &quot;)),
+        style_bold(col_yellow(&quot;\n\nYou need to install: \n&quot;)),
+        
+        paste(paste(c(packages1[not]), collapse=&quot;, &quot;)),
+        &quot;\n\n--------------------------------------&quot;,
+        &quot;\n\n Use:\n - install.packages(),\n - BiocManager::install() or, \n - use Google to find installation instructions.\n\n&quot;, style_bold(col_green(&quot;Then run this function again!\n\n&quot;)))
+  } else {
+    cat(&quot;&quot;,col_green(style_bold(&quot;\n All packages are loaded!\n\n Happy Coding! :)\n\n&quot;)))
+  }
+}</code></pre>
+<details>
+<summary>
+Example use:
+</summary>
+<pre class="r"><code>loadPack()</code></pre>
+<pre><code>
+--------------------------------------
+
+***Installing General Packages***
+
+ggplot2 is loaded!
+rstudioapi is loaded!
+rmarkdown is loaded!
+tidyr is loaded!
+cli is loaded!
+knitr is loaded!
+dplyr is loaded!
+Seurat is loaded!
+SeuratObject is loaded!
+DoubletFinder has not been installed</code></pre>
+<pre><code>Registered S3 method overwritten by &#39;SeuratDisk&#39;:
+  method            from  
+  as.sparse.H5Group Seurat</code></pre>
+<pre><code>SeuratDisk is loaded!
+flipPlots is loaded!
+stringr is loaded!
+crayon is loaded!
+Matrix is loaded!
+cowplot is loaded!
+scater is loaded!
+BiocParallel is loaded!
+ComplexHeatmap is loaded!
+readxl is loaded!
+ggpubr is loaded!
+
+--------------------------------------
+
+  **IMPORTANT**   
+
+You need to install: 
+ DoubletFinder 
+
+-------------------------------------- 
+
+ Use:
+ - install.packages(),
+ - BiocManager::install() or, 
+ - use Google to find installation instructions.
+
+ Then run this function again!</code></pre>
+</details>
+<hr>
+<p><br><br></p>
+</div>
+<div id="plotsankey" class="section level2">
+<h2>plotSankey</h2>
+<p>This generates a sankey diagram using <strong>Seurat data</strong>.
+This might be useful to see how two vectors relate to each other. This
+was made by Brian Gloss.</p>
+<p>An example of its use would be to transfer labels from one single
+cell dataset to another, and visualise how much of cluster aligns with
+the new annotations. And this can be done for multiple meta data
+columns.</p>
+<pre class="r"><code>plotSankey&lt;-function(seuratObj,idvar=c(&quot;varRes.0.3&quot;,&quot;emt_res.0.3&quot;)){
+  require(flipPlots)
+  message(&#39;try install_github(&quot;Displayr/flipPlots&quot;) if this doesnt work&#39;)
+  require(dplyr)
+  seuratObj@meta.data[,match(idvar,colnames(seuratObj@meta.data))] %&gt;% arrange(.[,1]) %&gt;% group_by_all() %&gt;% summarise(COUNT = n()) -&gt;&gt; my.data
+  #my.data&lt;-as.factor(my.data[,1])
+  SankeyDiagram(my.data[, -grep(&quot;COUNT&quot;,colnames(my.data))],link.color = &quot;Source&quot;,weights = my.data$COUNT,,max.categories = 100)
+}</code></pre>
+<details>
+<summary>
+Example use:
+</summary>
+<p>This might look strange, but its because the data had been integrated
+and this is just looking at the old annotations (Integrated_05) and the
+new labels of just one dataset.</p>
+<pre class="r"><code>plotSankey(seu_obj[,seu_obj$Integrated_05!=0], 
+           c(&quot;merged_clusters_anno&quot;, 
+             &quot;Integrated_05&quot;, 
+             &quot;Age&quot;))</code></pre>
+<p><a href="assets/func1.png"></a></p>
+</details>
+<hr>
+<p><br><br></p>
+</div>
+<div id="proportion-plots" class="section level2">
+<h2>Proportion plots</h2>
+<p>This is used to get proportions of some categorical value in groups.
+E.g. Clusters proportions of inflamed and uninflamed tissues.</p>
+<pre class="r"><code>proportions &lt;- function(data, ident.1, ident.2, position) {
+  x&lt;- FetchData(data,c(ident.1,ident.2))
+  colnames(x) &lt;- c(&#39;ident.2&#39;, &#39;ident.1&#39;)
+  x%&gt;% 
+    group_by(ident.1) %&gt;%
+    mutate(prop=1/length(ident.2)) %&gt;%
+    ungroup() %&gt;%
+    group_by(ident.2,ident.1) %&gt;%
+    summarise(totprop=sum(prop)) %&gt;%
+    
+    ggplot(aes(x=ident.2,fill=ident.1,y=totprop)) +
+      geom_bar(position=position, stat=&#39;identity&#39;) + 
+      theme(axis.text.x =element_text(angle = 45,hjust=1))+
+      scale_y_continuous(name=&quot;Cluster Proportion&quot;)+ 
+      theme_classic()
+}</code></pre>
+<details>
+<summary>
+Example use:
+</summary>
+<p>This might look strange, but its because the data had been integrated
+and this is just looking at the old annotations (Integrated_05) and the
+new labels of just one dataset.</p>
+<pre class="r"><code>proportions(seu_obj, 
+            &quot;Age&quot;, # x axis
+            &quot;Integrated_05&quot;, # proportions
+            &quot;fill&quot;) # or stack</code></pre>
+<p><a href="assets/func2.png"></a></p>
+</details>
+<hr>
+<p><br><br></p>
+</div>
+<div id="process-data" class="section level2">
+<h2>Process data</h2>
+<p>This function just summarises the standard processing of single cell
+RNA data. You can go in and uncomment the umap and tsne if you wish.</p>
+<pre class="r"><code>process &lt;- function(dat=dat, umap=T, tsne=F, dimuse = 1:30, features=2000, verbose=F, reduction.name=NULL){
+  dat &lt;- NormalizeData(dat, verbose=verbose)
+  dat &lt;- FindVariableFeatures(dat, nfeatures=features, verbose=verbose)
+  dat &lt;- ScaleData(dat, features=VariableFeatures(dat), verbose=verbose)
+  dat &lt;- RunPCA(dat, verbose=verbose, reduction.name = paste0(&quot;pca&quot;, reduction.name))
+  if(umap) {
+    dat &lt;- RunUMAP(dat, dims=dimuse, verbose=verbose, reduction = paste0(&quot;pca&quot;, reduction.name), reduction.name = paste0(&quot;umap&quot;, reduction.name))
+  }
+  if(tsne){
+     dat &lt;- RunTSNE(dat, dims=dimuse, check_duplicates=F, verbose=verbose, reduction = paste0(&quot;pca&quot;, reduction.name),reduction.name = paste0(&quot;tsne&quot;, reduction.name))
+  } 
+  return(dat)
+}</code></pre>
+<br>
+<hr>
+<details>
+<summary>
+Example use:
+</summary>
+<pre class="r"><code>seu_obj &lt;- process(
+  seu_obj, 
+  umap=T, tsne = F, # can change these to generate UMAPs or TSNEs. Default is UMAP only as its quicker. 
+  dimuse = 1:30,    # can set 1:whatever dimensions you want to use
+  features = 2000,  # number of variable features to use. Adjust if using platforms like Xenium or CosMX
+  verbose= F,       # change to T if you want to see the output as its running. 
+  reduction.name = NULL # change this if you want to add a unique name to your reductions. E.g. if you&#39;re testing a number of dimensions, features, or are running this pre-integration
+)</code></pre>
+</details>
+<hr>
+<p><br><br></p>
+</div>
+<div id="human-protein-atlas" class="section level2">
+<h2>Human Protein Atlas</h2>
+<p>Currently, this one is quite hideous. I downloaded the protein and
+the RNA data from the <a href="https://www.proteinatlas.org/">Human
+Protein Atlas</a>. This function is basically used to get a general idea
+of what an unknown gene might be associated with.</p>
+<p>I then filtered quite a bit out. The R script used to generate the
+data can be found <a
+href="https://github.com/DrThomasOneil/LabCode/tree/main/HPA">here</a>.
+(I think I filtered out tissues and cell-types not relevant to our
+group)</p>
+<p>When you source these functions from Github, this function reads in
+the data as an object <code>HPA</code> and loads the function
+<code>hpa</code></p>
+<pre class="r"><code>hpa &lt;- function(gene=&quot;CD14&quot;, log=F) {
+  if(log==T) {
+    p2 &lt;- ggplot(HPA[[1]][HPA[[1]]$Gene.name==gene,], aes(Cell.type, log(Exp), fill=Tissue))+geom_col()+theme_classic()+RotatedAxis()+NoLegend()+ylab(&quot;Protein Exp&quot;)
+    p1 &lt;- ggplot(HPA[[1]][HPA[[1]]$Gene.name==gene,], aes(Tissue, log(Exp), fill=Tissue))+geom_col()+theme_classic()+RotatedAxis()+NoLegend()+geom_vline(xintercept = c(4.5,7.5))+ggtitle(gene)+ylab(&quot;Protein Exp&quot;)
+    p3 &lt;-ggplot(HPA[[2]][HPA[[2]]$Gene.name==gene,], aes(Cell.type, log(nTPM+1), fill=Cell.type))+geom_col()+theme_classic()+RotatedAxis()+NoLegend()+geom_vline(xintercept = c(4.5,6.5,8.5,13.5,15.5,17.5))
+    p4 &lt;-ggplot(HPA[[3]][HPA[[3]]$Gene.name==gene,], aes(Cell.type, log(nTPM+1), fill=Tissue))+geom_col()+theme_classic()+RotatedAxis()+theme(legend.position = &#39;top&#39;, legend.direction= &quot;horizontal&quot;)+geom_vline(xintercept = c(2.5,4.5,6.5,8.5,10.5))  
+  }
+  else{
+    p2 &lt;- ggplot(HPA[[1]][HPA[[1]]$Gene.name==gene,], aes(Cell.type, Exp, fill=Tissue))+geom_col()+theme_classic()+RotatedAxis()+NoLegend()+ylab(&quot;Protein Exp&quot;)
+    p1 &lt;- ggplot(HPA[[1]][HPA[[1]]$Gene.name==gene,], aes(Tissue, Exp, fill=Tissue))+geom_col()+theme_classic()+RotatedAxis()+NoLegend()+geom_vline(xintercept = c(4.5,7.5))+ggtitle(gene)+ylab(&quot;Protein Exp&quot;)
+    p3 &lt;-ggplot(HPA[[2]][HPA[[2]]$Gene.name==gene,], aes(Cell.type, nTPM, fill=Cell.type))+geom_col()+theme_classic()+RotatedAxis()+NoLegend()+geom_vline(xintercept = c(4.5,6.5,8.5,13.5,15.5,17.5))
+    p4 &lt;-ggplot(HPA[[3]][HPA[[3]]$Gene.name==gene,], aes(Cell.type, nTPM, fill=Tissue))+geom_col()+theme_classic()+RotatedAxis()+theme(legend.position = &#39;top&#39;, legend.direction= &quot;horizontal&quot;)+geom_vline(xintercept = c(2.5,4.5,6.5,8.5,10.5))
+  }
+  print(plot_grid(p1,p2,p3,p4))
+}</code></pre>
+<br>
+<hr>
+<details>
+<summary>
+Example use:
+</summary>
+<p><strong>Top panels are protein</strong>: Protein expression a bit
+strange. As I understand it, they’ve scored its expression from 1-3. On
+the left is scored per tissue, and on the right stacked tissue scores
+per cell type.</p>
+<p><strong>Bottom panels are RNA</strong>: Left is celltype only. Right
+should be similar but stacked with tissues.</p>
+<pre class="r"><code>hpa(&quot;CD14&quot;)</code></pre>
+<p><a href="assets/func3.png"></a></p>
+</details>
+<hr>
+<p><br><br></p>
+</div>
+<div id="label-transfer-heatmap" class="section level2">
+<h2>Label transfer Heatmap</h2>
+<p>This one has a lot of options but does quite a bit under the
+hood.</p>
+<p>It needs two RNA datasets tour query data, a reference data. There
+are then several options</p>
+<ul>
+<li>the identities you want to compare - default will just be the
+current <code>idents</code>.</li>
+<li><code>norm</code> will let you choose whether to scale prediction
+scores by the max predicted score. Can be misleading, which is why the
+default is <code>false</code>.</li>
+<li><code>crow</code> and <code>ccol</code> are about clustering rows
+and columns by similarities. Turn these off if you have a preferred
+order you want.</li>
+<li><code>return.plot</code> and <code>return.seurat</code> do not work
+together. If both <code>false</code> it will only return a plot. See
+example uses below.</li>
+<li><code>col.name</code> will let you set a custom column name for
+<code>return.seurat</code>. E.g. predicted_GCA.</li>
+<li><code>var.feat</code> is empty by default, which will use the
+reference variable features. Otherwise, you can specify features to use
+for integration.</li>
+</ul>
+<pre class="r"><code>predictHeat &lt;- function(ref, query, refID = &quot;ident&quot;, queryID = &quot;ident&quot;, norm=F, crow=T,ccol=T, return.plot=F, return.seurat=F, col.name=&quot;predictedID&quot;, var.feat=&quot;&quot;) {
+  if(length(var.feat)==1) {
+    predictions &lt;- TransferData(
+      anchorset = FindTransferAnchors(reference = ref, query = query, features=VariableFeatures(ref)),
+      refdata = FetchData(ref, refID)[,1]
+    )
+  } else {
+    predictions &lt;- TransferData(
+      anchorset = FindTransferAnchors(reference = ref, query = query, features=var.feat),
+      refdata = FetchData(ref, refID)[,1]
+    )
+  }
+  predictions$orig =FetchData(query, queryID)[,1]
+  df &lt;- as.data.frame(matrix(data=NA,ncol=length(unique(predictions$orig)), nrow=length(unique(predictions$predicted.id))))
+  colnames(df) = unique(predictions$orig); 
+  rownames(df) = paste0(&quot;prediction.score.&quot;,gsub(&quot; &quot;, &quot;.&quot;,unique(predictions$predicted.id)))
+  df2 &lt;- as.data.frame(matrix(data=NA,ncol=length(unique(predictions$orig)), nrow=length(unique(predictions$predicted.id))))
+  colnames(df2) = unique(predictions$orig); 
+  rownames(df2) = paste0(&quot;prediction.score.&quot;,gsub(&quot; &quot;, &quot;.&quot;,unique(predictions$predicted.id)))
+  for(col in 1:ncol(df)) {
+    for(row in 1:nrow(df)){
+      x = mean(predictions[predictions$orig==colnames(df)[col], rownames(df)[row]])
+      x2 = mean(predictions[predictions$orig==colnames(df)[col], 
+                            rownames(df)[row]]/
+                  predictions[predictions$orig==colnames(df)[col], 
+                              &quot;prediction.score.max&quot;])
+      if(is.na(x) | is.infinite(x)){x=0}
+      if(is.na(x2) | is.infinite(x2)){x2=0}
+      df[row,col] &lt;-x 
+      df2[row,col] &lt;-x2
+    }
+  }
+  if (norm) {df = df2}
+  if(!ccol) {ccol = F}
+  if(!crow) {crow =F}
+  print(ComplexHeatmap::Heatmap(na.omit(df), cluster_columns = ccol, cluster_rows = crow))
+  #dont return both a metatable
+  if(return.plot*return.seurat ==1) {
+    cat(style_bold(col_red(&quot;\n***ERROR***\n\n&quot;)))    
+    cat(style_bold(col_yellow(&quot;\n***ERROR***\n\n&quot;)))
+  } else {
+    if(return.plot){
+      plot = ComplexHeatmap::Heatmap(na.omit(df), cluster_columns = ccol, cluster_rows = crow)
+      return(plot)
+    } 
+    if(return.seurat){
+      query &lt;- AddMetaData(query, metadata = predictions$predicted.id, col.name=col.name)
+      return(query)
+    } 
+  }
+}</code></pre>
+<br>
+<hr>
+<details>
+<summary>
+Example use:
+</summary>
+<p>Just output the plot</p>
+<pre class="r"><code>plot &lt;- predictHeat(ref, query, 
+                     refID = &quot;Integrated_05&quot;, queryID = &quot;merged_clusters_anno&quot;, 
+                     norm=F, 
+                     crow=T,ccol=T, 
+                     return.plot=T, # as TRUE will assign the plot
+                     return.seurat=F, 
+                     col.name=&quot;predictedID&quot;, var.feat=&quot;&quot;)</code></pre>
+<p><a href="assets/func4.png"></a></p>
+<p>Assign a new column called <code>predictedID</code> to the query
+dataset - the function outputs the plot anyways. But then we can use
+something like plotSankey to see how the cells were labelled.</p>
+<pre class="r"><code>query &lt;- predictHeat(ref, query, 
+                     refID = &quot;Integrated_05&quot;, queryID = &quot;merged_clusters_anno&quot;, 
+                     norm=T, 
+                     crow=T,ccol=T, 
+                     return.plot=F,
+                     return.seurat=T, #as TRUE will save the predicted scores as &#39;predictedID&#39; 
+                     col.name=&quot;predictedID&quot;, var.feat=&quot;&quot;)
+plotSankey(query, c(&quot;merged_clusters_anno&quot;, &quot;predictedID&quot;))</code></pre>
+<p><a href="assets/func5.png"></a></p>
+</details>
+<hr>
+<p><br><br></p>
+</div>
+<div id="top-de-markers" class="section level2">
+<h2>Top DE markers</h2>
+<p>This is just summarised script for finding the top differentially
+expressed markers</p>
+<pre class="r"><code>topm &lt;- function(data, min.diff.pct = 0.01, n=40, logfc = 0.1) {
+  FindAllMarkers(data, only.pos=T, min.diff.pct = min.diff.pct, logfc.threshold = logfc) %&gt;%
+    filter(p_val_adj &lt;0.0001) %&gt;%
+    group_by(cluster) %&gt;%
+    top_n(n=n, wt = avg_log2FC)
+}</code></pre>
+<br>
+<hr>
+<details>
+<summary>
+Example use:
+</summary>
+<pre class="r"><code>top20markers &lt;- topm(ref, 
+                     min.diff.pct = 0.1, 
+                     logfc = 0.2,
+                     n=20)
+knitr::kable(top20markers[1:10,])</code></pre>
+</details>
+<hr>
+<br><br> <br><br>
+<hr>
+<p><br></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.4.0 (2024-04-24)
+Platform: aarch64-apple-darwin20
+Running under: macOS Sonoma 14.3
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Australia/Sydney
+tzcode source: internal
+
+attached base packages:
+[1] grid      stats4    stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] ggpubr_0.6.0                readxl_1.4.3               
+ [3] ComplexHeatmap_2.20.0       BiocParallel_1.38.0        
+ [5] scater_1.32.1               scuttle_1.14.0             
+ [7] SingleCellExperiment_1.26.0 SummarizedExperiment_1.34.0
+ [9] Biobase_2.64.0              GenomicRanges_1.56.1       
+[11] GenomeInfoDb_1.40.1         IRanges_2.38.1             
+[13] S4Vectors_0.42.1            BiocGenerics_0.50.0        
+[15] MatrixGenerics_1.16.0       matrixStats_1.4.1          
+[17] cowplot_1.1.3               Matrix_1.7-0               
+[19] crayon_1.5.3                stringr_1.5.1              
+[21] flipPlots_1.3.6             SeuratDisk_0.0.0.9021      
+[23] Seurat_5.1.0                SeuratObject_5.0.2         
+[25] sp_2.1-4                    dplyr_1.1.4                
+[27] knitr_1.48                  tidyr_1.3.1                
+[29] rmarkdown_2.28              rstudioapi_0.16.0          
+[31] ggplot2_3.5.1               cli_3.6.3                  
+[33] workflowr_1.7.1            
+
+loaded via a namespace (and not attached):
+  [1] fs_1.6.4                   spatstat.sparse_3.1-0     
+  [3] lubridate_1.9.3            striprtf_0.6.0            
+  [5] httr_1.4.7                 RColorBrewer_1.1-3        
+  [7] doParallel_1.0.17          tools_4.4.0               
+  [9] sctransform_0.4.1          backports_1.5.0           
+ [11] utf8_1.2.4                 R6_2.5.1                  
+ [13] DT_0.33                    lazyeval_0.2.2            
+ [15] uwot_0.2.2                 mgcv_1.9-1                
+ [17] GetoptLong_1.0.5           withr_3.0.1               
+ [19] flipTime_2.10.0            gridExtra_2.3             
+ [21] progressr_0.14.0           spatstat.explore_3.3-2    
+ [23] fastDummies_1.7.4          sass_0.4.9                
+ [25] spatstat.data_3.1-2        ggridges_0.5.6            
+ [27] pbapply_1.7-2              foreign_0.8-87            
+ [29] parallelly_1.38.0          shape_1.4.6.1             
+ [31] generics_0.1.3             ica_1.0-3                 
+ [33] spatstat.random_3.3-2      car_3.1-2                 
+ [35] ggbeeswarm_0.7.2           fansi_1.0.6               
+ [37] abind_1.4-8                lifecycle_1.0.4           
+ [39] whisker_0.4.1              yaml_2.3.10               
+ [41] carData_3.0-5              snakecase_0.11.1          
+ [43] SparseArray_1.4.8          Rtsne_0.17                
+ [45] promises_1.3.0             miniUI_0.1.1.1            
+ [47] lattice_0.22-6             beachmat_2.20.0           
+ [49] rhtmlMetro_1.0.7           pillar_1.9.0              
+ [51] rjson_0.2.23               future.apply_1.11.2       
+ [53] codetools_0.2-20           leiden_0.4.3.1            
+ [55] glue_1.7.0                 getPass_0.2-4             
+ [57] spatstat.univar_3.0-1      data.table_1.16.0         
+ [59] vctrs_0.6.5                png_0.1-8                 
+ [61] spam_2.10-0                cellranger_1.1.0          
+ [63] gtable_0.3.5               cachem_1.1.0              
+ [65] xfun_0.47                  S4Arrays_1.4.1            
+ [67] mime_0.12                  survival_3.7-0            
+ [69] iterators_1.0.14           fitdistrplus_1.2-1        
+ [71] ROCR_1.0-11                nlme_3.1-166              
+ [73] bit64_4.0.5                RcppAnnoy_0.0.22          
+ [75] rprojroot_2.0.4            data.tree_1.1.0           
+ [77] bslib_0.8.0                sparkline_2.0             
+ [79] irlba_2.3.5.1              vipor_0.4.7               
+ [81] KernSmooth_2.23-24         rpart_4.1.23              
+ [83] flipU_1.5.13               colorspace_2.1-1          
+ [85] Hmisc_5.1-3                nnet_7.3-19               
+ [87] tidyselect_1.2.1           processx_3.8.4            
+ [89] flipTransformations_1.14.3 bit_4.0.5                 
+ [91] compiler_4.4.0             git2r_0.33.0              
+ [93] htmlTable_2.4.3            BiocNeighbors_1.22.0      
+ [95] hdf5r_1.3.11               xml2_1.3.6                
+ [97] DelayedArray_0.30.1        plotly_4.10.4             
+ [99] checkmate_2.3.2            scales_1.3.0              
+[101] lmtest_0.9-40              callr_3.7.6               
+[103] digest_0.6.37              goftest_1.2-3             
+[105] spatstat.utils_3.1-0       verbs_0.15.11             
+[107] XVector_0.44.0             htmltools_0.5.8.1         
+[109] pkgconfig_2.0.3            base64enc_0.1-3           
+[111] sparseMatrixStats_1.16.0   fastmap_1.2.0             
+[113] GlobalOptions_0.1.2        rlang_1.1.4               
+[115] htmlwidgets_1.6.4          UCSC.utils_1.0.0          
+[117] shiny_1.9.1                DelayedMatrixStats_1.26.0 
+[119] farver_2.1.2               jquerylib_0.1.4           
+[121] zoo_1.8-12                 jsonlite_1.8.8            
+[123] BiocSingular_1.20.0        magrittr_2.0.3            
+[125] Formula_1.2-5              GenomeInfoDbData_1.2.12   
+[127] dotCall64_1.1-1            flipFormat_1.11.3         
+[129] patchwork_1.3.0            munsell_0.5.1             
+[131] Rcpp_1.0.13                viridis_0.6.5             
+[133] reticulate_1.39.0          stringi_1.8.4             
+[135] zlibbioc_1.50.0            MASS_7.3-61               
+[137] plyr_1.8.9                 parallel_4.4.0            
+[139] listenv_0.9.1              ggrepel_0.9.6             
+[141] deldir_2.0-4               splines_4.4.0             
+[143] tensor_1.5                 circlize_0.4.16           
+[145] ps_1.8.0                   igraph_2.0.3              
+[147] spatstat.geom_3.3-3        ggsignif_0.6.4            
+[149] RcppHNSW_0.6.0             reshape2_1.4.4            
+[151] ScaledMatrix_1.12.0        evaluate_1.0.0            
+[153] foreach_1.5.2              httpuv_1.6.15             
+[155] networkD3_0.5.0            RANN_2.6.2                
+[157] purrr_1.0.2                polyclip_1.10-7           
+[159] clue_0.3-65                future_1.34.0             
+[161] scattermore_1.2            formattable_0.2.1         
+[163] rsvd_1.0.5                 janitor_2.2.0             
+[165] broom_1.0.6                xtable_1.8-4              
+[167] RSpectra_0.16-2            rstatix_0.7.2             
+[169] later_1.3.2                viridisLite_0.4.2         
+[171] tibble_3.2.1               beeswarm_0.4.0            
+[173] cluster_2.1.6              timechange_0.3.0          
+[175] globals_0.16.3            </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
