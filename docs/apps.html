@@ -459,15 +459,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetreefc5a59dc6fcb681d09df3c3fdc51237c1ab5cb40targetblankfc5a59da">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetreebc7c46c4c18d148590863b7a4cb85fb961b1329ctargetblankbc7c46ca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/fc5a59dc6fcb681d09df3c3fdc51237c1ab5cb40" target="_blank">fc5a59d</a>
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/bc7c46c4c18d148590863b7a4cb85fb961b1329c" target="_blank">bc7c46c</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetreefc5a59dc6fcb681d09df3c3fdc51237c1ab5cb40targetblankfc5a59da"
+id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetreebc7c46c4c18d148590863b7a4cb85fb961b1329ctargetblankbc7c46ca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -477,7 +477,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/fc5a59dc6fcb681d09df3c3fdc51237c1ab5cb40" target="_blank">fc5a59d</a>.
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/bc7c46c4c18d148590863b7a4cb85fb961b1329c" target="_blank">bc7c46c</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -544,6 +544,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DrThomasOneil/CVR-site/blob/bc7c46c4c18d148590863b7a4cb85fb961b1329c/analysis/apps.Rmd" target="_blank">bc7c46c</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-10-11
+</td>
+<td>
+Update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/e15a9790d600e6839e5b417a692019c718026c27/docs/apps.html" target="_blank">e15a979</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-10-11
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -935,6 +969,51 @@ excel. Make sure not to change anything unnecessarily. The rpca app
 relies on this.</li>
 </ul>
 </details>
+</div>
+</div>
+<div id="step-4-rpca-integration" class="section level3">
+<h3>Step 4: RPCA integration</h3>
+<p>After you’ve set the co-factors and filters, you can run the rpca
+integration app.</p>
+<p><code>source("https://raw.githubusercontent.com/CVR-MucosalImmunology/Rshiny/refs/heads/main/flow_integration.R");shinyApp(ui,server);rm(ui,server)</code></p>
+<p>This app takes the files in the <code>flow/</code> and corresponding
+<code>meta/</code> folder. This is where it becomes very efficient.</p>
+<p>You can choose which samples you want to integrate. It’ll then load
+the markers to choose from. Click <strong>Run RPCA</strong> and wait.
+Depending on the number of samples, it may take a while. If you’re
+worried, go to the RStudio window and you’ll see the functions running
+in the background.</p>
+<p>Some things to consider:<br />
+- To run quickly, this function cuts the samples down to 6000 cells. If
+you want to run more cells, let me know and we can adjust the script to
+choose cell numbers, or change the code itself. - …</p>
+<details>
+<summary>
+View App:
+</summary>
+<p><img src="assets/app2.png" /></p>
+</details>
+<p>To do this manually could take quite a while. Now you’re able to
+rapidly remove samples that aren’t working, remove or add markers to
+check how they alter the clustering, etc.</p>
+<div id="visualisation" class="section level4">
+<h4>Visualisation</h4>
+<p>You can now check where markers are lying on the Umap by selecting a
+marker and clicking <strong>Update</strong>.</p>
+</div>
+<div id="soms-clustering" class="section level4">
+<h4>SOMS clustering</h4>
+<p>You can also very rapidly test out different k cluster values. Change
+the <code>clusters</code> value and click <strong>Update K</strong>.</p>
+</div>
+<div id="export-data" class="section level4">
+<h4>Export data</h4>
+<p>When you’re happy with integration and SOMS clustering, you can
+export all data and graphs. Change the <code>prefix</code> to make the
+output files unique (in case you want to export more than once).</p>
+<p>What is exported is:<br />
+- Pre and post integration graphs - SOMS cluster umap - The expression
+plots of each marker used for clustering - The rmd of the data.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
