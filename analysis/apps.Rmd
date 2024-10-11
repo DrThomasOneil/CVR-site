@@ -8,7 +8,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-#{.tabset .tabset-fade}
+# {.tabset .tabset-fade}
 
 This page will contain instructions on how to use different shiny apps for surface level analysis of flow and spatial/single cell transcriptomic data. 
 
