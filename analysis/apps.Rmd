@@ -19,6 +19,8 @@ I've built a flow cytometry app which automates a lot of the repetitive processe
 
 Particularly, it allows you to set individual cofactors for scaling channel values. The default is to set a single cofactor, which may be comparable to setting the same axes setting in FlowJo for all channels. Each channel may need to be adjusted individually, and this app allows you to do this comparatively rapidly. 
 
+The authors of the [Spectre site](https://immunedynamics.io/spectre/cytometry/#tutorials) provide more details on how to use the app, such as transformations and choosing markers for clustering. 
+
 ### Step 1: R set up
 
 I've made a template folder for this analysis: [download](https://github.com/DrThomasOneil/CVR-site/raw/refs/heads/master/docs/assets/apps/flow_template.zip)
@@ -73,7 +75,9 @@ Export/move these files to the `/flow` folder.
 
 ### Step 3: Adjust cofactors and filters
 
-In the original Spectre script, you have the option to set a single cofactor. This is almost equivalent to setting the scale once in flowjo to apply to all channels. We know using tissue and different samples/batches sometimes requires drastically different scalings. 
+In the original Spectre script, you have the option to set a single cofactor. This is almost equivalent to setting the scale once in flowjo to apply to all channels. We know using tissue and different samples/batches sometimes requires drastically different transformations. 
+
+The [Spectre site](https://immunedynamics.io/spectre/cytometry/#tutorials) provides details on transformations
 
 To do this manually, I might think would be a bit of a nightmare. So I've made the first app so that you are able to view and set thresholds per marker per sample. 
 
