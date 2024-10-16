@@ -459,15 +459,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree984244da32e640a649caee4eeceb5e8c140c5410targetblank984244da">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree6f0e914378daf11c17d2220a29d6bd17af5dba51targetblank6f0e914a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/984244da32e640a649caee4eeceb5e8c140c5410" target="_blank">984244d</a>
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/6f0e914378daf11c17d2220a29d6bd17af5dba51" target="_blank">6f0e914</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree984244da32e640a649caee4eeceb5e8c140c5410targetblank984244da"
+id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree6f0e914378daf11c17d2220a29d6bd17af5dba51targetblank6f0e914a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -477,7 +477,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/984244da32e640a649caee4eeceb5e8c140c5410" target="_blank">984244d</a>.
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/6f0e914378daf11c17d2220a29d6bd17af5dba51" target="_blank">6f0e914</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -541,6 +541,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DrThomasOneil/CVR-site/blob/6f0e914378daf11c17d2220a29d6bd17af5dba51/analysis/apps.Rmd" target="_blank">6f0e914</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-10-16
+</td>
+<td>
+Update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/2b49a4e944f37b40244b3538480131bcef8058a3/docs/apps.html" target="_blank">2b49a4e</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-10-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -987,6 +1021,10 @@ channel values. The default is to set a single cofactor, which may be
 comparable to setting the same axes setting in FlowJo for all channels.
 Each channel may need to be adjusted individually, and this app allows
 you to do this comparatively rapidly.</p>
+<p>The authors of the <a
+href="https://immunedynamics.io/spectre/cytometry/#tutorials">Spectre
+site</a> provide more details on how to use the app, such as
+transformations and choosing markers for clustering.</p>
 <div id="step-1-r-set-up" class="section level3">
 <h3>Step 1: R set up</h3>
 <p>I’ve made a template folder for this analysis: <a
@@ -1033,7 +1071,11 @@ you select compensated channels.</p>
 <p>In the original Spectre script, you have the option to set a single
 cofactor. This is almost equivalent to setting the scale once in flowjo
 to apply to all channels. We know using tissue and different
-samples/batches sometimes requires drastically different scalings.</p>
+samples/batches sometimes requires drastically different
+transformations.</p>
+<p>The <a
+href="https://immunedynamics.io/spectre/cytometry/#tutorials">Spectre
+site</a> provides details on transformations</p>
 <p>To do this manually, I might think would be a bit of a nightmare. So
 I’ve made the first app so that you are able to view and set thresholds
 per marker per sample.</p>
