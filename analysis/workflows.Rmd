@@ -4,7 +4,7 @@ site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
     toc: false
-    code_folding: show
+    code_folding: hide
 editor_options:
   chunk_output_type: console
 ---
@@ -13,7 +13,8 @@ editor_options:
   
 ## Single cell RNA 
 
-```{r, child = '/Users/thomasoneil/Library/CloudStorage/OneDrive-TheUniversityofSydney(Staff)/projects/GSE225199_fistula/workshop.Rmd'}
+```{r, child = 'data/rmds/workflow_sc.Rmd'}
+ 
 ```    
 
 
