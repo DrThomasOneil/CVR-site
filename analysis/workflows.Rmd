@@ -1,0 +1,27 @@
+---
+title: "Workflows"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+    code_folding: show
+editor_options:
+  chunk_output_type: console
+---
+
+# {.tabset .tabset-fade}
+  
+## Single cell RNA 
+
+```{r, child = '/Users/thomasoneil/Library/CloudStorage/OneDrive-TheUniversityofSydney(Staff)/projects/GSE225199_fistula/workshop.Rmd'}
+```    
+
+
+
+
+
+
+
+
+
+
