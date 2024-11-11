@@ -1,0 +1,627 @@
+---
+title: "SingleCell"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+```{r libraries, include=T, eval=F}
+
+library(GEOquery)
+library(Seurat)
+library(Matrix)
+library(ggplot2)
+library(cowplot)
+library(dplyr)
+
+```
+
+
+```{r setup, include=F}
+knitr::opts_chunk$set(echo = TRUE, message=F, warning=F, eval=F)
+
+# sets the directory of all chunks to the directory of this script
+#knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/OneDrive-TheUniversityofSydney(Staff)/projects/GSE225199_fistula")
+```
+
+
+```{r, include=T}
+theme_set(theme_classic())
+set.seed(1337)
+```
+
+# Single cell analysis workshop{.tabset .tabset-fade}
+
+There are tonnes of single cell RNA sequencing datasets that are publicly available. Packages like Seurat have also developed user-friendly functions and workflows that make analysis easy, too. Therefore, the only limitation to analyse unexplored facets of public data is a clear and efficient workflow. 
+
+**However, there is no one-size-fits-all for analysis.** As such, it really just takes *time, practice and patience*. To this end, here is yet another practice script for analysing single-cell RNA sequencing data.
+
+Instead of focusing on the downstream analysis, I'll demonstrate some of the upstream processing steps in more detail. To save on time and space, the large majority of my workflow will use only ONE sample. And then I will pump through all samples and cover integration.
+
+1. Downloading and loading data into Seurat
+2. QC
+3. Normalisation
+4. Annotation
+5. Integration 
+
+The data is derived from [perianal fistula in Crohn's disease](https://pubmed.ncbi.nlm.nih.gov/39132177/).
+
+## Downloading and loading data into Seurat
+
+Downloading and processing the data will take up ~2GB of space. So choose where you want to set your wd such as D: or C: drive or OneDrive etc. 
+
+You can manually download the data, but I'm preferring to handle everything in R from now on, as it creates a perfect reproducibility report. 
+
+```{r download data, eval=F}
+
+pDir = getwd()
+
+if(!dir.exists("raw")){dir.create("raw")}
+if(!dir.exists("data")){dir.create("data")}
+
+#download the data from the GEO
+download.file("https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE225199&format=file", 
+             destfile = "GSE225199.tar", 
+             method = "curl")
+
+#untar data into a new folder called "raw"
+untar("GSE225199.tar", exdir = "raw")
+
+```
+
+From the GEO, we can also collect the submitted metadata for each sample. There are two reasons for this:
+
+a, We can use the GSM's to open each unique sample
+b. We can immediately and automatically assign metadata to the final sample
+
+```{r metadata}
+gse <- pData(GEOquery::getGEO("GSE225199")[[1]])
+
+saveRDS(gse, "data/gse,rds")
+
+```
+
+We also want to create a new folder for data and load in the names of the files we downloaded
+
+```{r files}
+
+mats = list.files("raw/", pattern= ".mtx")
+bars = list.files("raw/", pattern= "barcode")
+feats = list.files("raw/", pattern= "feat")
+
+```
+
+<hr>
+
+### Load in the first sample
+
+```{r load in sample 1}
+{
+setwd("raw")
+
+i=1
+
+mat = readMM(grep(rownames(gse)[i], mats, value=T))
+feat = read.delim(grep(rownames(gse)[i], feats, value=T), header=F)
+bar = read.delim(grep(rownames(gse)[i], bars, value=T), header=F)
+
+feat$V4 <- make.unique(feat$V2, sep="-")
+}
+
+```
+
+We have three separate objects:
+
+- **mat** is the matrix of expressions with rows = genes and columns = barcodes 
+- **feat** contains the features/genes, and has three columns: a) Ensembl gene ID, b) Gene name, and c) type of expression.
+- **bar** contains the barcode IDs. These have no real relevance for now, but for the purposes here, are unique and can be used to match up meta-data.
+
+Here, I also build a metadata data frame. We use the rownames as barcodes so the Seurat knows which metadata row aligns to the which column in the matrix. I use information from the `gse` object, such as sex, inflammation status and batch. This can be done AFTER you've built the Seurat object, but I wanted to show you how to make a Seurat object with corresponding metadata. This is useful for more complex functions in downstream analysis, such as chopping up and restitching data. 
+
+Lastly we `CreateSeuratObject` and store extra metadata about the genes. This is important, as Seurat doesn't like duplicated rownames. So, I've created the object using the unique genenames, and store the extra gene info as metadata. We can then process the data without Seurat flipping out over it. Why we have duplicated gene names is possibly due to gene isotypes - the same protein from a different transcript/gene. We dont want to assume anything about which variant of the same protein is more important. Therefore, we dont automatically just keep the first instance, nor keep the one with the highest count. Most likely, the transcript variant with the least counts will be filtered out in a future step. 
+
+```{r build Seurat, eval=F}
+
+rownames(mat) <- feat$V4 #rownames = genes
+colnames(mat) <- bar$V1 #colnames = barcodes
+
+#generate the metadata file using information from the gse object
+met <- data.frame(row.names = bar$V1)
+met$batch <- gse$`batch:ch1`[i]
+met$sex <- gse$`Sex:ch1`[i]
+met$disease <-gse$`disease status:ch1`[i]
+met$inflam <- gse$`inflammation status:ch1`[i]
+met$geo <- gse$geo_accession[i]
+
+#create seurat object
+seu <- CreateSeuratObject(mat, meta.data = met)
+
+# feature metadata
+seu@assays$RNA@meta.data
+seu@assays$RNA@meta.data$geneID <- feat$V2
+seu@assays$RNA@meta.data$geneID_Unique <- feat$V4
+seu@assays$RNA@meta.data$ensembl <- feat$V1
+
+```
+ 
+<hr>
+ 
+## QC
+
+There are a few common QC metrics for single cell, and this is where you will probably spend the most time. There is no gold standard and its really a game of balancing how much data you're willing to bin in order to achieve higher quality. There are limits you need to be careful of, however, such as removing cells that are high quality, but dont meet your metrics. 
+
+Often times, I will set loose metrics, and go all the way through to clustering and annotation before wanting to tidy the data up further. This is usually my default, as we typically then isolate cell-types of interest and I can spend more time tailoring QC for those cells.
+
+An example might be the mitochondrial percentage. High mitochondrial RNA counts are calculated by dividing the summed counts from the 13 or so mito-genes (typically prefixed by `MT-` or `MT.`) by the total count per cell. A threshold is set to remove cells that contain too high a mitochondrial RNA content as this can be indicative of dead or dying/leaky cells - cytoplasmic RNA is leaked from the cell, but retain mitochondrial RNA, thus, the majority of the RNA counted in that cell would be mitochondrial. This can vary drastically. You will see some people set it quite low (5%) and some quite high (25%).
+
+Again, this comes down to your study. I will set a high threshold for initial processing, and reduce this when I get to my celltype of interest. The reason for this is because if, for example, you are looking at whole digested tissue, some non-immune cells, such as muscle cells, will have higher mitoRNA. So to set a blanket threshold on diverse data, you may unknowingly be bias in removing whole cell types. Contrastingly, immune cells are expected to be quite low. If you isolate T cells (which are typically robust in tissue digestions) in the data you might find that almost none exceed 10%. And so lowering the threshold to 5% might only remove a small fraction of your data. DCs and Macs which are more fragile might be starting to die, depending on the paper's methods, and in the same dataset might need a higher threshold. 
+
+Therefore, the QC steps in single cell RNA analysis is very much individually determined per dataset (and even sample). Furthermore, I'd encourage you, even when you are happy with the thresholds, to continually check them during the processing. And to be open to the fact that there's a huge possibility that you need to readjust your thresholds and start all over. 
+
+<details><summary>**Also worth checking out what the original paper used for QC when recreating figure:**</summary>
+
+Filtered gene expression matrices were loaded into Seurat v. 4.1.1 with min.features = 200 and min.cells = 3.14  The following QC parameters were used: number of genes 250-6500, number of transcripts >300, mitochondria percent <30% and log10(Genes/UMI) >0.80. Only genes that were observed to be expressed in 10 or more cells were kept for downstream analysis. After QC, 67,119 cells from rectal tissue were kept for downstream analysis. 
+<hr>
+</details><hr>
+
+```{r percentmt, fig.height=3, fig.width=2, eval=F}
+# typically you can just use 
+#
+# PercentageFeatureSet(seu, pattern = "^MT-")
+#
+# You can confirm this using this
+# seu@assays$RNA@meta.data[grep("MT-", seu@assays$RNA@meta.data$geneID),]
+
+seu$percent.mt <- PercentageFeatureSet(seu, features=rownames(seu)[grep("MT-", seu@assays$RNA@meta.data$geneID)])
+
+VlnPlot(seu, "percent.mt", pt.size=0.1, alpha=0.1)+
+  NoLegend()+theme(axis.text.x = element_text(size=0))+xlab("")+
+  geom_hline(yintercept = 30)
+
+table(OverThreshold=seu$percent.mt>30)
+
+```
+
+![ ](assets/workflows/percentmt-1.png)
+
+Another couple of metrics to look at are `nFeature` and `nCount`. **nFeature** is the number of unique features across the 36000 genes expressed in that cell. **nCount** is the total count of all genes expressed in that cell. We can use these in a few ways.
+
+A cell that has too few variety or total transcripts might represent, again, a dead or dying/leaky cells, but also an empty `cell`. This is where a cell isn't paired with a bead during acquisition, but rather a bunch of extracellular mRNA. Therefore, a low count is probably indicative of poor quality barcodes. 
+
+A cell that has too high a variety or total count is possibly indicative of duplicates. There are other packages that can be used for duplicates, but this is one of the more common ways to filter. For example, B cells will all contain roughly the same variety of genes, and T cells a different variety of genes. Therefore, these cells will contain roughly the same number of unique features. However, if a B cell and a T cell are contained in the same droplet, you will have, theoretically, double the number of unique genes. So, while you can have highly diverse subsets, the chances are, you have high unique transcripts in doublets. 
+
+```{r nCount&nFeature, eval=F}
+FeatureScatter(seu, "nFeature_RNA", "nCount_RNA", pt.size=0.1)+
+  geom_hline(yintercept = 30000)+
+  geom_vline(xintercept = 500)+
+  geom_text(label="Unique features: 500\nTotal features: 30,000", x=2500, y=38000 )
+```
+
+![ ](assets/workflows/nCount&nFeature-1.png)
+
+
+```{r nCount&nFeature2, eval=F}
+#label the points to throw
+seu$filter = ifelse(seu$nCount_RNA<30000 & seu$nFeature_RNA>500, "keep", 'throw')
+
+FeatureScatter(seu, "nFeature_RNA", "nCount_RNA", group.by = "filter")+
+  geom_hline(yintercept = 30000)+
+  geom_vline(xintercept = 500)+
+  geom_text(label="Unique features: 500\nTotal features: 30,000", x=2500, y=38000)
+
+```
+
+![ ](assets/workflows/nCount&nFeature-2.png)
+
+For the sake of showing how this might affect clustering, I will not filter them right now. 
+
+Lastly, we can filter the actual genes themselves. This should lower the object size AND reduce possible noise when processing the data. 
+
+Again, this isn't a gold standard metric. Basically we can remove cells that are not present in a certain number of cells. Some people use an exact number (e.g. the gene needs to be present in at least 10 cells) or proportion (e.g. has to be present in 3% of cells). I've seen this done both before and after filtering cells. 
+
+```{r rowfilter}
+
+zeroes <- rowSums(seu@assays$RNA@layers$counts!=0) # counts the number of non-zeros per row. 
+table(PresentIn3pc=zeroes<0.03*ncol(seu), ZeroCounts=zeroes==0) #~24000 genes are not expressed in >3% of cells. 
+
+```
+
+For the purposes of this, I will use the QC metrics employed by the original paper so that we can recreate their figures.
+
+```{r Filtering}
+
+# visual rep of whats happening! 
+seu@assays$RNA@layers$counts[210:220,210:220]
+seu@assays$RNA@layers$counts[210:220,210:220]!=0
+rowSums(seu@assays$RNA@layers$counts[210:220,210:220]!=0)
+
+
+# according to the paper methods
+# gene has to be present in at least 10 cells
+seu <- seu[zeroes>=10,]
+
+# number of genes and number of transcripts
+
+seu$filter = ifelse(seu$nCount_RNA>300 & seu$nFeature_RNA>250 & seu$nFeature_RNA<6500 & seu$percent.mt<30, "keep", 'throw')
+
+
+seu <- subset(seu, subset = filter =="keep")
+dim(seu)
+```
+
+<hr>
+
+## Data processing{.tabset .tabset-fade}
+
+### Standard Seurat Pipeline
+
+A standard Seurat pipeline can be found [here](https://satijalab.org/seurat/articles/pbmc3k_tutorial). 
+
+
+```{r Processing1, eval=F}
+seu <- NormalizeData(seu, verbose=F)
+seu <- FindVariableFeatures(seu, verbose=F)
+
+VariableFeatures(seu)
+
+seu <- ScaleData(seu, features = rownames(seu), verbose=F)
+seu <- RunPCA(seu, verbose=F)
+
+#PCA visualisations
+PCAPlot(seu)
+```
+
+![ ](assets/workflows/Processing1-1.png)
+
+```{r Processing3, eval=F}
+VizDimLoadings(seu, dims=1:2)
+```
+
+![ ](assets/workflows/Processing1-2.png)
+
+```{r Processing4, eval=F}
+#print(seu[["pca"]], dims = 4, nfeatures = 5)
+PCAPlot(seu, dims=c(3,4))+geom_hline(yintercept = 0)
+```
+
+![ ](assets/workflows/Processing1-3.png)
+
+
+Elbow plots are one way to choose the number of dimensions to use from the PCA. The SD represents the variability in the genes across that dimensions. With lower variability, you get lower SD, and a more unique expression across the cells on those dimensions. So we can decide to use as many dimensions as we want. Too few and you may as well use the PCA itself for visualisations and clustering. Too many and you might introduce a lot of senseless noise. 
+
+This again, is an individually decided metric. 
+
+```{r Elbow, eval=F}
+ElbowPlot(seu, ndims=50)
+```
+
+![ ](assets/workflows/Elbow-1.png)
+
+```{r ClusteringAndVis, eval=F}
+
+#paper uses 15 as cutoff and 0.5 for resolution
+seu <- FindNeighbors(seu, dims = 1:15, verbose=F)
+seu <- FindClusters(seu, resolution = 0.5, cluster.name = "D1_15_R05", verbose=F)
+seu <- RunUMAP(seu, dims = 1:15, verbose=F)
+seu <- RunTSNE(seu, dims = 1:15)
+
+plot_grid(ncol=2, 
+          PCAPlot(seu, label=T, pt.size=1)+NoLegend()+NoAxes()+ggtitle("PCA"),
+          UMAPPlot(seu, label=T, pt.size=1)+NoLegend()+NoAxes()+ggtitle("UMAP"),
+          TSNEPlot(seu, label=T, pt.size=1)+NoLegend()+NoAxes()+ggtitle("TSNE")
+          )
+
+```
+
+![ ](assets/workflows/ClusteringAndVis-1.png)
+
+### Annotations
+
+```{r Annotation, eval=F}
+
+DotPlot(seu, c("CD3E", #T
+               "LYZ","CD14", #MNP 
+               "KIT","HPGDS", "TPSAB1", # granulo
+               "MZB1", "CD79A", 'MS4A1', #B/Plasma 
+               "MKI67", 'TYMS', #Cycling,
+               "PECAM1", "VWF", "CD34", "LYVE1", #endothelial,
+               "COL1A1", "COL6A1", "ACTA2", "NOTCH3", #Fb
+               "PIGR", "KRT8"
+               ))+
+  RotatedAxis()
+
+```
+
+![ ](assets/workflows/Annotation-1.png)
+
+```{r Annotation2, eval=F}
+annotations = c(
+  "0" = "Epi",
+  "1" = "Epi2",
+  "3" = "Epi3",
+  "5" = "Epi4",
+  "8" = "Epi5",
+  "4" = "Cycling",
+  "10" = "Fibroblast",
+  "13" = "Endothelial",
+  "7" = "T cells",
+  "2" = "B cells",
+  "6" = "Plasma",
+  "9" = "Plasma2",
+  "12" = "MNP",
+  "11" = "Granulo",
+  "14" = "Granulo2"
+)
+seu <- RenameIdents(seu, annotations)
+seu$Init_Anno <- Idents(seu)
+
+saveRDS(seu, "data/sample1.rds")
+```
+
+
+```{r Visualise with new annotations}
+
+plot_grid(ncol=2, 
+          PCAPlot(seu, label=T, pt.size=1, repel=T)+NoLegend()+NoAxes()+ggtitle("PCA"),
+          UMAPPlot(seu, label=T, pt.size=1, repel=F)+NoLegend()+NoAxes()+ggtitle("UMAP"),
+          TSNEPlot(seu, label=T, pt.size=1, repel=T)+NoLegend()+NoAxes()+ggtitle("TSNE")
+          )
+
+```
+
+![ ](assets/workflows/Visualisewithnewannotations-1.png)
+
+
+### Vis: UMAPs
+
+```{r Custom Visualisations, eval=F}
+# to test out yourselves
+
+UMAPPlot(seu, 
+         label=T, 
+         pt.size=1, 
+         repel=F)+NoLegend()+NoAxes()+  
+  scale_color_viridis_d()+ggtitle("Set colour scale")
+
+UMAPPlot(seu, 
+         label=T, 
+         pt.size=1, 
+         repel=F)+NoLegend()+NoAxes()+  
+  scale_color_manual(values=colorRampPalette(c("violet", "blue", "yellow","red"))(15))+ggtitle("Selected Scale")
+
+UMAPPlot(seu, 
+         label=T, 
+         pt.size=1, 
+         repel=F)+NoLegend()+NoAxes()+  
+  scale_color_manual(values=rainbow(15))+ggtitle("Rainbow!")
+
+
+UMAPPlot(seu, 
+         label=T, 
+         repel=F,
+         label.box=T,
+         cols=colorRampPalette(c("violet", "blue", "yellow","red"))(15),
+         label.size=2,
+         pt.size=2)+
+  NoLegend()+NoAxes()+  
+  ggtitle("With added features")
+
+
+```
+
+### Vis: DotPlot
+
+```{r DotPlot, eval=F}
+# to test out yourselves
+
+genes = c("EPCAM", "MKI67", "COL1A1", "CD34", "CD3E", "MS4A1", "CD79A", "MZB1", "LYZ", "HPGDS")
+
+DotPlot(seu, features=genes)
+
+DotPlot(seu, features=genes)+
+  labs(y="",x="", title="Titles")
+
+DotPlot(seu, features=genes)+
+  RotatedAxis()+NoLegend()+
+  labs(y="",x="", title="Rotated X Axis & NoLegend")
+
+DotPlot(seu, 
+        features=genes,
+        cols=c("yellow", "blue"))+
+  RotatedAxis()+
+  labs(y="",x="", title="Changed Colour Palette")
+
+DotPlot(seu, 
+        features=genes,
+        cols=c("yellow", "blue"),
+        idents=c("T cells", "B cells","Plasma","Plasma2", "MNP"))+
+  RotatedAxis()+
+  labs(y="",x="", title="Idents of Interest")
+
+DotPlot(seu, 
+        features=genes,
+        cols=c("yellow", "blue"),
+        idents=c("T cells", "B cells","Plasma","Plasma2", "MNP"))+
+  RotatedAxis()+
+  coord_flip()+
+  labs(y="",x="", title="CoordFlip")
+
+```
+
+## Integration
+
+Lastly, we'll cover integration. There are a few ways to do this. But mainly, if you're working with Seurat, you'll probably look at CCA or RPCA.
+
+We just need to start by loading in all the other data.
+
+```{r mergeData, eval=F}
+setwd("raw")
+i=1 
+
+  mat = readMM(grep(rownames(gse)[i], mats, value=T))
+  feat = read.delim(grep(rownames(gse)[i], feats, value=T), header=F)
+  bar = read.delim(grep(rownames(gse)[i], bars, value=T), header=F)
+  
+  feat$V4 <- make.unique(feat$V2, sep="-")
+  
+  rownames(mat) <- feat$V4 #rownames = genes
+  colnames(mat) <- bar$V1 #colnames = barcodes
+  
+  #generate the metadata file using information from the gse object
+  met <- data.frame(row.names = bar$V1)
+  met$batch <- gse$`batch:ch1`[i]
+  met$sex <- gse$`Sex:ch1`[i]
+  met$disease <-gse$`disease status:ch1`[i]
+  met$inflam <- gse$`inflammation status:ch1`[i]
+  met$geo <- gse$geo_accession[i]
+  
+  #create seurat object
+  seu <- CreateSeuratObject(mat, meta.data = met)
+  
+  # feature metadata
+  seu@assays$RNA@meta.data
+  seu@assays$RNA@meta.data$geneID <- feat$V2
+  seu@assays$RNA@meta.data$geneID_Unique <- feat$V4
+  seu@assays$RNA@meta.data$ensembl <- feat$V1
+  
+  seu$percent.mt <- PercentageFeatureSet(seu, features=rownames(seu)[grep("MT-", seu@assays$RNA@meta.data$geneID)])
+
+
+  #  number of genes and number of transcripts
+  seu$filter = ifelse(seu$nCount_RNA>300 & seu$nFeature_RNA>250 & seu$nFeature_RNA<6500 & seu$percent.mt<30, 
+                      "keep", 
+                      'throw')
+
+  seu <- subset(seu, subset = filter == "keep")
+  data <- seu
+  
+for(i in 2:nrow(gse)){
+  
+  mat = readMM(grep(rownames(gse)[i], mats, value=T))
+  feat = read.delim(grep(rownames(gse)[i], feats, value=T), header=F)
+  bar = read.delim(grep(rownames(gse)[i], bars, value=T), header=F)
+  
+  feat$V4 <- make.unique(feat$V2, sep="-")
+  
+  rownames(mat) <- feat$V4 #rownames = genes
+  colnames(mat) <- bar$V1 #colnames = barcodes
+  
+  #generate the metadata file using information from the gse object
+  met <- data.frame(row.names = bar$V1)
+  met$batch <- gse$`batch:ch1`[i]
+  met$sex <- gse$`Sex:ch1`[i]
+  met$disease <-gse$`disease status:ch1`[i]
+  met$inflam <- gse$`inflammation status:ch1`[i]
+  met$geo <- gse$geo_accession[i]
+  
+  #create seurat object
+  seu <- CreateSeuratObject(mat, meta.data = met)
+  
+  # feature metadata
+  seu@assays$RNA@meta.data
+  seu@assays$RNA@meta.data$geneID <- feat$V2
+  seu@assays$RNA@meta.data$geneID_Unique <- feat$V4
+  seu@assays$RNA@meta.data$ensembl <- feat$V1
+  
+  seu$percent.mt <- PercentageFeatureSet(seu, features=rownames(seu)[grep("MT-", seu@assays$RNA@meta.data$geneID)])
+  #  number of genes and number of transcripts
+  seu$filter = ifelse(seu$nCount_RNA>300 & seu$nFeature_RNA>250 & seu$nFeature_RNA<6500 & seu$percent.mt<30, 
+                      "keep", 
+                      'throw')
+
+  seu <- subset(seu, subset = filter == "keep")
+  data <- merge(data, seu)
+}
+#rm(bar,feat,mat,met, bars, feats, i, mats, zeroes)
+setwd(pDir)
+data[["RNA"]] <- JoinLayers(data[["RNA"]])
+
+zeroes <- rowSums(data@assays$RNA@layers$counts!=0) # counts the number of non-zeros per row. 
+data <- data[zeroes>=10,]
+
+saveRDS(data, "data/all_data_unint.rds")
+```
+
+Performing the integration here, we'll use RPCA because its quicker. I'm going to integrate per batch, though you might want to check that this is enough. You might want to integrate per individual samples, if you still see batch effects and have enough cells. 
+
+```{r, eval=F}
+data <- readRDS("data/all_data_unint.rds")
+options(future.globals.maxSize = 3 * 1024^3)  # 3 GiB
+
+data[["RNA"]] <- split(data[["RNA"]], f = data$batch)
+
+data <- NormalizeData(data,verbose=F)
+data <- FindVariableFeatures(data,verbose=F)
+data <- ScaleData(data,verbose=F)
+data <- RunPCA(data,verbose=F)
+
+# checking unintegrated analysis
+data <- FindNeighbors(data, dims = 1:15, reduction = "pca",verbose=F)
+data <- FindClusters(data, resolution = 0.5, cluster.name = "unintegrated_clusters",verbose=F)
+data <- RunUMAP(data, dims = 1:15, reduction = "pca", reduction.name = "umap.unintegrated",verbose=F)
+#integrating data
+data <- IntegrateLayers(object = data, method = RPCAIntegration, orig.reduction = "pca", new.reduction = "integrated.rpca",
+    verbose = T)
+data[["RNA"]] <- JoinLayers(data[["RNA"]])
+
+data <- FindNeighbors(data, reduction = "integrated.rpca", dims = 1:15,verbose=F)
+data <- FindClusters(data, resolution = 0.5,verbose=F)
+data <- RunUMAP(data, dims = 1:15, reduction = "integrated.rpca",verbose=F)
+
+
+saveRDS(data,"data/integrated.rds")
+```
+
+Here is a clear example, on the right, of one sample being drastically different to the rest. It is possible that this requires more stringent integration per sample, rather than per batch. 
+
+But will ultimately be up to the user who might identify that some of these UMAP tails are real groups of unique cells to that donor, or more artificial differences created by batch errors. It is for this reason that I'll often check the proportion of donor cells per cluster to make sure one cluster isn't being predominated by one or two donors. 
+
+
+```{r, eval=F}
+data <- readRDS("~/Library/CloudStorage/OneDrive-TheUniversityofSydney(Staff)/projects/GSE225199_fistula/data/integrated.rds")
+
+plot_grid(
+  DimPlot(data, reduction = "umap", group.by = "geo", label=T)+NoLegend()+ggtitle("RPCA"),
+  DimPlot(data, reduction = "umap.unintegrated", group.by = "geo", label=T)+NoLegend()+ggtitle("No Int")
+)
+```
+
+![ ](assets/workflows/int.png)
+
+```{r, eval=F}
+FetchData(data, c("ident","geo")) %>% group_by(ident) %>%
+    mutate(prop=1/length(ident)) %>%
+    ungroup() %>%
+    group_by(ident,geo) %>%
+    summarise(totprop=sum(prop)) %>%
+    ggplot(aes(x=ident,fill=geo,y=totprop)) +
+    geom_bar(position='fill', stat='identity') + 
+    theme(axis.text.x =element_text(angle = 45,hjust=1))+scale_y_continuous(name="Cluster Proportion")+ theme_classic()
+```
+
+![ ](assets/workflows/int2.png)
+
+```{r, eval=F}
+FetchData(data, c("ident","batch")) %>% group_by(ident) %>%
+    mutate(prop=1/length(ident)) %>%
+    ungroup() %>%
+    group_by(ident,batch) %>%
+    summarise(totprop=sum(prop)) %>%
+    ggplot(aes(x=ident,fill=batch,y=totprop)) +
+    geom_bar(position='fill', stat='identity') + 
+    theme(axis.text.x =element_text(angle = 45,hjust=1))+scale_y_continuous(name="Cluster Proportion")+ theme_classic()
+
+
+```
+
+![ ](assets/workflows/int3.png)
+
+**Cluster 8,14, 20 needs to be investigated. If they are real clusters that could exist in those samples, then it is not a batch effect. If those clusters are identical but slightly different from the adjacent celltypes, then it is batch effects and a more rigorous attemp should be made, such as CCA or int-per-donor rather than by batch.**
+
+
+
+
