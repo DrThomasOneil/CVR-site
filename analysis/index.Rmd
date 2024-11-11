@@ -13,6 +13,8 @@ Go to:
 
 - [About](https://drthomasoneil.github.io/CVR-site/about.html)
 - [Custom Functions](https://drthomasoneil.github.io/CVR-site/functions.html)
+- [Workflows](https://drthomasoneil.github.io/CVR-site/workflows.html)
+  - Single Cell RNA processing and analysis using public data
 - [ShinyApps](https://drthomasoneil.github.io/CVR-site/apps.html)
   - Flow Analysis using Spectre
 - [Getting Started](https://drthomasoneil.github.io/CVR-site/start.html)

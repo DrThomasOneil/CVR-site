@@ -7,4 +7,4 @@ editor_options:
   chunk_output_type: console
 ---
 
-To be completed  
+To be completed 

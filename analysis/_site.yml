@@ -9,6 +9,8 @@ navbar:
     href: about.html
   - text: Functions
     href: functions.html
+  - text: Workflows
+    href: workflows.html
   - text: ShinyApps
     href: apps.html
   right:
