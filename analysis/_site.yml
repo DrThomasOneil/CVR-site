@@ -12,7 +12,7 @@ navbar:
   - text: Workflows
     menu: 
       - text: "Single Cell"
-        href: workflows_sc.html
+        href: workflow_sc.html
   - text: ShinyApps
     href: apps.html
   right:
