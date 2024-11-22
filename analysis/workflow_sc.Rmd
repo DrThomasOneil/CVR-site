@@ -187,7 +187,7 @@ table(OverThreshold=seu$percent.mt>30)
 ```
 
 ![ ](assets/workflows/percentmt-1.png)
-
+ 
 Another couple of metrics to look at are `nFeature` and `nCount`. **nFeature** is the number of unique features across the 36000 genes expressed in that cell. **nCount** is the total count of all genes expressed in that cell. We can use these in a few ways.
 
 A cell that has too few variety or total transcripts might represent, again, a dead or dying/leaky cells, but also an empty `cell`. This is where a cell isn't paired with a bead during acquisition, but rather a bunch of extracellular mRNA. Therefore, a low count is probably indicative of poor quality barcodes. 

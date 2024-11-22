@@ -7,7 +7,7 @@ editor_options:
   chunk_output_type: console
 ---
  
-Go to:
+Go to:  
  
 - [About](https://drthomasoneil.github.io/CVR-site/about.html)
 - [Custom Functions](https://drthomasoneil.github.io/CVR-site/functions.html)

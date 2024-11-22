@@ -20,7 +20,7 @@ It can be accessed using:
 ```{r, eval=F}
 source("https://raw.githubusercontent.com/DrThomasOneil/scrnaCVR/refs/heads/main/R/functions.r")
 ```
-
+ 
 ## loadPack
 
 This function runs automatically. It'll load the packages that I typically use, which just saves me having to load packages manually everytime. 
