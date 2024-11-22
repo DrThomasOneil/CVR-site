@@ -15,7 +15,7 @@ This site is a collection of scripts, workflows and information about the regula
 ***
 
 <div style="text-align: left;">
-  <img src="assets/headshot.jpg" alt="Image" style="width: 2in; height: 2in; float: left; margin-right: 10px;">
+  <img src="assets/headshot.jpg" alt="Image" style="width: 2in; float: left; margin-right: 10px;">
   <div style="overflow: hidden; padding-top: 12%;">
 
 ## Dr. Thomas O'Neil
