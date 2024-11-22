@@ -10,6 +10,17 @@ editor_options:
 
 This site is a collection of scripts, workflows and information about the regular analysis that I perform. 
 
-![ ](assets/headshot.jpg) 
+![ ](assets/headshot.jpg) {width=20%}
 
+***
+
+<div style="text-align: left;">
+  <img src="assets/headshot.jpg" alt="Image" style="width: 2in; height: 2in; float: left; margin-right: 10px;">
+  <div style="overflow: hidden; padding-top: 12%;">
+
+## Dr. Thomas O'Neil
+
+**Postdoctoral Researcher**
+  <hr>
+  </div>
 
