@@ -8,7 +8,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-This site is a collection of scripts, workflows and information about the regular analysis that I perform. 
 
 
 ***  
@@ -19,7 +18,9 @@ This site is a collection of scripts, workflows and information about the regula
 
 ## Dr. Thomas O'Neil
 
-**Postdoctoral Researcher**
+**Postdoctoral Researcher**  
+This site is information about me. It is also a collection of scripts, workflows and information about the regular analysis that I perform. 
+
   <hr>
   </div>
 
