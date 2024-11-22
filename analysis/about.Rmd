@@ -10,7 +10,6 @@ editor_options:
 
 This site is a collection of scripts, workflows and information about the regular analysis that I perform. 
 
-![ ](assets/headshot.jpg){width=20%}
 
 ***
 
