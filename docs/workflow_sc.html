@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>SingleCell</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CVR-site</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="functions.html">Functions</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Workflows
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="workflows_sc.html">Single Cell</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="apps.html">ShinyApps</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="start.html">Getting Started</a>
+</li>
+<li>
+  <a href="https://github.com/DrThomasOneil/CVR-site">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">SingleCell</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2024-11-22
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>CVR-site/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20241002code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20241002)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20241002code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20241002)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree2486ea04b8171f99e9117f86dd7304258727fe95targetblank2486ea0a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/2486ea04b8171f99e9117f86dd7304258727fe95" target="_blank">2486ea0</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree2486ea04b8171f99e9117f86dd7304258727fe95targetblank2486ea0a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/2486ea04b8171f99e9117f86dd7304258727fe95" target="_blank">2486ea0</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .RData
+    Ignored:    .Rhistory
+    Ignored:    analysis/.DS_Store
+    Ignored:    data/.DS_Store
+    Ignored:    data/merged_Martin_GCA-SB-HealthyAdult_20220119_annotated_TO.rds
+    Ignored:    data/rmds/.DS_Store
+    Ignored:    static/
+
+Untracked files:
+    Untracked:  data/rmds/workflows.Rmd
+
+Unstaged changes:
+    Deleted:    analysis/workflows.Rmd
+    Deleted:    data/rmds/workflow_sc.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/workflow_sc.Rmd</code>) and HTML
+(<code>docs/workflow_sc.html</code>) files. If you’ve configured a
+remote Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DrThomasOneil/CVR-site/blob/2486ea04b8171f99e9117f86dd7304258727fe95/analysis/workflow_sc.Rmd" target="_blank">2486ea0</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-22
+</td>
+<td>
+Update
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>library(GEOquery)
+library(Seurat)
+library(Matrix)
+library(ggplot2)
+library(cowplot)
+library(dplyr)</code></pre>
+<pre class="r"><code>theme_set(theme_classic())
+set.seed(1337)</code></pre>
+<div id="single-cell-analysis-workshop"
+class="section level1 tabset tabset-fade">
+<h1 class="tabset tabset-fade">Single cell analysis workshop</h1>
+<p>There are tonnes of single cell RNA sequencing datasets that are
+publicly available. Packages like Seurat have also developed
+user-friendly functions and workflows that make analysis easy, too.
+Therefore, the only limitation to analyse unexplored facets of public
+data is a clear and efficient workflow.</p>
+<p><strong>However, there is no one-size-fits-all for analysis.</strong>
+As such, it really just takes <em>time, practice and patience</em>. To
+this end, here is yet another practice script for analysing single-cell
+RNA sequencing data.</p>
+<p>Instead of focusing on the downstream analysis, I’ll demonstrate some
+of the upstream processing steps in more detail. To save on time and
+space, the large majority of my workflow will use only ONE sample. And
+then I will pump through all samples and cover integration.</p>
+<ol style="list-style-type: decimal">
+<li>Downloading and loading data into Seurat</li>
+<li>QC</li>
+<li>Normalisation</li>
+<li>Annotation</li>
+<li>Integration</li>
+</ol>
+<p>The data is derived from <a
+href="https://pubmed.ncbi.nlm.nih.gov/39132177/">perianal fistula in
+Crohn’s disease</a>.</p>
+<div id="downloading-and-loading-data-into-seurat"
+class="section level2">
+<h2>Downloading and loading data into Seurat</h2>
+<p>Downloading and processing the data will take up ~2GB of space. So
+choose where you want to set your wd such as D: or C: drive or OneDrive
+etc.</p>
+<p>You can manually download the data, but I’m preferring to handle
+everything in R from now on, as it creates a perfect reproducibility
+report.</p>
+<pre class="r"><code>pDir = getwd()
+
+if(!dir.exists(&quot;raw&quot;)){dir.create(&quot;raw&quot;)}
+if(!dir.exists(&quot;data&quot;)){dir.create(&quot;data&quot;)}
+
+#download the data from the GEO
+download.file(&quot;https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE225199&amp;format=file&quot;, 
+             destfile = &quot;GSE225199.tar&quot;, 
+             method = &quot;curl&quot;)
+
+#untar data into a new folder called &quot;raw&quot;
+untar(&quot;GSE225199.tar&quot;, exdir = &quot;raw&quot;)</code></pre>
+<p>From the GEO, we can also collect the submitted metadata for each
+sample. There are two reasons for this:</p>
+<p>a, We can use the GSM’s to open each unique sample b. We can
+immediately and automatically assign metadata to the final sample</p>
+<pre class="r"><code>gse &lt;- pData(GEOquery::getGEO(&quot;GSE225199&quot;)[[1]])
+
+saveRDS(gse, &quot;data/gse,rds&quot;)</code></pre>
+<p>We also want to create a new folder for data and load in the names of
+the files we downloaded</p>
+<pre class="r"><code>mats = list.files(&quot;raw/&quot;, pattern= &quot;.mtx&quot;)
+bars = list.files(&quot;raw/&quot;, pattern= &quot;barcode&quot;)
+feats = list.files(&quot;raw/&quot;, pattern= &quot;feat&quot;)</code></pre>
+<hr>
+<div id="load-in-the-first-sample" class="section level3">
+<h3>Load in the first sample</h3>
+<pre class="r"><code>{
+setwd(&quot;raw&quot;)
+
+i=1
+
+mat = readMM(grep(rownames(gse)[i], mats, value=T))
+feat = read.delim(grep(rownames(gse)[i], feats, value=T), header=F)
+bar = read.delim(grep(rownames(gse)[i], bars, value=T), header=F)
+
+feat$V4 &lt;- make.unique(feat$V2, sep=&quot;-&quot;)
+}</code></pre>
+<p>We have three separate objects:</p>
+<ul>
+<li><strong>mat</strong> is the matrix of expressions with rows = genes
+and columns = barcodes</li>
+<li><strong>feat</strong> contains the features/genes, and has three
+columns: a) Ensembl gene ID, b) Gene name, and c) type of
+expression.</li>
+<li><strong>bar</strong> contains the barcode IDs. These have no real
+relevance for now, but for the purposes here, are unique and can be used
+to match up meta-data.</li>
+</ul>
+<p>Here, I also build a metadata data frame. We use the rownames as
+barcodes so the Seurat knows which metadata row aligns to the which
+column in the matrix. I use information from the <code>gse</code>
+object, such as sex, inflammation status and batch. This can be done
+AFTER you’ve built the Seurat object, but I wanted to show you how to
+make a Seurat object with corresponding metadata. This is useful for
+more complex functions in downstream analysis, such as chopping up and
+restitching data.</p>
+<p>Lastly we <code>CreateSeuratObject</code> and store extra metadata
+about the genes. This is important, as Seurat doesn’t like duplicated
+rownames. So, I’ve created the object using the unique genenames, and
+store the extra gene info as metadata. We can then process the data
+without Seurat flipping out over it. Why we have duplicated gene names
+is possibly due to gene isotypes - the same protein from a different
+transcript/gene. We dont want to assume anything about which variant of
+the same protein is more important. Therefore, we dont automatically
+just keep the first instance, nor keep the one with the highest count.
+Most likely, the transcript variant with the least counts will be
+filtered out in a future step.</p>
+<pre class="r"><code>rownames(mat) &lt;- feat$V4 #rownames = genes
+colnames(mat) &lt;- bar$V1 #colnames = barcodes
+
+#generate the metadata file using information from the gse object
+met &lt;- data.frame(row.names = bar$V1)
+met$batch &lt;- gse$`batch:ch1`[i]
+met$sex &lt;- gse$`Sex:ch1`[i]
+met$disease &lt;-gse$`disease status:ch1`[i]
+met$inflam &lt;- gse$`inflammation status:ch1`[i]
+met$geo &lt;- gse$geo_accession[i]
+
+#create seurat object
+seu &lt;- CreateSeuratObject(mat, meta.data = met)
+
+# feature metadata
+seu@assays$RNA@meta.data
+seu@assays$RNA@meta.data$geneID &lt;- feat$V2
+seu@assays$RNA@meta.data$geneID_Unique &lt;- feat$V4
+seu@assays$RNA@meta.data$ensembl &lt;- feat$V1</code></pre>
+<hr>
+</div>
+</div>
+<div id="qc" class="section level2">
+<h2>QC</h2>
+<p>There are a few common QC metrics for single cell, and this is where
+you will probably spend the most time. There is no gold standard and its
+really a game of balancing how much data you’re willing to bin in order
+to achieve higher quality. There are limits you need to be careful of,
+however, such as removing cells that are high quality, but dont meet
+your metrics.</p>
+<p>Often times, I will set loose metrics, and go all the way through to
+clustering and annotation before wanting to tidy the data up further.
+This is usually my default, as we typically then isolate cell-types of
+interest and I can spend more time tailoring QC for those cells.</p>
+<p>An example might be the mitochondrial percentage. High mitochondrial
+RNA counts are calculated by dividing the summed counts from the 13 or
+so mito-genes (typically prefixed by <code>MT-</code> or
+<code>MT.</code>) by the total count per cell. A threshold is set to
+remove cells that contain too high a mitochondrial RNA content as this
+can be indicative of dead or dying/leaky cells - cytoplasmic RNA is
+leaked from the cell, but retain mitochondrial RNA, thus, the majority
+of the RNA counted in that cell would be mitochondrial. This can vary
+drastically. You will see some people set it quite low (5%) and some
+quite high (25%).</p>
+<p>Again, this comes down to your study. I will set a high threshold for
+initial processing, and reduce this when I get to my celltype of
+interest. The reason for this is because if, for example, you are
+looking at whole digested tissue, some non-immune cells, such as muscle
+cells, will have higher mitoRNA. So to set a blanket threshold on
+diverse data, you may unknowingly be bias in removing whole cell types.
+Contrastingly, immune cells are expected to be quite low. If you isolate
+T cells (which are typically robust in tissue digestions) in the data
+you might find that almost none exceed 10%. And so lowering the
+threshold to 5% might only remove a small fraction of your data. DCs and
+Macs which are more fragile might be starting to die, depending on the
+paper’s methods, and in the same dataset might need a higher
+threshold.</p>
+<p>Therefore, the QC steps in single cell RNA analysis is very much
+individually determined per dataset (and even sample). Furthermore, I’d
+encourage you, even when you are happy with the thresholds, to
+continually check them during the processing. And to be open to the fact
+that there’s a huge possibility that you need to readjust your
+thresholds and start all over.</p>
+<details>
+<summary>
+<strong>Also worth checking out what the original paper used for QC when
+recreating figure:</strong>
+</summary>
+Filtered gene expression matrices were loaded into Seurat v. 4.1.1 with
+min.features = 200 and min.cells = 3.14 The following QC parameters were
+used: number of genes 250-6500, number of transcripts &gt;300,
+mitochondria percent &lt;30% and log10(Genes/UMI) &gt;0.80. Only genes
+that were observed to be expressed in 10 or more cells were kept for
+downstream analysis. After QC, 67,119 cells from rectal tissue were kept
+for downstream analysis.
+<hr>
+</details>
+<hr>
+<pre class="r"><code># typically you can just use 
+#
+# PercentageFeatureSet(seu, pattern = &quot;^MT-&quot;)
+#
+# You can confirm this using this
+# seu@assays$RNA@meta.data[grep(&quot;MT-&quot;, seu@assays$RNA@meta.data$geneID),]
+
+seu$percent.mt &lt;- PercentageFeatureSet(seu, features=rownames(seu)[grep(&quot;MT-&quot;, seu@assays$RNA@meta.data$geneID)])
+
+VlnPlot(seu, &quot;percent.mt&quot;, pt.size=0.1, alpha=0.1)+
+  NoLegend()+theme(axis.text.x = element_text(size=0))+xlab(&quot;&quot;)+
+  geom_hline(yintercept = 30)
+
+table(OverThreshold=seu$percent.mt&gt;30)</code></pre>
+<p><img src="assets/workflows/percentmt-1.png" /></p>
+<p>Another couple of metrics to look at are <code>nFeature</code> and
+<code>nCount</code>. <strong>nFeature</strong> is the number of unique
+features across the 36000 genes expressed in that cell.
+<strong>nCount</strong> is the total count of all genes expressed in
+that cell. We can use these in a few ways.</p>
+<p>A cell that has too few variety or total transcripts might represent,
+again, a dead or dying/leaky cells, but also an empty <code>cell</code>.
+This is where a cell isn’t paired with a bead during acquisition, but
+rather a bunch of extracellular mRNA. Therefore, a low count is probably
+indicative of poor quality barcodes.</p>
+<p>A cell that has too high a variety or total count is possibly
+indicative of duplicates. There are other packages that can be used for
+duplicates, but this is one of the more common ways to filter. For
+example, B cells will all contain roughly the same variety of genes, and
+T cells a different variety of genes. Therefore, these cells will
+contain roughly the same number of unique features. However, if a B cell
+and a T cell are contained in the same droplet, you will have,
+theoretically, double the number of unique genes. So, while you can have
+highly diverse subsets, the chances are, you have high unique
+transcripts in doublets.</p>
+<pre class="r"><code>FeatureScatter(seu, &quot;nFeature_RNA&quot;, &quot;nCount_RNA&quot;, pt.size=0.1)+
+  geom_hline(yintercept = 30000)+
+  geom_vline(xintercept = 500)+
+  geom_text(label=&quot;Unique features: 500\nTotal features: 30,000&quot;, x=2500, y=38000 )</code></pre>
+<p><img src="assets/workflows/nCount&amp;nFeature-1.png" /></p>
+<pre class="r"><code>#label the points to throw
+seu$filter = ifelse(seu$nCount_RNA&lt;30000 &amp; seu$nFeature_RNA&gt;500, &quot;keep&quot;, &#39;throw&#39;)
+
+FeatureScatter(seu, &quot;nFeature_RNA&quot;, &quot;nCount_RNA&quot;, group.by = &quot;filter&quot;)+
+  geom_hline(yintercept = 30000)+
+  geom_vline(xintercept = 500)+
+  geom_text(label=&quot;Unique features: 500\nTotal features: 30,000&quot;, x=2500, y=38000)</code></pre>
+<p><img src="assets/workflows/nCount&amp;nFeature-2.png" /></p>
+<p>For the sake of showing how this might affect clustering, I will not
+filter them right now.</p>
+<p>Lastly, we can filter the actual genes themselves. This should lower
+the object size AND reduce possible noise when processing the data.</p>
+<p>Again, this isn’t a gold standard metric. Basically we can remove
+cells that are not present in a certain number of cells. Some people use
+an exact number (e.g. the gene needs to be present in at least 10 cells)
+or proportion (e.g. has to be present in 3% of cells). I’ve seen this
+done both before and after filtering cells.</p>
+<pre class="r"><code>zeroes &lt;- rowSums(seu@assays$RNA@layers$counts!=0) # counts the number of non-zeros per row. 
+table(PresentIn3pc=zeroes&lt;0.03*ncol(seu), ZeroCounts=zeroes==0) #~24000 genes are not expressed in &gt;3% of cells. </code></pre>
+<p>For the purposes of this, I will use the QC metrics employed by the
+original paper so that we can recreate their figures.</p>
+<pre class="r"><code># visual rep of whats happening! 
+seu@assays$RNA@layers$counts[210:220,210:220]
+seu@assays$RNA@layers$counts[210:220,210:220]!=0
+rowSums(seu@assays$RNA@layers$counts[210:220,210:220]!=0)
+
+
+# according to the paper methods
+# gene has to be present in at least 10 cells
+seu &lt;- seu[zeroes&gt;=10,]
+
+# number of genes and number of transcripts
+
+seu$filter = ifelse(seu$nCount_RNA&gt;300 &amp; seu$nFeature_RNA&gt;250 &amp; seu$nFeature_RNA&lt;6500 &amp; seu$percent.mt&lt;30, &quot;keep&quot;, &#39;throw&#39;)
+
+
+seu &lt;- subset(seu, subset = filter ==&quot;keep&quot;)
+dim(seu)</code></pre>
+<hr>
+</div>
+<div id="data-processing" class="section level2 tabset tabset-fade">
+<h2 class="tabset tabset-fade">Data processing</h2>
+<div id="standard-seurat-pipeline" class="section level3">
+<h3>Standard Seurat Pipeline</h3>
+<p>A standard Seurat pipeline can be found <a
+href="https://satijalab.org/seurat/articles/pbmc3k_tutorial">here</a>.</p>
+<pre class="r"><code>seu &lt;- NormalizeData(seu, verbose=F)
+seu &lt;- FindVariableFeatures(seu, verbose=F)
+
+VariableFeatures(seu)
+
+seu &lt;- ScaleData(seu, features = rownames(seu), verbose=F)
+seu &lt;- RunPCA(seu, verbose=F)
+
+#PCA visualisations
+PCAPlot(seu)</code></pre>
+<p><img src="assets/workflows/Processing1-1.png" /></p>
+<pre class="r"><code>VizDimLoadings(seu, dims=1:2)</code></pre>
+<p><img src="assets/workflows/Processing1-2.png" /></p>
+<pre class="r"><code>#print(seu[[&quot;pca&quot;]], dims = 4, nfeatures = 5)
+PCAPlot(seu, dims=c(3,4))+geom_hline(yintercept = 0)</code></pre>
+<p><img src="assets/workflows/Processing1-3.png" /></p>
+<p>Elbow plots are one way to choose the number of dimensions to use
+from the PCA. The SD represents the variability in the genes across that
+dimensions. With lower variability, you get lower SD, and a more unique
+expression across the cells on those dimensions. So we can decide to use
+as many dimensions as we want. Too few and you may as well use the PCA
+itself for visualisations and clustering. Too many and you might
+introduce a lot of senseless noise.</p>
+<p>This again, is an individually decided metric.</p>
+<pre class="r"><code>ElbowPlot(seu, ndims=50)</code></pre>
+<p><img src="assets/workflows/Elbow-1.png" /></p>
+<pre class="r"><code>#paper uses 15 as cutoff and 0.5 for resolution
+seu &lt;- FindNeighbors(seu, dims = 1:15, verbose=F)
+seu &lt;- FindClusters(seu, resolution = 0.5, cluster.name = &quot;D1_15_R05&quot;, verbose=F)
+seu &lt;- RunUMAP(seu, dims = 1:15, verbose=F)
+seu &lt;- RunTSNE(seu, dims = 1:15)
+
+plot_grid(ncol=2, 
+          PCAPlot(seu, label=T, pt.size=1)+NoLegend()+NoAxes()+ggtitle(&quot;PCA&quot;),
+          UMAPPlot(seu, label=T, pt.size=1)+NoLegend()+NoAxes()+ggtitle(&quot;UMAP&quot;),
+          TSNEPlot(seu, label=T, pt.size=1)+NoLegend()+NoAxes()+ggtitle(&quot;TSNE&quot;)
+          )</code></pre>
+<p><img src="assets/workflows/ClusteringAndVis-1.png" /></p>
+</div>
+<div id="annotations" class="section level3">
+<h3>Annotations</h3>
+<pre class="r"><code>DotPlot(seu, c(&quot;CD3E&quot;, #T
+               &quot;LYZ&quot;,&quot;CD14&quot;, #MNP 
+               &quot;KIT&quot;,&quot;HPGDS&quot;, &quot;TPSAB1&quot;, # granulo
+               &quot;MZB1&quot;, &quot;CD79A&quot;, &#39;MS4A1&#39;, #B/Plasma 
+               &quot;MKI67&quot;, &#39;TYMS&#39;, #Cycling,
+               &quot;PECAM1&quot;, &quot;VWF&quot;, &quot;CD34&quot;, &quot;LYVE1&quot;, #endothelial,
+               &quot;COL1A1&quot;, &quot;COL6A1&quot;, &quot;ACTA2&quot;, &quot;NOTCH3&quot;, #Fb
+               &quot;PIGR&quot;, &quot;KRT8&quot;
+               ))+
+  RotatedAxis()</code></pre>
+<p><img src="assets/workflows/Annotation-1.png" /></p>
+<pre class="r"><code>annotations = c(
+  &quot;0&quot; = &quot;Epi&quot;,
+  &quot;1&quot; = &quot;Epi2&quot;,
+  &quot;3&quot; = &quot;Epi3&quot;,
+  &quot;5&quot; = &quot;Epi4&quot;,
+  &quot;8&quot; = &quot;Epi5&quot;,
+  &quot;4&quot; = &quot;Cycling&quot;,
+  &quot;10&quot; = &quot;Fibroblast&quot;,
+  &quot;13&quot; = &quot;Endothelial&quot;,
+  &quot;7&quot; = &quot;T cells&quot;,
+  &quot;2&quot; = &quot;B cells&quot;,
+  &quot;6&quot; = &quot;Plasma&quot;,
+  &quot;9&quot; = &quot;Plasma2&quot;,
+  &quot;12&quot; = &quot;MNP&quot;,
+  &quot;11&quot; = &quot;Granulo&quot;,
+  &quot;14&quot; = &quot;Granulo2&quot;
+)
+seu &lt;- RenameIdents(seu, annotations)
+seu$Init_Anno &lt;- Idents(seu)
+
+saveRDS(seu, &quot;data/sample1.rds&quot;)</code></pre>
+<pre class="r"><code>plot_grid(ncol=2, 
+          PCAPlot(seu, label=T, pt.size=1, repel=T)+NoLegend()+NoAxes()+ggtitle(&quot;PCA&quot;),
+          UMAPPlot(seu, label=T, pt.size=1, repel=F)+NoLegend()+NoAxes()+ggtitle(&quot;UMAP&quot;),
+          TSNEPlot(seu, label=T, pt.size=1, repel=T)+NoLegend()+NoAxes()+ggtitle(&quot;TSNE&quot;)
+          )</code></pre>
+<p><img src="assets/workflows/Visualisewithnewannotations-1.png" /></p>
+</div>
+<div id="vis-umaps" class="section level3">
+<h3>Vis: UMAPs</h3>
+<pre class="r"><code># to test out yourselves
+
+UMAPPlot(seu, 
+         label=T, 
+         pt.size=1, 
+         repel=F)+NoLegend()+NoAxes()+  
+  scale_color_viridis_d()+ggtitle(&quot;Set colour scale&quot;)
+
+UMAPPlot(seu, 
+         label=T, 
+         pt.size=1, 
+         repel=F)+NoLegend()+NoAxes()+  
+  scale_color_manual(values=colorRampPalette(c(&quot;violet&quot;, &quot;blue&quot;, &quot;yellow&quot;,&quot;red&quot;))(15))+ggtitle(&quot;Selected Scale&quot;)
+
+UMAPPlot(seu, 
+         label=T, 
+         pt.size=1, 
+         repel=F)+NoLegend()+NoAxes()+  
+  scale_color_manual(values=rainbow(15))+ggtitle(&quot;Rainbow!&quot;)
+
+
+UMAPPlot(seu, 
+         label=T, 
+         repel=F,
+         label.box=T,
+         cols=colorRampPalette(c(&quot;violet&quot;, &quot;blue&quot;, &quot;yellow&quot;,&quot;red&quot;))(15),
+         label.size=2,
+         pt.size=2)+
+  NoLegend()+NoAxes()+  
+  ggtitle(&quot;With added features&quot;)</code></pre>
+</div>
+<div id="vis-dotplot" class="section level3">
+<h3>Vis: DotPlot</h3>
+<pre class="r"><code># to test out yourselves
+
+genes = c(&quot;EPCAM&quot;, &quot;MKI67&quot;, &quot;COL1A1&quot;, &quot;CD34&quot;, &quot;CD3E&quot;, &quot;MS4A1&quot;, &quot;CD79A&quot;, &quot;MZB1&quot;, &quot;LYZ&quot;, &quot;HPGDS&quot;)
+
+DotPlot(seu, features=genes)
+
+DotPlot(seu, features=genes)+
+  labs(y=&quot;&quot;,x=&quot;&quot;, title=&quot;Titles&quot;)
+
+DotPlot(seu, features=genes)+
+  RotatedAxis()+NoLegend()+
+  labs(y=&quot;&quot;,x=&quot;&quot;, title=&quot;Rotated X Axis &amp; NoLegend&quot;)
+
+DotPlot(seu, 
+        features=genes,
+        cols=c(&quot;yellow&quot;, &quot;blue&quot;))+
+  RotatedAxis()+
+  labs(y=&quot;&quot;,x=&quot;&quot;, title=&quot;Changed Colour Palette&quot;)
+
+DotPlot(seu, 
+        features=genes,
+        cols=c(&quot;yellow&quot;, &quot;blue&quot;),
+        idents=c(&quot;T cells&quot;, &quot;B cells&quot;,&quot;Plasma&quot;,&quot;Plasma2&quot;, &quot;MNP&quot;))+
+  RotatedAxis()+
+  labs(y=&quot;&quot;,x=&quot;&quot;, title=&quot;Idents of Interest&quot;)
+
+DotPlot(seu, 
+        features=genes,
+        cols=c(&quot;yellow&quot;, &quot;blue&quot;),
+        idents=c(&quot;T cells&quot;, &quot;B cells&quot;,&quot;Plasma&quot;,&quot;Plasma2&quot;, &quot;MNP&quot;))+
+  RotatedAxis()+
+  coord_flip()+
+  labs(y=&quot;&quot;,x=&quot;&quot;, title=&quot;CoordFlip&quot;)</code></pre>
+</div>
+</div>
+<div id="integration" class="section level2">
+<h2>Integration</h2>
+<p>Lastly, we’ll cover integration. There are a few ways to do this. But
+mainly, if you’re working with Seurat, you’ll probably look at CCA or
+RPCA.</p>
+<p>We just need to start by loading in all the other data.</p>
+<pre class="r"><code>setwd(&quot;raw&quot;)
+i=1 
+
+  mat = readMM(grep(rownames(gse)[i], mats, value=T))
+  feat = read.delim(grep(rownames(gse)[i], feats, value=T), header=F)
+  bar = read.delim(grep(rownames(gse)[i], bars, value=T), header=F)
+  
+  feat$V4 &lt;- make.unique(feat$V2, sep=&quot;-&quot;)
+  
+  rownames(mat) &lt;- feat$V4 #rownames = genes
+  colnames(mat) &lt;- bar$V1 #colnames = barcodes
+  
+  #generate the metadata file using information from the gse object
+  met &lt;- data.frame(row.names = bar$V1)
+  met$batch &lt;- gse$`batch:ch1`[i]
+  met$sex &lt;- gse$`Sex:ch1`[i]
+  met$disease &lt;-gse$`disease status:ch1`[i]
+  met$inflam &lt;- gse$`inflammation status:ch1`[i]
+  met$geo &lt;- gse$geo_accession[i]
+  
+  #create seurat object
+  seu &lt;- CreateSeuratObject(mat, meta.data = met)
+  
+  # feature metadata
+  seu@assays$RNA@meta.data
+  seu@assays$RNA@meta.data$geneID &lt;- feat$V2
+  seu@assays$RNA@meta.data$geneID_Unique &lt;- feat$V4
+  seu@assays$RNA@meta.data$ensembl &lt;- feat$V1
+  
+  seu$percent.mt &lt;- PercentageFeatureSet(seu, features=rownames(seu)[grep(&quot;MT-&quot;, seu@assays$RNA@meta.data$geneID)])
+
+
+  #  number of genes and number of transcripts
+  seu$filter = ifelse(seu$nCount_RNA&gt;300 &amp; seu$nFeature_RNA&gt;250 &amp; seu$nFeature_RNA&lt;6500 &amp; seu$percent.mt&lt;30, 
+                      &quot;keep&quot;, 
+                      &#39;throw&#39;)
+
+  seu &lt;- subset(seu, subset = filter == &quot;keep&quot;)
+  data &lt;- seu
+  
+for(i in 2:nrow(gse)){
+  
+  mat = readMM(grep(rownames(gse)[i], mats, value=T))
+  feat = read.delim(grep(rownames(gse)[i], feats, value=T), header=F)
+  bar = read.delim(grep(rownames(gse)[i], bars, value=T), header=F)
+  
+  feat$V4 &lt;- make.unique(feat$V2, sep=&quot;-&quot;)
+  
+  rownames(mat) &lt;- feat$V4 #rownames = genes
+  colnames(mat) &lt;- bar$V1 #colnames = barcodes
+  
+  #generate the metadata file using information from the gse object
+  met &lt;- data.frame(row.names = bar$V1)
+  met$batch &lt;- gse$`batch:ch1`[i]
+  met$sex &lt;- gse$`Sex:ch1`[i]
+  met$disease &lt;-gse$`disease status:ch1`[i]
+  met$inflam &lt;- gse$`inflammation status:ch1`[i]
+  met$geo &lt;- gse$geo_accession[i]
+  
+  #create seurat object
+  seu &lt;- CreateSeuratObject(mat, meta.data = met)
+  
+  # feature metadata
+  seu@assays$RNA@meta.data
+  seu@assays$RNA@meta.data$geneID &lt;- feat$V2
+  seu@assays$RNA@meta.data$geneID_Unique &lt;- feat$V4
+  seu@assays$RNA@meta.data$ensembl &lt;- feat$V1
+  
+  seu$percent.mt &lt;- PercentageFeatureSet(seu, features=rownames(seu)[grep(&quot;MT-&quot;, seu@assays$RNA@meta.data$geneID)])
+  #  number of genes and number of transcripts
+  seu$filter = ifelse(seu$nCount_RNA&gt;300 &amp; seu$nFeature_RNA&gt;250 &amp; seu$nFeature_RNA&lt;6500 &amp; seu$percent.mt&lt;30, 
+                      &quot;keep&quot;, 
+                      &#39;throw&#39;)
+
+  seu &lt;- subset(seu, subset = filter == &quot;keep&quot;)
+  data &lt;- merge(data, seu)
+}
+#rm(bar,feat,mat,met, bars, feats, i, mats, zeroes)
+setwd(pDir)
+data[[&quot;RNA&quot;]] &lt;- JoinLayers(data[[&quot;RNA&quot;]])
+
+zeroes &lt;- rowSums(data@assays$RNA@layers$counts!=0) # counts the number of non-zeros per row. 
+data &lt;- data[zeroes&gt;=10,]
+
+saveRDS(data, &quot;data/all_data_unint.rds&quot;)</code></pre>
+<p>Performing the integration here, we’ll use RPCA because its quicker.
+I’m going to integrate per batch, though you might want to check that
+this is enough. You might want to integrate per individual samples, if
+you still see batch effects and have enough cells.</p>
+<pre class="r"><code>data &lt;- readRDS(&quot;data/all_data_unint.rds&quot;)
+options(future.globals.maxSize = 3 * 1024^3)  # 3 GiB
+
+data[[&quot;RNA&quot;]] &lt;- split(data[[&quot;RNA&quot;]], f = data$batch)
+
+data &lt;- NormalizeData(data,verbose=F)
+data &lt;- FindVariableFeatures(data,verbose=F)
+data &lt;- ScaleData(data,verbose=F)
+data &lt;- RunPCA(data,verbose=F)
+
+# checking unintegrated analysis
+data &lt;- FindNeighbors(data, dims = 1:15, reduction = &quot;pca&quot;,verbose=F)
+data &lt;- FindClusters(data, resolution = 0.5, cluster.name = &quot;unintegrated_clusters&quot;,verbose=F)
+data &lt;- RunUMAP(data, dims = 1:15, reduction = &quot;pca&quot;, reduction.name = &quot;umap.unintegrated&quot;,verbose=F)
+#integrating data
+data &lt;- IntegrateLayers(object = data, method = RPCAIntegration, orig.reduction = &quot;pca&quot;, new.reduction = &quot;integrated.rpca&quot;,
+    verbose = T)
+data[[&quot;RNA&quot;]] &lt;- JoinLayers(data[[&quot;RNA&quot;]])
+
+data &lt;- FindNeighbors(data, reduction = &quot;integrated.rpca&quot;, dims = 1:15,verbose=F)
+data &lt;- FindClusters(data, resolution = 0.5,verbose=F)
+data &lt;- RunUMAP(data, dims = 1:15, reduction = &quot;integrated.rpca&quot;,verbose=F)
+
+
+saveRDS(data,&quot;data/integrated.rds&quot;)</code></pre>
+<p>Here is a clear example, on the right, of one sample being
+drastically different to the rest. It is possible that this requires
+more stringent integration per sample, rather than per batch.</p>
+<p>But will ultimately be up to the user who might identify that some of
+these UMAP tails are real groups of unique cells to that donor, or more
+artificial differences created by batch errors. It is for this reason
+that I’ll often check the proportion of donor cells per cluster to make
+sure one cluster isn’t being predominated by one or two donors.</p>
+<pre class="r"><code>data &lt;- readRDS(&quot;~/Library/CloudStorage/OneDrive-TheUniversityofSydney(Staff)/projects/GSE225199_fistula/data/integrated.rds&quot;)
+
+plot_grid(
+  DimPlot(data, reduction = &quot;umap&quot;, group.by = &quot;geo&quot;, label=T)+NoLegend()+ggtitle(&quot;RPCA&quot;),
+  DimPlot(data, reduction = &quot;umap.unintegrated&quot;, group.by = &quot;geo&quot;, label=T)+NoLegend()+ggtitle(&quot;No Int&quot;)
+)</code></pre>
+<p><img src="assets/workflows/int.png" /></p>
+<pre class="r"><code>FetchData(data, c(&quot;ident&quot;,&quot;geo&quot;)) %&gt;% group_by(ident) %&gt;%
+    mutate(prop=1/length(ident)) %&gt;%
+    ungroup() %&gt;%
+    group_by(ident,geo) %&gt;%
+    summarise(totprop=sum(prop)) %&gt;%
+    ggplot(aes(x=ident,fill=geo,y=totprop)) +
+    geom_bar(position=&#39;fill&#39;, stat=&#39;identity&#39;) + 
+    theme(axis.text.x =element_text(angle = 45,hjust=1))+scale_y_continuous(name=&quot;Cluster Proportion&quot;)+ theme_classic()</code></pre>
+<p><img src="assets/workflows/int2.png" /></p>
+<pre class="r"><code>FetchData(data, c(&quot;ident&quot;,&quot;batch&quot;)) %&gt;% group_by(ident) %&gt;%
+    mutate(prop=1/length(ident)) %&gt;%
+    ungroup() %&gt;%
+    group_by(ident,batch) %&gt;%
+    summarise(totprop=sum(prop)) %&gt;%
+    ggplot(aes(x=ident,fill=batch,y=totprop)) +
+    geom_bar(position=&#39;fill&#39;, stat=&#39;identity&#39;) + 
+    theme(axis.text.x =element_text(angle = 45,hjust=1))+scale_y_continuous(name=&quot;Cluster Proportion&quot;)+ theme_classic()</code></pre>
+<p><img src="assets/workflows/int3.png" /></p>
+<p><strong>Cluster 8,14, 20 needs to be investigated. If they are real
+clusters that could exist in those samples, then it is not a batch
+effect. If those clusters are identical but slightly different from the
+adjacent celltypes, then it is batch effects and a more rigorous attemp
+should be made, such as CCA or int-per-donor rather than by
+batch.</strong></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
