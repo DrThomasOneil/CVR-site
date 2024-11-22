@@ -1,5 +1,6 @@
 ---
-title: "About "
+title: "About Me"
+site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
     toc: false
@@ -7,4 +8,8 @@ editor_options:
   chunk_output_type: console
 ---
 
-To be completed 
+This site is a collection of scripts, workflows and information about the regular analysis that I perform. 
+
+![ ](assets/headshot.jpg)
+
+
