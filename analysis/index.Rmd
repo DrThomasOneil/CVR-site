@@ -1,10 +1,8 @@
 ---
 title: "Home"
-site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
     toc: false
-    code_folding: show
 editor_options:
   chunk_output_type: console
 ---
