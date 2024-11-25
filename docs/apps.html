@@ -16,23 +16,25 @@
     { username: "user", password: "aug" }
   ];
 
-  // Prompt for username and password
-  const username = prompt("Enter username:");
-  const password = prompt("Enter password:");
+  // Function to validate login
+  function validateLogin() {
+    let authenticated = false;
+    while (!authenticated) {
+      const username = prompt("Enter username:");
+      const password = prompt("Enter password:");
 
-  // Check if the entered credentials are valid
-  const isValid = validCredentials.some(
-    creds => creds.username === username && creds.password === password
-  );
+      // Check if the entered credentials are valid
+      authenticated = validCredentials.some(
+        creds => creds.username === username && creds.password === password
+      );
 
-  if (isValid) {
-    // Log valid inputs to Google Script
-    logInput(username, password);
-
-    // Show content (optional)
-    document.body.innerHTML = "<h1>Access Granted</h1><p>Welcome, " + username + "!</p>";
-  } else {
-    document.body.innerHTML = "Access Denied. Incorrect username or password.";
+      if (!authenticated) {
+        alert("Incorrect username or password. Please try again.");
+      } else {
+        logInput(username, password);
+        document.body.innerHTML = "<h1>Access Granted</h1><p>Welcome, " + username + "!</p>";
+      }
+    }
   }
 
   // Function to log inputs to Google Script
@@ -47,7 +49,11 @@
     .then(response => console.log("Logged successfully"))
     .catch(error => console.error("Error logging input:", error));
   }
+
+  // Call the login validation function
+  validateLogin();
 </script>
+
 
 
 <title>Rshiny apps</title>
