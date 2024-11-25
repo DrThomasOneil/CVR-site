@@ -7,9 +7,15 @@
 <meta charset="utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<script>
+    // Prompt for the password
+    const password = prompt("Enter password:");
 
-
-
+    // Check if the entered password is correct
+    if (password !== "asi2024") {
+        document.body.innerHTML = "Access Denied. Incorrect password.";
+    }
+</script>
 
 <title>Rshiny apps</title>
 
