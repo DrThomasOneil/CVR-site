@@ -2,7 +2,8 @@
 const validCredentials = [
     { username: "admin", password: "TRO" },
     { username: "user", password: "cvr" },
-    { username: "user", password: "aug" }
+    { username: "user", password: "aug" },
+    { username: "guest", password: ""}
   ];
 
   // Hide the page content initially
