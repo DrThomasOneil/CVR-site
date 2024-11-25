@@ -6,9 +6,12 @@
 #* Acknowledgements: Brian Gloss
 
 #* Function plans
-#* 
-#* - checkModule adaptation for single cell data
-#*  - to add "spatial = T" which outputs SpatialFeaturePlot, otherwise FeaturePlot
+#* - Integrate data & output list incl data w and wo the extra reductions. 
+#* - filter data
+#* - load10X custom (e.g. when its not easy - use the GEO, etc.)
+#* - add Tiff data
+
+
 
 # setup -------------------------------------------------------------------
 loadPack <- function() {
@@ -49,12 +52,40 @@ loadPack()
 source("https://raw.githubusercontent.com/tomoneil58/LabCode/main/HPA/HPA.R")
 
 # Processing --------------------------------------------------------------
-process <- function(dat=dat, dimuse = 1:15, features=800, verbose=F, reduction.name=NULL){
+process <- function(dat=dat, dimuse = 1:15, features=800, verbose=F, reduction.name=NULL, useful_features=T){
+  source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
+  if(useful_features){
+    cat("\nCollecting data:\n\n")
+    progress(2)
+  }
   dat <- NormalizeData(dat, verbose=verbose)
+  cat("\nData Normalized...\n\n")
+  if(useful_features){
+    cat("\nFinding Var Features:\n\n")
+    points(3)
+  }
   dat <- FindVariableFeatures(dat, nfeatures=features, verbose=verbose)
+  cat("\nVar Features Collected...\n\n")
+  if(useful_features){
+    cat("\nScaling Data:\n\n")
+    cycle(3)
+  }
   dat <- ScaleData(dat, features=VariableFeatures(dat), verbose=verbose)
+  cat("\nData Scaled...\n\n")
+  if(useful_features){
+    cat("\Running PCA:\n\n")
+    cycle(3)
+  }
   dat <- RunPCA(dat, verbose=verbose, reduction.name = paste0("pca", reduction.name))
+  if(useful_features){
+    cat("\Running UMAP:\n\n")
+    cycle(3)
+  }
   dat <- RunUMAP(dat, dims=dimuse, verbose=verbose, reduction = paste0("pca", reduction.name), reduction.name = paste0("umap", reduction.name))
+  if(useful_features){
+    cat("\Running TSNE:\n\n")
+    cycle(3)
+  }
   dat <- RunTSNE(dat, dims=dimuse, check_duplicates=F, verbose=verbose, reduction = paste0("pca", reduction.name),reduction.name = paste0("tsne", reduction.name))
   return(dat)
 }
@@ -72,18 +103,35 @@ printMessage <- function(message = "Message", space=4, theme=NULL, bg = "#FFFFFF
   if(is.null(theme)){theme <- combine_ansi_styles(make_ansi_style(bg, bg = TRUE, bold = bold), txt)}
   message=paste(paste(rep(" ", space), collapse=""), message, paste(rep(" ", space), collapse=""), collapse="")
   cat(theme(paste(rep(" ", nchar(message)), collapse=""), "\n",message, '\n',paste(rep(" ", nchar(message)), collapse="")), "\n\n")
-};printMessage()
+}
 
 # Plotting ----------------------------------------------------------------
-plotSankey<-function(seuratObj,idvar=c("varRes.0.3","emt_res.0.3")){
+plotSankey<-function(seuratObj,idvar=c("varRes.0.3","emt_res.0.3"), useful_features=T){
+  source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
   require(flipPlots)
   message('try install_github("Displayr/flipPlots") if this doesnt work')
   require(dplyr)
+  if(useful_features){
+    cat("\nCollecting data:\n\n")
+    progress(2)
+    cat("\nMetadata collected...\n\n")
+    Sys.sleep(2)
+    points(2)
+  }
   seuratObj@meta.data[,match(idvar,colnames(seuratObj@meta.data))] %>% arrange(.[,1]) %>% group_by_all() %>% summarise(COUNT = n()) ->> my.data
   #my.data<-as.factor(my.data[,1])
   SankeyDiagram(my.data[, -grep("COUNT",colnames(my.data))],link.color = "Source",weights = my.data$COUNT,,max.categories = 100)
 }
-proportions <- function(data, ident.1, ident.2, position) {
+proportions <- function(data, ident.1, ident.2, position, useful_features=T) {
+  source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
+  if(useful_features){
+    cat("\nCollecting metadata:\n\n")
+    progress(2)
+    cat("\nMetadata collected...\n\n")
+    Sys.sleep(2)
+    points(2)
+  }
+
   x<- FetchData(data,c(ident.1,ident.2))
   colnames(x) <- c('ident.2', 'ident.1')
   x%>% group_by(ident.1) %>%
@@ -98,8 +146,13 @@ proportions <- function(data, ident.1, ident.2, position) {
 }
 
 # Analysis ----------------------------------------------------------------
-predictionHeat <- function(ref, query, refID = "ident", queryID = "ident", norm=F, crow=T,ccol=T, return.plot=F, return.seurat=F, col.name="predictedID", var.feat="") {
-  if(length(var.feat)==1) {
+predictionHeat <- function(ref, query, refID = "ident", queryID = "ident", norm=F, crow=T,ccol=T, return.plot=F, return.seurat=F, col.name="predictedID", var.feat="", useful_features=T) {
+  source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
+  if(useful_features){
+    cat("\nGenerating Prediction scores:\n\n")
+    progress(2)
+  }
+    if(length(var.feat)==1) {
     predictions <- TransferData(
       anchorset = FindTransferAnchors(reference = ref, query = query, features=VariableFeatures(ref)),
       refdata = FetchData(ref, refID)[,1]
@@ -146,6 +199,10 @@ predictionHeat <- function(ref, query, refID = "ident", queryID = "ident", norm=
   if(!crow) {
     crow =F
   }
+  if(useful_features){
+    cat("\nGenerating plots:\n\n")
+    cycle(3)
+  }
   print(ComplexHeatmap::Heatmap(na.omit(df), cluster_columns = ccol, cluster_rows = crow))
   #dont return both a metatable
   if(return.plot*return.seurat ==1) {
@@ -162,10 +219,12 @@ predictionHeat <- function(ref, query, refID = "ident", queryID = "ident", norm=
       return(query)
     } 
   }
+  rm(cycle, progress)
 }
 
   # Plot or add module score to Visium data
-checkModule <- function(data, genes, name="ModScore", mean =F, dq=0.1, top=F, df_out=F, assay="SCT", output = c("plot","data"),compar=c(), useful_features=T, skip=F){
+checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1, top=F, df_out=F, assay="SCT", output = c("plot","data"),compar=c(), useful_features=T, skip=F){
+  source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
   # themes
   error <- combine_ansi_styles(make_ansi_style("#8B0000", bg = TRUE, bold = TRUE), col_white)
   warn <- combine_ansi_styles(make_ansi_style("#FFFF00", bg = TRUE, bold = TRUE), "#000000")
@@ -289,13 +348,9 @@ checkModule <- function(data, genes, name="ModScore", mean =F, dq=0.1, top=F, df
       rename_with(~ substr(., 1, nchar(.) - 1), .cols = paste0(name,1))  
   } else {
     data@meta.data <- data@meta.data %>%
-      mutate(tmp=rowMeans(FetchData(data, above, layer='data', assay="SCT"))) %>%
+      mutate(tmp=rowMeans(FetchData(data, above, layer='data', assay=assay))) %>%
       rename_with(~ name, .cols = "tmp")  
-    
-    
-  }
-  
-  
+      }
   # plot or data ------------------------------------------------------------
   if(output == "plot") {
     
@@ -310,26 +365,46 @@ checkModule <- function(data, genes, name="ModScore", mean =F, dq=0.1, top=F, df
         input=compar
       } else {input="CD3E"}
     }
-    
-    p1 <- suppressMessages(SpatialFeaturePlot(data, name, alpha=c(0,0))+scale_fill_viridis_c(option="A")+NoLegend()+ggtitle("Tissue"))
-    max_value <- NA
-    suppressMessages(print(SpatialFeaturePlot(data, name, alpha=c(0,1))+scale_fill_viridis_c(option="A")+ ggtitle(paste("Module:", name))))
-    repeat {
-      max2 <- readline(prompt = "Change max threshold (type Y to continue): ")
-      if (toupper(max2) == "Y") {
-        p2 <- suppressMessages(SpatialFeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value) +
-                                 scale_fill_viridis_c(option = "A") + NoLegend()+ ggtitle(paste("Module:", name)))
-        break
-      } else if (!is.na(as.numeric(max2))) {
-        # Update max_value and plot
-        max_value <- as.numeric(max2)
-        suppressMessages(print(SpatialFeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value) +
-                                 scale_fill_viridis_c(option = "A") + ggtitle(paste("Module:", name))))
-      } else {
-        cat("Invalid input. Please enter a numeric value or 'Y' to continue.\n")
+    if(spatial){
+      p1 <- suppressMessages(SpatialFeaturePlot(data, name, alpha=c(0,0), assay=assay)+scale_fill_viridis_c(option="A")+NoLegend()+ggtitle("Tissue"))
+      max_value <- NA
+      suppressMessages(print(SpatialFeaturePlot(data, name, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option="A")+ ggtitle(paste("Module:", name))))
+      repeat {
+        max2 <- readline(prompt = "Change max threshold (type Y to continue): ")
+        if (toupper(max2) == "Y") {
+          p2 <- suppressMessages(SpatialFeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value) +
+                                   scale_fill_viridis_c(option = "A") + NoLegend()+ ggtitle(paste("Module:", name)))
+          break
+        } else if (!is.na(as.numeric(max2))) {
+          max_value <- as.numeric(max2)
+          suppressMessages(print(SpatialFeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value, assay=assay) +
+                                   scale_fill_viridis_c(option = "A") + ggtitle(paste("Module:", name))))
+        } else {
+          cat("Invalid input. Please enter a numeric value or 'Y' to continue.\n")
+        }
       }
+      p3 <- suppressMessages(SpatialFeaturePlot(data, input, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option="A")+NoLegend() + ggtitle(paste("Gene:", input)))
+    } else {
+      p1 <- suppressMessages(FeaturePlot(data, name, alpha=c(0,0), assay=assay)+scale_fill_viridis_c(option="A")+NoLegend()+ggtitle("Tissue"))
+      max_value <- NA
+      suppressMessages(print(FeaturePlot(data, name, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option="A")+ ggtitle(paste("Module:", name))))
+      repeat {
+        max2 <- readline(prompt = "Change max threshold (type Y to continue): ")
+        if (toupper(max2) == "Y") {
+          p2 <- suppressMessages(FeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value, assay=assay) +
+                                   scale_fill_viridis_c(option = "A") + NoLegend()+ ggtitle(paste("Module:", name)))
+          break
+        } else if (!is.na(as.numeric(max2))) {
+          max_value <- as.numeric(max2)
+          suppressMessages(print(FeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value, assay=assay) +
+                                   scale_fill_viridis_c(option = "A") + ggtitle(paste("Module:", name))))
+        } else {
+          cat("Invalid input. Please enter a numeric value or 'Y' to continue.\n")
+        }
+      }
+      p3 <- suppressMessages(FeaturePlot(data, input, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option="A")+NoLegend() + ggtitle(paste("Gene:", input)))
+      
     }
-    p3 <- suppressMessages(SpatialFeaturePlot(data, input, alpha=c(0,1))+scale_fill_viridis_c(option="A")+NoLegend() + ggtitle(paste("Gene:", input)))
     m <- data@meta.data %>% select(name)
     data@meta.data <- data@meta.data %>%
       mutate(moduleScore = ifelse(m>0, "pos", "neg"))
@@ -346,93 +421,91 @@ checkModule <- function(data, genes, name="ModScore", mean =F, dq=0.1, top=F, df
   if(useful_features) {
     printMessage("Thank you for using the useful features", space=4, theme=warn)
   }
+  rm(progress, cycle)
 }
 
 
 # Troll -------------------------------------------------------------------
+# progress <- function(max=3) {
+#   
+#   phrases <-c(rep(c("Tom is Cool!", 
+#                     "Spatial Transcriptomics is fun!", 
+#                     "Single cell RNA seq is very expensive!", 
+#                     "IMC stands for imaging massive cytometry!", 
+#                     "Public data is free!",
+#                     " :^) ", 
+#                     " :^( ", 
+#                     " :^D ", 
+#                     " >:^) ",
+#                     
+#                     "Nothing is true, and everything is possible", 
+#                     "The mitochondria is the powerhouse of the cell"), each=3),
+#               "Did you know that this is a joke?",
+#               "Did you know that this progress bar is fake?"
+#   )
+#   
+#   cat(bold(green("\n")))
+#   
+#   a <- ceiling(runif(1, min=0, max=length(phrases)))
+#   line<-paste(white("\r|--------|\n"),yellow(bold("Fun Fact:",phrases[a])))
+#   cat(line)
+#   phrases <- phrases[-a]
+#   Sys.sleep(ceiling(runif(1, min = 1, max=max)))
+#   flush.console()
+#   cat("\r", paste(rep(" ", nchar(line)), collapse=""), sep="")
+#   
+#   a <- ceiling(runif(1, min=0, max=length(phrases)-1))
+#   line<-paste(white("\r|##------|\n"),yellow(bold("Fun Fact:",phrases[a])))
+#   cat(line)
+#   phrases <- phrases[-a]
+#   Sys.sleep(ceiling(runif(1, min = 1, max=max)))
+#   flush.console()
+#   cat("\r", paste(rep(" ", nchar(line)), collapse=""), sep="")
+#   
+#   
+#   a <- ceiling(runif(1, min=0, max=length(phrases)-2))
+#   line<-paste(white("\r|####----|\n"),yellow(bold("Fun Fact:",phrases[a])))
+#   cat(line)
+#   phrases <- phrases[-a]
+#   Sys.sleep(ceiling(runif(1, min = 1, max=max)))
+#   flush.console()
+#   cat("\r", paste(rep(" ", nchar(line)), collapse=""), sep="")
+#   
+#   a <- ceiling(runif(1, min=0, max=length(phrases)-3))
+#   line<-paste(white("\r|######--|\n"),yellow(bold("Fun Fact:",phrases[a])))
+#   cat(line)
+#   phrases <- phrases[-a]
+#   Sys.sleep(ceiling(runif(1, min = 1, max=max)))
+#   flush.console()
+#   cat("\r", paste(rep(" ", nchar(line)), collapse=""), sep="")
+#   
+#   cat(white("\r|########|\n\n"),bold(yellow("Done!\n")))
+# }
+# 
+# cycle <- function(seconds=5) {
+#   cat(yellow("\nLoading:\n"))
+#   x=0
+#   while(x<seconds){
+#     Sys.sleep(0.1);x=x+0.1
+#     cat(white("\r   |"))
+#     Sys.sleep(0.1);x=x+0.1
+#     cat(white("\r   /"))
+#     Sys.sleep(0.1);x=x+0.1
+#     cat(white("\r   \u2500"))
+#     Sys.sleep(0.1);x=x+0.1
+#     cat(white("\r   \\"))
+#     Sys.sleep(0.1);x=x+0.1
+#   }
+#   cat(white("\n\n"))
+#   
+# }
 
 
-progress <- function(max=3) {
-  
-  phrases <-c(rep(c("Tom is Cool!", 
-                    "Spatial Transcriptomics is fun!", 
-                    "Single cell RNA seq is very expensive!", 
-                    "IMC stands for imaging massive cytometry!", 
-                    "Public data is free!",
-                    " :^) ", 
-                    " :^( ", 
-                    " :^D ", 
-                    " >:^) ",
-                    
-                    "Nothing is true, and everything is possible", 
-                    "The mitochondria is the powerhouse of the cell"), each=3),
-              "Did you know that this is a joke?",
-              "Did you know that this progress bar is fake?"
-  )
-  
-  cat(bold(green("\n")))
-  
-  a <- ceiling(runif(1, min=0, max=length(phrases)))
-  line<-paste(white("\r|--------|\n"),yellow(bold("Fun Fact:",phrases[a])))
-  cat(line)
-  phrases <- phrases[-a]
-  Sys.sleep(ceiling(runif(1, min = 1, max=max)))
-  flush.console()
-  cat("\r", paste(rep(" ", nchar(line)), collapse=""), sep="")
-  
-  a <- ceiling(runif(1, min=0, max=length(phrases)-1))
-  line<-paste(white("\r|##------|\n"),yellow(bold("Fun Fact:",phrases[a])))
-  cat(line)
-  phrases <- phrases[-a]
-  Sys.sleep(ceiling(runif(1, min = 1, max=max)))
-  flush.console()
-  cat("\r", paste(rep(" ", nchar(line)), collapse=""), sep="")
-  
-  
-  a <- ceiling(runif(1, min=0, max=length(phrases)-2))
-  line<-paste(white("\r|####----|\n"),yellow(bold("Fun Fact:",phrases[a])))
-  cat(line)
-  phrases <- phrases[-a]
-  Sys.sleep(ceiling(runif(1, min = 1, max=max)))
-  flush.console()
-  cat("\r", paste(rep(" ", nchar(line)), collapse=""), sep="")
-  
-  a <- ceiling(runif(1, min=0, max=length(phrases)-3))
-  line<-paste(white("\r|######--|\n"),yellow(bold("Fun Fact:",phrases[a])))
-  cat(line)
-  phrases <- phrases[-a]
-  Sys.sleep(ceiling(runif(1, min = 1, max=max)))
-  flush.console()
-  cat("\r", paste(rep(" ", nchar(line)), collapse=""), sep="")
-  
-  cat(white("\r|########|\n\n"),bold(yellow("Done!\n")))
-}
-
-cycle <- function(seconds=5) {
-  cat(yellow("\nLoading:\n"))
-  x=0
-  while(x<seconds){
-    Sys.sleep(0.1);x=x+0.1
-    cat(white("\r   |"))
-    Sys.sleep(0.1);x=x+0.1
-    cat(white("\r   /"))
-    Sys.sleep(0.1);x=x+0.1
-    cat(white("\r   \u2500"))
-    Sys.sleep(0.1);x=x+0.1
-    cat(white("\r   \\"))
-    Sys.sleep(0.1);x=x+0.1
-  }
-  cat(white("\n\n"))
-  
-}
 
 
 
-# emptybox = function(string = "This function doesnt work yet") {
-#   p <- ggplot() + 
-#     geom_blank(aes(x = 1:10, y = 1:10)) +
-#     theme_void()  # Removes axes and background
-#   string <- strwrap( string, width=20)
-#   p2 <- p + annotate("text", x = 5, y = 5, label = string, size = 3, hjust=0.5, vjust=0.5,, family = "sans", fontface = "plain")
-#   print(p2)
+
+# test <- function() {
+#   source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
+#   cycle()
 # }

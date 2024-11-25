@@ -75,3 +75,20 @@ cycle <- function(seconds=5) {
   cat(white("\n\n"))
   
 }
+
+points <- function(cyc=3) {
+  cat("\n")
+  for(i in 1:cyc) {
+    cat("\r.")
+    Sys.sleep(1)
+    flush.console()
+    cat("\r..")
+    Sys.sleep(1)
+    flush.console()
+    cat("\r...")
+    Sys.sleep(1)
+    cat("\r    ")
+    Sys.sleep(1)
+  }
+  cat("\n")
+}
