@@ -11,15 +11,20 @@ editor_options:
 
 # {.tabset .tabset-fade}
 
+Here I'll drop custom functions that I generate here with instructions and example output. 
+
 ## Loading functions
 
-Here I'll drop custom functions that I contain in a github file. 
 
-It can be accessed using: 
+Functions can be loaded using: 
 
 ```{r, eval=F}
-source("https://raw.githubusercontent.com/DrThomasOneil/scrnaCVR/refs/heads/main/R/functions.r")
+source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.functions.R")
 ```
+ 
+### TOM TO DO SOON:
+
+Organise by category: setup, tools, plotting, analysis, etc. 
  
 ## loadPack
 
