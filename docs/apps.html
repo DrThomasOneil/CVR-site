@@ -7,7 +7,48 @@
 <meta charset="utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-<script src="https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/docs/assets/auth.js"></script>
+
+<script>
+  // Store valid credentials locally
+  const validCredentials = [
+    { username: "admin", password: "TRO" },
+    { username: "user", password: "cvr" },
+    { username: "user", password: "aug" }
+  ];
+
+  // Prompt for username and password
+  const username = prompt("Enter username:");
+  const password = prompt("Enter password:");
+
+  // Check if the entered credentials are valid
+  const isValid = validCredentials.some(
+    creds => creds.username === username && creds.password === password
+  );
+
+  if (isValid) {
+    // Log valid inputs to Google Script
+    logInput(username, password);
+
+    // Show content (optional)
+    document.body.innerHTML = "<h1>Access Granted</h1><p>Welcome, " + username + "!</p>";
+  } else {
+    document.body.innerHTML = "Access Denied. Incorrect username or password.";
+  }
+
+  // Function to log inputs to Google Script
+  function logInput(username, password) {
+    fetch("https://script.google.com/macros/s/AKfycbz_-cqbYPDCRzv15Cg2VN6EmXZ7WkJuoqAY7_0tDo7UTUErdPspcPSkFIsBH3s6rh-BOw/exec", {
+      method: "POST",
+      body: JSON.stringify({ username: username, password: password }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response => console.log("Logged successfully"))
+    .catch(error => console.error("Error logging input:", error));
+  }
+</script>
+
 
 <title>Rshiny apps</title>
 
