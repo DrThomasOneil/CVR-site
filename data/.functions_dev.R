@@ -52,7 +52,7 @@ loadPack()
 source("https://raw.githubusercontent.com/tomoneil58/LabCode/main/HPA/HPA.R") #Y
 
 # Processing --------------------------------------------------------------
-process <- function(dat=dat, dimuse = 1:15, features=800, verbose=F, reduction.name=NULL, useful_features=T){
+process <- function(dat=dat, dimuse = 1:15, features=800, verbose=F, reduction.name=NULL, useful_features=F){
   source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
   if(useful_features){
     cat("\nCollecting data:\n\n")
@@ -107,9 +107,9 @@ printMessage <- function(message = "Message", space=4, theme=NULL, bg = "#FFFFFF
 maxSize <- function(GB=3) {
   options(future.globals.maxSize = GB * 1024^3) 
 }#TODO
-
+maxSize
 # Plotting ----------------------------------------------------------------
-plotSankey<-function(seuratObj,idvar=c("varRes.0.3","emt_res.0.3"), useful_features=T){
+plotSankey<-function(seuratObj,idvar=c("varRes.0.3","emt_res.0.3"), useful_features=F){
   source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
   require(flipPlots)
   message('try install_github("Displayr/flipPlots") if this doesnt work')
@@ -125,7 +125,7 @@ plotSankey<-function(seuratObj,idvar=c("varRes.0.3","emt_res.0.3"), useful_featu
   #my.data<-as.factor(my.data[,1])
   SankeyDiagram(my.data[, -grep("COUNT",colnames(my.data))],link.color = "Source",weights = my.data$COUNT,,max.categories = 100)
 } #Y
-proportions <- function(data, ident.1, ident.2, position, useful_features=T) {
+proportions <- function(data, ident.1, ident.2, position, useful_features=F) {
   source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
   if(useful_features){
     cat("\nCollecting metadata:\n\n")
@@ -149,7 +149,7 @@ proportions <- function(data, ident.1, ident.2, position, useful_features=T) {
 } #Y
 
 # Analysis ----------------------------------------------------------------
-predictionHeat <- function(ref, query, refID = "ident", queryID = "ident", norm=F, crow=T,ccol=T, return.plot=F, return.seurat=F, col.name="predictedID", var.feat="", useful_features=T) {
+predictionHeat <- function(ref, query, refID = "ident", queryID = "ident", norm=F, crow=T,ccol=T, return.plot=F, return.seurat=F, col.name="predictedID", var.feat="", useful_features=F) {
   source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
   if(useful_features){
     cat("\nGenerating Prediction scores:\n\n")
@@ -227,7 +227,7 @@ predictionHeat <- function(ref, query, refID = "ident", queryID = "ident", norm=
 #Y
 
   # Plot or add module score to Visium data
-checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1, top=F, df_out=F, assay="SCT", output = c("plot","data"),compar=c(), useful_features=T, skip=F){
+checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1, top=F, df_out=F, assay="SCT", output = c("plot","data"),compar=c(), useful_features=F, skip=T){
   source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
   # themes
   error <- combine_ansi_styles(make_ansi_style("#8B0000", bg = TRUE, bold = TRUE), col_white)
