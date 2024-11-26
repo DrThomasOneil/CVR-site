@@ -23,7 +23,7 @@ loadPack <- function() {
   #FUTURE TOM: ADD PACKAGES HERE!
   packages1 <- c("ggplot2", "rstudioapi", "rmarkdown", 'tidyr', "cli", "knitr", "dplyr", "Seurat","SeuratObject",
                  "SeuratDisk", "flipPlots",'stringr', "crayon","Matrix", "cowplot", 'scater', "BiocParallel",
-                 "ComplexHeatmap","xlsx", "ggpubr", "scales")#, "Test")
+                 "ComplexHeatmap","readxl", "ggpubr", "scales")#, "Test")
   
   for (i in 1:length(packages1)){
     if(requireNamespace(packages1[i], quietly = TRUE)==F) {
@@ -73,17 +73,17 @@ process <- function(dat=dat, dimuse = 1:15, features=800, verbose=F, reduction.n
   dat <- ScaleData(dat, features=VariableFeatures(dat), verbose=verbose)
   cat("\nData Scaled...\n\n")
   if(useful_features){
-    cat("\Running PCA:\n\n")
+    cat("\nRunning PCA:\n\n")
     cycle(3)
   }
   dat <- RunPCA(dat, verbose=verbose, reduction.name = paste0("pca", reduction.name))
   if(useful_features){
-    cat("\Running UMAP:\n\n")
+    cat("\nRunning UMAP:\n\n")
     cycle(3)
   }
   dat <- RunUMAP(dat, dims=dimuse, verbose=verbose, reduction = paste0("pca", reduction.name), reduction.name = paste0("umap", reduction.name))
   if(useful_features){
-    cat("\Running TSNE:\n\n")
+    cat("\nRunning TSNE:\n\n")
     cycle(3)
   }
   dat <- RunTSNE(dat, dims=dimuse, check_duplicates=F, verbose=verbose, reduction = paste0("pca", reduction.name),reduction.name = paste0("tsne", reduction.name))
