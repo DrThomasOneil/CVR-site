@@ -9,6 +9,11 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r, include=F}
+source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.functions_dev.R")
+encrypt()
+```
+
 # {.tabset .tabset-fade}
 
 Here I'll drop custom functions that I generate here with instructions and example output. 
