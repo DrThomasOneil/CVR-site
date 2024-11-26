@@ -55,16 +55,23 @@
     }
     
     function logInput(username, input) {
-      fetch("https://script.google.com/macros/s/AKfycbw2h2movDbsMZ96szZqBCdqFDPIKU4OSwcy2CHH6Kao7W8LPcYs7F0JwYjrToMfp8NWGA/exec", {
-        method: "POST",
-        body: JSON.stringify({ username: username, input: input }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then(response => console.log("Logged successfully"))
-      .catch(error => console.error("Error logging input:", error));
+  fetch("https://script.google.com/macros/s/AKfycbx-XMEO37A4k4u_RnIjcrdid9AFbkCAftsyZUaCgGr7Ihlqc_jAhZ02eTY_OF6Vf8RU/exec", {
+    method: "POST",
+    mode: "cors", // Explicitly handle CORS
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ username: username, input: input })
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
+    return response.text();
+  })
+  .then(data => console.log("Logged successfully:", data))
+  .catch(error => console.error("Error logging input:", error));
+}
     
     // Call the login validation function
     validateLogin();
