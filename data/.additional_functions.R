@@ -87,8 +87,10 @@ points <- function(cyc=3) {
     flush.console()
     cat("\r...")
     Sys.sleep(1)
+    flush.console()
     cat("\r    ")
     Sys.sleep(1)
+    
   }
   cat("\n")
 }
