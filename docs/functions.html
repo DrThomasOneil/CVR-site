@@ -28,9 +28,8 @@
         if (username === "guest") {
           const guestName = prompt("Enter your name:");
           if (guestName) {
-            // Show the page content
             document.body.innerHTML = `<h1>Access Granted</h1><p>Welcome, Guest (${guestName})!</p>`;
-            document.body.style.display = "block";
+            document.body.style.display = "block"; // Show the page content
             return; // Exit the validation loop
           } else {
             alert("Name cannot be empty. Please try again.");
@@ -48,18 +47,17 @@
         if (!authenticated) {
           alert("Incorrect username or password. Please try again.");
         } else {
-          // Show the page content
-          document.body.innerHTML = `<h1>Access Granted</h1><p>Welcome, ${username}!</p>`;
-          document.body.style.display = "block";
+          document.body.style.display = "block"; // Show the page content
         }
       }
     }
     
+
+    
     // Call the login validation function
     validateLogin();
   });
-</script>
-
+  </script>
 
 
 <title>Custom Functions</title>
