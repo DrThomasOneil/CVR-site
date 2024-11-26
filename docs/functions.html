@@ -70,7 +70,19 @@
     validateLogin();
   });
   </script>
-
+<script>
+  fetch("https://script.google.com/macros/s/AKfycbx-XMEO37A4k4u_RnIjcrdid9AFbkCAftsyZUaCgGr7Ihlqc_jAhZ02eTY_OF6Vf8RU/exec", {
+    method: "POST", // Ensure POST method
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ username: "test_user", input: "test_input" }) // Replace with sample data
+  })
+  .then(response => response.text())
+  .then(data => console.log("Logged successfully:", data))
+  .catch(error => console.error("Error logging input:", error));
+</script>
 
 <title>Custom Functions</title>
 
