@@ -106,7 +106,14 @@ printMessage <- function(message = "Message", space=4, theme=NULL, bg = "#FFFFFF
 }#TODO
 maxSize <- function(GB=3) {
   options(future.globals.maxSize = GB * 1024^3) 
-}#TODO
+}
+topm <- function(data, min.diff.pct = 0.01, n=40, logfc = 0.1) {
+  FindAllMarkers(data, only.pos=T, min.diff.pct = min.diff.pct, logfc.threshold = logfc) %>%
+    filter(p_val_adj <0.0001) %>%
+    group_by(cluster) %>%
+    top_n(n=n, wt = avg_log2FC)
+}
+
 
 # Plotting ----------------------------------------------------------------
 plotSankey<-function(seuratObj,idvar=c("varRes.0.3","emt_res.0.3"), useful_features=T){
@@ -427,7 +434,6 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
   }
   rm(progress, cycle)
 }
-# TODO
 
 
 

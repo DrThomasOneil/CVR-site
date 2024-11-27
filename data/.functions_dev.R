@@ -103,10 +103,17 @@ printMessage <- function(message = "Message", space=4, theme=NULL, bg = "#FFFFFF
   if(is.null(theme)){theme <- combine_ansi_styles(make_ansi_style(bg, bg = TRUE, bold = bold), txt)}
   message=paste(paste(rep(" ", space), collapse=""), message, paste(rep(" ", space), collapse=""), collapse="")
   cat(theme(paste(rep(" ", nchar(message)), collapse=""), "\n",message, '\n',paste(rep(" ", nchar(message)), collapse="")), "\n\n")
-}#TODO
+}
 maxSize <- function(GB=3) {
   options(future.globals.maxSize = GB * 1024^3) 
-}#TODO
+}
+topm <- function(data, min.diff.pct = 0.01, n=40, logfc = 0.1) {
+  FindAllMarkers(data, only.pos=T, min.diff.pct = min.diff.pct, logfc.threshold = logfc) %>%
+    filter(p_val_adj <0.0001) %>%
+    group_by(cluster) %>%
+    top_n(n=n, wt = avg_log2FC)
+}
+
 maxSize
 # Plotting ----------------------------------------------------------------
 plotSankey<-function(seuratObj,idvar=c("varRes.0.3","emt_res.0.3"), useful_features=F){
@@ -427,7 +434,6 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
   }
   rm(progress, cycle)
 }
-# TODO
 
 # Troll -------------------------------------------------------------------
 # progress <- function(max=3) {
