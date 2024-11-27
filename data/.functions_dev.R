@@ -50,7 +50,7 @@ loadPack <- function() {
 } #Y
 loadPack()
 source("https://raw.githubusercontent.com/tomoneil58/LabCode/main/HPA/HPA.R") #Y
-theme_set(theme_classic())
+#theme_set(theme_classic())
 
 # Processing --------------------------------------------------------------
 process <- function(dat=dat, dimuse = 1:15, features=800, verbose=F, reduction.name=NULL, useful_features=F){
