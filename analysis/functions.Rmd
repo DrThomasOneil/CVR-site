@@ -443,16 +443,17 @@ plotSankey(query, c("merged_clusters_anno", "predictedID"))
 
 ### Check Module Score
 
-This one also has a lot of options, and a lot is done under the hood. I wont show examples. But hopefully 
+This one also has a lot of options, and a lot is done under the hood. I wont show examples. But hopefully I can summarise here. 
 
-It needs two RNA datasets tour query data, a reference data. There are then several options 
-
-- the identities you want to compare - default will just be the current `idents`. 
-- `norm` will let you choose whether to scale prediction scores by the max predicted score. Can be misleading, which is why the default is `false`.
-- `crow` and `ccol` are about clustering rows and columns by similarities. Turn these off if you have a preferred order you want. 
-- `return.plot` and `return.seurat` do not work together. If both `false` it will only return a plot. See example uses below. 
-- `col.name` will let you set a custom column name for `return.seurat`. E.g. predicted_GCA. 
-- `var.feat` is empty by default, which will use the reference variable features. Otherwise, you can specify features to use for integration. 
+- `data` will be your seurat object
+- `genes` is an array of genes for your module score
+- `name` will be what the new column in the 
+- `mean` will do RowMeans only, without normalising to whole data counts
+- `spatial` will output Spatial plots for visualisation instead of umaps in single cell.
+- `dq` is a number representing a quantile. The script gets the mean of every single gene in the dataset. It'll then select the value at the quantile you choose and filter your genes if they are lower than that value. Increase the dq to select higher expressed genes. 
+- `top` is an alternative way of selecting genes for module scoring. If set to TRUE, instead of choosing genes expressing enough based on dq, it will filter for genes that are in the top 2000 variable genes. 
+- `df_out` will just print the dataframe of average expressions
+- `assay` will let you select SCT or RNA or whatever. As long as its in the 
 
 ```{r}
 checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1, top=F, df_out=F, assay="SCT", output = c("plot","data"),compar=c(), useful_features=F, skip=T){
