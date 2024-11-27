@@ -50,6 +50,7 @@ loadPack <- function() {
 } #Y
 loadPack()
 source("https://raw.githubusercontent.com/tomoneil58/LabCode/main/HPA/HPA.R") #Y
+theme_set(theme)
 
 # Processing --------------------------------------------------------------
 process <- function(dat=dat, dimuse = 1:15, features=800, verbose=F, reduction.name=NULL, useful_features=F){
@@ -132,7 +133,7 @@ plotSankey<-function(seuratObj,idvar=c("varRes.0.3","emt_res.0.3"), useful_featu
   #my.data<-as.factor(my.data[,1])
   SankeyDiagram(my.data[, -grep("COUNT",colnames(my.data))],link.color = "Source",weights = my.data$COUNT,,max.categories = 100)
 } #Y
-proportions <- function(data, ident.1, ident.2, position, useful_features=F) {
+proportions <- function(data, ident.1, ident.2, position, useful_features=F, facet="") {
   source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
   if(useful_features){
     cat("\nCollecting metadata:\n\n")
@@ -141,18 +142,32 @@ proportions <- function(data, ident.1, ident.2, position, useful_features=F) {
     Sys.sleep(2)
     points(2)
   }
+  if(nchar(facet)==0){
+    x<- FetchData(data,c(ident.1,ident.2))
+    colnames(x) <- c('ident.2', 'ident.1')
+    x%>% group_by(ident.1) %>%
+      mutate(prop=1/length(ident.2)) %>%
+      ungroup() %>%
+      group_by(ident.2,ident.1) %>%
+      summarise(totprop=sum(prop)) %>%
+      ggplot(aes(x=ident.2,fill=ident.1,y=totprop)) +
+      geom_bar(position=position, stat='identity') + theme(axis.text.x =
+                                                             element_text(angle = 45,hjust=1))+scale_y_continuous(name="Cluster
+      Proportion")+ theme_classic()
+  } else {
+    x<- FetchData(data,c(ident.1,ident.2, facet))
+    colnames(x) <- c('ident.2', 'ident.1', 'facet')
+    x%>% group_by(ident.1) %>%
+      mutate(prop=1/length(ident.2)) %>%
+      ungroup() %>%
+      group_by(ident.2,ident.1) %>%
+      summarise(totprop=sum(prop), facet=facet) %>%
+      ggplot(aes(x=ident.2,fill=ident.1,y=totprop)) +
+      geom_bar(position=position, stat='identity') + theme(axis.text.x =
+                                                             element_text(angle = 45,hjust=1))+scale_y_continuous(name="Cluster
+      Proportion")+ theme_classic()
+  }
 
-  x<- FetchData(data,c(ident.1,ident.2))
-  colnames(x) <- c('ident.2', 'ident.1')
-  x%>% group_by(ident.1) %>%
-    mutate(prop=1/length(ident.2)) %>%
-    ungroup() %>%
-    group_by(ident.2,ident.1) %>%
-    summarise(totprop=sum(prop)) %>%
-    ggplot(aes(x=ident.2,fill=ident.1,y=totprop)) +
-    geom_bar(position=position, stat='identity') + theme(axis.text.x =
-                                                           element_text(angle = 45,hjust=1))+scale_y_continuous(name="Cluster
-    Proportion")+ theme_classic()
 } #Y
 
 # Analysis ----------------------------------------------------------------
