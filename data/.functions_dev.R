@@ -1,12 +1,12 @@
 
 #* Thomas O'Neil
 #* Uploaded to Github 20241126
-#* 
+#*
 #* This is a series of functions that I've made and adapted for common use.
 #* Acknowledgements: Brian Gloss
 
 #* Function plans
-#* - Integrate data & output list incl data w and wo the extra reductions. 
+#* - Integrate data & output list incl data w and wo the extra reductions.
 #* - filter data
 #* - load10X custom (e.g. when its not easy - use the GEO, etc.)
 #* - add Tiff data
@@ -19,12 +19,12 @@ loadPack <- function() {
   cat("\n--------------------------------------\n")
   cat(style_bold(col_magenta("\n***Installing General Packages***\n\n")))
   not <- c(); not2 <- c()
-  
+
   #FUTURE TOM: ADD PACKAGES HERE!
   packages1 <- c("ggplot2", "rstudioapi", "rmarkdown", 'tidyr', "cli", "knitr", "dplyr", "Seurat","SeuratObject",
                  "SeuratDisk", "flipPlots",'stringr', "crayon","Matrix", "cowplot", 'scater', "BiocParallel",
                  "ComplexHeatmap","readxl", "ggpubr", "scales")#, "Test")
-  
+
   for (i in 1:length(packages1)){
     if(requireNamespace(packages1[i], quietly = TRUE)==F) {
       cat(paste(style_bold(col_red(packages1[i])), "has not been installed\n"))
@@ -35,14 +35,14 @@ loadPack <- function() {
     }
   }
   cat("\n--------------------------------------\n")
-  
+
   if (length(not) > 0){
     cat(style_bold(bg_red("\n  **IMPORTANT**  ")),
         style_bold(col_yellow("\n\nYou need to install: \n")),
-        
+
         paste(paste(c(packages1[not]), collapse=", ")),
         "\n\n--------------------------------------",
-        
+
         "\n\n Use:\n - install.packages(),\n - BiocManager::install() or, \n - use Google to find installation instructions.\n\n", style_bold(col_green("Then run this function again!\n\n")))
   } else {
     cat("",col_green(style_bold("\n All packages are loaded!\n\n Happy Coding! :)\n\n")))
@@ -50,7 +50,7 @@ loadPack <- function() {
 } #Y
 loadPack()
 source("https://raw.githubusercontent.com/tomoneil58/LabCode/main/HPA/HPA.R") #Y
-theme_set(theme)
+theme_set(theme_classic())
 
 # Processing --------------------------------------------------------------
 process <- function(dat=dat, dimuse = 1:15, features=800, verbose=F, reduction.name=NULL, useful_features=F){
@@ -106,7 +106,7 @@ printMessage <- function(message = "Message", space=4, theme=NULL, bg = "#FFFFFF
   cat(theme(paste(rep(" ", nchar(message)), collapse=""), "\n",message, '\n',paste(rep(" ", nchar(message)), collapse="")), "\n\n")
 }
 maxSize <- function(GB=3) {
-  options(future.globals.maxSize = GB * 1024^3) 
+  options(future.globals.maxSize = GB * 1024^3)
 }
 topm <- function(data, min.diff.pct = 0.01, n=40, logfc = 0.1) {
   FindAllMarkers(data, only.pos=T, min.diff.pct = min.diff.pct, logfc.threshold = logfc) %>%
@@ -188,30 +188,30 @@ predictionHeat <- function(ref, query, refID = "ident", queryID = "ident", norm=
       refdata = FetchData(ref, refID)[,1]
     )
   }
-  
+
   predictions$orig =FetchData(query, queryID)[,1]
   df <- as.data.frame(matrix(data=NA,ncol=length(unique(predictions$orig)), nrow=length(unique(predictions$predicted.id))))
-  colnames(df) = unique(predictions$orig); 
+  colnames(df) = unique(predictions$orig);
   rownames(df) = paste0("prediction.score.",gsub(" ", ".",unique(predictions$predicted.id)))
   df2 <- as.data.frame(matrix(data=NA,ncol=length(unique(predictions$orig)), nrow=length(unique(predictions$predicted.id))))
-  colnames(df2) = unique(predictions$orig); 
+  colnames(df2) = unique(predictions$orig);
   rownames(df2) = paste0("prediction.score.",gsub(" ", ".",unique(predictions$predicted.id)))
-  
+
   for(col in 1:ncol(df)) {
     for(row in 1:nrow(df)){
       x = mean(predictions[predictions$orig==colnames(df)[col], rownames(df)[row]])
-      x2 = mean(predictions[predictions$orig==colnames(df)[col], 
+      x2 = mean(predictions[predictions$orig==colnames(df)[col],
                             rownames(df)[row]]/
-                  predictions[predictions$orig==colnames(df)[col], 
+                  predictions[predictions$orig==colnames(df)[col],
                               "prediction.score.max"])
-      
+
       if(is.na(x) | is.infinite(x)){
         x=0
       }
       if(is.na(x2) | is.infinite(x2)){
         x2=0
       }
-      df[row,col] <-x 
+      df[row,col] <-x
       df2[row,col] <-x2
     }
   }
@@ -231,21 +231,21 @@ predictionHeat <- function(ref, query, refID = "ident", queryID = "ident", norm=
   print(ComplexHeatmap::Heatmap(na.omit(df), cluster_columns = ccol, cluster_rows = crow))
   #dont return both a metatable
   if(return.plot*return.seurat ==1) {
-    cat(style_bold(col_red("\n***ERROR***\n\n")))    
+    cat(style_bold(col_red("\n***ERROR***\n\n")))
     cat(style_bold(col_yellow("\n***ERROR***\n\n")))
-    
+
   } else {
     if(return.plot){
       plot = ComplexHeatmap::Heatmap(na.omit(df), cluster_columns = ccol, cluster_rows = crow)
       return(plot)
-    } 
+    }
     if(return.seurat){
       query <- AddMetaData(query, metadata = predictions$predicted.id, col.name=col.name)
       return(query)
-    } 
+    }
   }
   rm(cycle, progress)
-} 
+}
 #Y
 
   # Plot or add module score to Visium data
@@ -257,8 +257,8 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
   # errors ------------------------------------------------------------------
   if(prod(is.character(c(name, output)), is.logical(c(top,useful_features,skip)), is.numeric(dq))==0){return(printMessage("Check arguments and try again!", theme=error))}
   if(length(output) != 1 | sum(!output %in% c("plot", "data"))!=0) {return(cat(error("\n\tChoose one of the two outputs:\t\t   \n\t - \"data\" to add ModuleScore to data, or   \n\t -\"plot\" to just output plots\t\t   ")))}
-  if(!assay %in% names(data@assays)){return(printMessage("**Assay is not present in Seurat Object**", theme=error))} 
-  
+  if(!assay %in% names(data@assays)){return(printMessage("**Assay is not present in Seurat Object**", theme=error))}
+
   # give them the information and the option to cancel before running
   if(!skip){
     cat(white(" - ",length(genes)),yellow("genes chosen to generate the module score \n"))
@@ -275,36 +275,36 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
       while(x<1) {
         input <- readline(prompt = "Do you want to continue (Y/N): ")
         if(input =="Y"){x=x+1}
-        else if(input =="N"){return(printMessage("Thanks for playing", theme=warn))} 
+        else if(input =="N"){return(printMessage("Thanks for playing", theme=warn))}
         else{cat(error("  Try again  \n"))}
       }
     } else {cat(white(" - "),yellow("You've chosen to"), white("skip\n"))}
   }
-  
+
   genes <- genes[!duplicated(genes)]
   genes <- na.omit(genes)
   if(useful_features){cycle(seconds = runif(1, min = 1, max=8))}
-  
+
   # Check which genes present in assay --------------------------------------
   cat(bold(green("\n\nChecking genes are present:\n\n")))
   if(useful_features){progress(max=3)}
-  
+
   na=c(); mod <-c() #not in object/for module scoring
   for(i in 1:length(genes)){
     if(sum(grepl(paste0("^",genes[i],"$"), rownames(data@assays$SCT$data)))==0){
       na <- c(na, genes[i])
     } else {
       mod <- c(mod, genes[i])
-    } 
+    }
   }
-  
-  # return error and leave if after checking genes in data not greater than 2 
+
+  # return error and leave if after checking genes in data not greater than 2
   if(length(mod)<2){
     return(printMessage(message="You do not have enough genes for a module score"), theme=error)
   }
   # print genes not found in the data
   cat(bold(green("\nDONE!\n\n")))
-  
+
   if (length(na) > 0){
     cat(error("\n  **IMPORTANT**  "),
         style_bold(col_yellow(paste0("\n\nGenes not in the dataset (", length(na) ,"/", length(genes) ,"): \n"))),
@@ -314,10 +314,10 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
   if(!top){
     above <-c();below <- c()
     exp <- rowMeans(data[[assay]]$data)
-    
+
     cat(yellow("\n\n---------\n\nMean expression of all genes:", white(mean(exp)),
                "\n\nQuantile Threshold chosen:", white(quantile(exp, probs = dq)), "\n\n---------\n"))
-    
+
     df <- data.frame(gene=mod, mean=NA, thresh=NA)
     #filter if means are above threshold
     for(i in 1:length(mod)) {
@@ -331,12 +331,12 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
         if(df_out){df$thresh[i] <- "below"}
       }
     }
-    
+
     # check that genes after filtering greater than 2 for module scoring
     if(length(above)<2){
       return(cat(warn(" \t\t\t\t\t\t  \n\t   After filtering per quantile\t\t  \n  you do not have enough genes for a module score \n\t\t\t\t\t\t  ")))
-    } 
-    
+    }
+
     # print genes that didnt make the threshold
     if (length(below) > 0){
       cat(error("\n  **IMPORTANT**  "),
@@ -363,23 +363,23 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
     }
     }
   }
-  
+
   cat(bold(yellow("\n\nModule Score being Generated:\n\n")))
   cycle(1)
   if(useful_features){cycle(seconds = runif(1, min = 1, max=8))}
-  
+
   if(!mean){
     data <- AddModuleScore(data, features=above, name=name)
     data@meta.data <- data@meta.data %>%
-      rename_with(~ substr(., 1, nchar(.) - 1), .cols = paste0(name,1))  
+      rename_with(~ substr(., 1, nchar(.) - 1), .cols = paste0(name,1))
   } else {
     data@meta.data <- data@meta.data %>%
       mutate(tmp=rowMeans(FetchData(data, above, layer='data', assay=assay))) %>%
-      rename_with(~ name, .cols = "tmp")  
+      rename_with(~ name, .cols = "tmp")
       }
   # plot or data ------------------------------------------------------------
   if(output == "plot") {
-    
+
     if(length(compar)==0){
       x=0
       while(x<1) {
@@ -429,7 +429,7 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
         }
       }
       p3 <- suppressMessages(FeaturePlot(data, input, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option="A")+NoLegend() + ggtitle(paste("Gene:", input)))
-      
+
     }
     m <- data@meta.data %>% select(name)
     data@meta.data <- data@meta.data %>%
@@ -443,7 +443,7 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
     if(df_out){print(df)}
     return(data)
   }
-  
+
   if(useful_features) {
     printMessage("Thank you for using the useful features", space=4, theme=warn)
   }
@@ -452,25 +452,25 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
 
 # Troll -------------------------------------------------------------------
 # progress <- function(max=3) {
-#   
-#   phrases <-c(rep(c("Tom is Cool!", 
-#                     "Spatial Transcriptomics is fun!", 
-#                     "Single cell RNA seq is very expensive!", 
-#                     "IMC stands for imaging massive cytometry!", 
+#
+#   phrases <-c(rep(c("Tom is Cool!",
+#                     "Spatial Transcriptomics is fun!",
+#                     "Single cell RNA seq is very expensive!",
+#                     "IMC stands for imaging massive cytometry!",
 #                     "Public data is free!",
-#                     " :^) ", 
-#                     " :^( ", 
-#                     " :^D ", 
+#                     " :^) ",
+#                     " :^( ",
+#                     " :^D ",
 #                     " >:^) ",
-#                     
-#                     "Nothing is true, and everything is possible", 
+#
+#                     "Nothing is true, and everything is possible",
 #                     "The mitochondria is the powerhouse of the cell"), each=3),
 #               "Did you know that this is a joke?",
 #               "Did you know that this progress bar is fake?"
 #   )
-#   
+#
 #   cat(bold(green("\n")))
-#   
+#
 #   a <- ceiling(runif(1, min=0, max=length(phrases)))
 #   line<-paste(white("\r|--------|\n"),yellow(bold("Fun Fact:",phrases[a])))
 #   cat(line)
@@ -478,7 +478,7 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
 #   Sys.sleep(ceiling(runif(1, min = 1, max=max)))
 #   flush.console()
 #   cat("\r", paste(rep(" ", nchar(line)), collapse=""), sep="")
-#   
+#
 #   a <- ceiling(runif(1, min=0, max=length(phrases)-1))
 #   line<-paste(white("\r|##------|\n"),yellow(bold("Fun Fact:",phrases[a])))
 #   cat(line)
@@ -486,8 +486,8 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
 #   Sys.sleep(ceiling(runif(1, min = 1, max=max)))
 #   flush.console()
 #   cat("\r", paste(rep(" ", nchar(line)), collapse=""), sep="")
-#   
-#   
+#
+#
 #   a <- ceiling(runif(1, min=0, max=length(phrases)-2))
 #   line<-paste(white("\r|####----|\n"),yellow(bold("Fun Fact:",phrases[a])))
 #   cat(line)
@@ -495,7 +495,7 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
 #   Sys.sleep(ceiling(runif(1, min = 1, max=max)))
 #   flush.console()
 #   cat("\r", paste(rep(" ", nchar(line)), collapse=""), sep="")
-#   
+#
 #   a <- ceiling(runif(1, min=0, max=length(phrases)-3))
 #   line<-paste(white("\r|######--|\n"),yellow(bold("Fun Fact:",phrases[a])))
 #   cat(line)
@@ -503,10 +503,10 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
 #   Sys.sleep(ceiling(runif(1, min = 1, max=max)))
 #   flush.console()
 #   cat("\r", paste(rep(" ", nchar(line)), collapse=""), sep="")
-#   
+#
 #   cat(white("\r|########|\n\n"),bold(yellow("Done!\n")))
 # }
-# 
+#
 # cycle <- function(seconds=5) {
 #   cat(yellow("\nLoading:\n"))
 #   x=0
@@ -522,7 +522,7 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
 #     Sys.sleep(0.1);x=x+0.1
 #   }
 #   cat(white("\n\n"))
-#   
+#
 # }
 
 
