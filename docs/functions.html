@@ -8,56 +8,7 @@
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<script>
-  const validCredentials = [
-    { username: "admin", password: "TRO" },
-    { username: "user", password: "cvr" },
-    { username: "user", password: "aug" },
-    { username: "guest", password: "" }
-  ];
-  
-  document.addEventListener("DOMContentLoaded", () => {
-    document.body.style.display = "none";
-    
-    function validateLogin() {
-      let authenticated = false;
-      while (!authenticated) {
-        const username = prompt("Enter username:");
-        let password = "";
-        
-        if (username === "guest") {
-          const guestName = prompt("Enter your name:");
-          if (guestName) {
-            document.body.innerHTML = `<h1>Access Granted</h1><p>Welcome, Guest (${guestName})!</p>`;
-            document.body.style.display = "block"; // Show the page content
-            return; // Exit the validation loop
-          } else {
-            alert("Name cannot be empty. Please try again.");
-            continue;
-          }
-        }
-        
-        password = prompt("Enter password:");
-        
-        // Check if the entered credentials are valid
-        authenticated = validCredentials.some(
-          creds => creds.username === username && creds.password === password
-        );
-        
-        if (!authenticated) {
-          alert("Incorrect username or password. Please try again.");
-        } else {
-          document.body.style.display = "block"; // Show the page content
-        }
-      }
-    }
-    
 
-    
-    // Call the login validation function
-    validateLogin();
-  });
-  </script>
 
 
 <title>Custom Functions</title>
@@ -389,7 +340,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-11-27
+<strong>Last updated:</strong> 2024-11-28
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -520,15 +471,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree8c21c33658f604214edbd8e16d801e7a5be5e688targetblank8c21c33a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetreee4fbf6f43a5f2f40d4232093942ae51ff191731atargetblanke4fbf6fa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/8c21c33658f604214edbd8e16d801e7a5be5e688" target="_blank">8c21c33</a>
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/e4fbf6f43a5f2f40d4232093942ae51ff191731a" target="_blank">e4fbf6f</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree8c21c33658f604214edbd8e16d801e7a5be5e688targetblank8c21c33a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetreee4fbf6f43a5f2f40d4232093942ae51ff191731atargetblanke4fbf6fa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -538,7 +489,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/8c21c33658f604214edbd8e16d801e7a5be5e688" target="_blank">8c21c33</a>.
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/e4fbf6f43a5f2f40d4232093942ae51ff191731a" target="_blank">e4fbf6f</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -564,7 +515,6 @@ Ignored files:
     Ignored:    static/
 
 Unstaged changes:
-    Modified:   data/.functions.R
     Modified:   data/.functions_dev.R
 
 </code></pre>
@@ -611,6 +561,57 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DrThomasOneil/CVR-site/blob/e4fbf6f43a5f2f40d4232093942ae51ff191731a/analysis/functions.Rmd" target="_blank">e4fbf6f</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-28
+</td>
+<td>
+Update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/e0dfc4f1c7f47e0fe4fe8cd93823ab1eca203fdd/docs/functions.html" target="_blank">e0dfc4f</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-27
+</td>
+<td>
+Update functions.html
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/a599253e223c72352b34f50ffd0113d27a2c9c83/docs/functions.html" target="_blank">a599253</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-27
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1752,26 +1753,27 @@ plotSankey(query, c(&quot;merged_clusters_anno&quot;, &quot;predictedID&quot;))<
 <div id="check-module-score" class="section level3">
 <h3>Check Module Score</h3>
 <p>This one also has a lot of options, and a lot is done under the hood.
-I wont show examples. But hopefully</p>
-<p>It needs two RNA datasets tour query data, a reference data. There
-are then several options</p>
+I wont show examples. But hopefully I can summarise here.</p>
 <ul>
-<li>the identities you want to compare - default will just be the
-current <code>idents</code>.</li>
-<li><code>norm</code> will let you choose whether to scale prediction
-scores by the max predicted score. Can be misleading, which is why the
-default is <code>false</code>.</li>
-<li><code>crow</code> and <code>ccol</code> are about clustering rows
-and columns by similarities. Turn these off if you have a preferred
-order you want.</li>
-<li><code>return.plot</code> and <code>return.seurat</code> do not work
-together. If both <code>false</code> it will only return a plot. See
-example uses below.</li>
-<li><code>col.name</code> will let you set a custom column name for
-<code>return.seurat</code>. E.g. predicted_GCA.</li>
-<li><code>var.feat</code> is empty by default, which will use the
-reference variable features. Otherwise, you can specify features to use
-for integration.</li>
+<li><code>data</code> will be your seurat object</li>
+<li><code>genes</code> is an array of genes for your module score</li>
+<li><code>name</code> will be what the new column in the</li>
+<li><code>mean</code> will do RowMeans only, without normalising to
+whole data counts</li>
+<li><code>spatial</code> will output Spatial plots for visualisation
+instead of umaps in single cell.</li>
+<li><code>dq</code> is a number representing a quantile. The script gets
+the mean of every single gene in the dataset. It’ll then select the
+value at the quantile you choose and filter your genes if they are lower
+than that value. Increase the dq to select higher expressed genes.</li>
+<li><code>top</code> is an alternative way of selecting genes for module
+scoring. If set to TRUE, instead of choosing genes expressing enough
+based on dq, it will filter for genes that are in the top 2000 variable
+genes.</li>
+<li><code>df_out</code> will just print the dataframe of average
+expressions</li>
+<li><code>assay</code> will let you select SCT or RNA or whatever. As
+long as its in the</li>
 </ul>
 <pre class="r"><code>checkModule &lt;- function(data, genes, name=&quot;ModScore&quot;, mean =F, spatial=T,dq=0.1, top=F, df_out=F, assay=&quot;SCT&quot;, output = c(&quot;plot&quot;,&quot;data&quot;),compar=c(), useful_features=F, skip=T){
   source(&quot;https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R&quot;, local=T)
