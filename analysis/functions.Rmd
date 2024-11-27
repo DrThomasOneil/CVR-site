@@ -9,17 +9,11 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r, include=F}
-source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.functions_dev.R")
-encrypt()
-```
-
 # {.tabset .tabset-fade}
 
 Here I'll drop custom functions that I generate here with instructions and example output. 
 
 ## Loading functions
-
 
 Functions can be loaded using: 
 
@@ -27,11 +21,13 @@ Functions can be loaded using:
 source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.functions.R")
 ```
  
-### TOM TO DO SOON:
 
 Organise by category: setup, tools, plotting, analysis, etc. 
+
+## Setup{.tabset .tabset-fade}
+
  
-## loadPack
+### loadPack
 
 This function runs automatically. It'll load the packages that I typically use, which just saves me having to load packages manually everytime. 
 
@@ -75,123 +71,7 @@ loadPack()
 
 </details><hr><br><br>
 
-## plotSankey
-
-This generates a sankey diagram using **Seurat data**. This might be useful to see how two vectors relate to each other. This was made by Brian Gloss. 
-
-An example of its use would be to transfer labels from one single cell dataset to another, and visualise how much of cluster aligns with the new annotations. And this can be done for multiple meta data columns. 
-
-```{r}
-plotSankey<-function(seuratObj,idvar=c("varRes.0.3","emt_res.0.3")){
-  require(flipPlots)
-  message('try install_github("Displayr/flipPlots") if this doesnt work')
-  require(dplyr)
-  seuratObj@meta.data[,match(idvar,colnames(seuratObj@meta.data))] %>% arrange(.[,1]) %>% group_by_all() %>% summarise(COUNT = n()) ->> my.data
-  #my.data<-as.factor(my.data[,1])
-  SankeyDiagram(my.data[, -grep("COUNT",colnames(my.data))],link.color = "Source",weights = my.data$COUNT,,max.categories = 100)
-}
-
-```
-
-<details><summary>Example use:</summary>
-
-This might look strange, but its because the data had been integrated and this is just looking at the old annotations (Integrated_05) and the new labels of just one dataset. 
-
-```{r message=FALSE, warning=FALSE, include=F, eval=F}
-seu_obj <- readRDS("/Users/thomasoneil/Library/CloudStorage/OneDrive-SharedLibraries-TheUniversityofSydney(Staff)/HIV Pathogenesis & Mucosal Immunology - Documents/Kirstie/Anja/merged_Martin_GCA-SB-HealthyAdult_20220119_annotated_TO.rds")
-seu_obj<-seu_obj[,!is.na(seu_obj$Integrated_05)]
-```
-
-
-```{r message=FALSE, warning=FALSE, eval=F}
-plotSankey(seu_obj[,seu_obj$Integrated_05!=0], 
-           c("merged_clusters_anno", 
-             "Integrated_05", 
-             "Age"))
-```
-
-![ ](assets/func1.png)
-
-</details><hr><br><br>
-
-## Proportion plots
-
-This is used to get proportions of some categorical value in groups. E.g. Clusters proportions of inflamed and uninflamed tissues. 
-
-```{r}
-proportions <- function(data, ident.1, ident.2, position) {
-  x<- FetchData(data,c(ident.1,ident.2))
-  colnames(x) <- c('ident.2', 'ident.1')
-  x%>% 
-    group_by(ident.1) %>%
-    mutate(prop=1/length(ident.2)) %>%
-    ungroup() %>%
-    group_by(ident.2,ident.1) %>%
-    summarise(totprop=sum(prop)) %>%
-    
-    ggplot(aes(x=ident.2,fill=ident.1,y=totprop)) +
-      geom_bar(position=position, stat='identity') + 
-      theme(axis.text.x =element_text(angle = 45,hjust=1))+
-      scale_y_continuous(name="Cluster Proportion")+ 
-      theme_classic()
-}
-```
-
-<details><summary>Example use:</summary>
-
-This might look strange, but its because the data had been integrated and this is just looking at the old annotations (Integrated_05) and the new labels of just one dataset. 
-
-```{r message=FALSE, warning=FALSE, eval=F}
-
-proportions(seu_obj, 
-            "Age", # x axis
-            "Integrated_05", # proportions
-            "fill") # or stack
-
-```
-
-![ ](assets/func2.png)
-
-</details><hr><br><br>
-
-## Process data
-
-This function just summarises the standard processing of single cell RNA data. You can go in and uncomment the umap and tsne if you wish. 
-
-```{r}
-process <- function(dat=dat, umap=T, tsne=F, dimuse = 1:30, features=2000, verbose=F, reduction.name=NULL){
-  dat <- NormalizeData(dat, verbose=verbose)
-  dat <- FindVariableFeatures(dat, nfeatures=features, verbose=verbose)
-  dat <- ScaleData(dat, features=VariableFeatures(dat), verbose=verbose)
-  dat <- RunPCA(dat, verbose=verbose, reduction.name = paste0("pca", reduction.name))
-  if(umap) {
-    dat <- RunUMAP(dat, dims=dimuse, verbose=verbose, reduction = paste0("pca", reduction.name), reduction.name = paste0("umap", reduction.name))
-  }
-  if(tsne){
-     dat <- RunTSNE(dat, dims=dimuse, check_duplicates=F, verbose=verbose, reduction = paste0("pca", reduction.name),reduction.name = paste0("tsne", reduction.name))
-  } 
-  return(dat)
-}
-```
-
-<br><hr><details><summary>Example use:</summary>
-
-```{r message=FALSE, warning=FALSE, eval=F}
-
-seu_obj <- process(
-  seu_obj, 
-  umap=T, tsne = F, # can change these to generate UMAPs or TSNEs. Default is UMAP only as its quicker. 
-  dimuse = 1:30,    # can set 1:whatever dimensions you want to use
-  features = 2000,  # number of variable features to use. Adjust if using platforms like Xenium or CosMX
-  verbose= F,       # change to T if you want to see the output as its running. 
-  reduction.name = NULL # change this if you want to add a unique name to your reductions. E.g. if you're testing a number of dimensions, features, or are running this pre-integration
-)
-
-```
-
-</details><hr><br><br>
-
-## Human Protein Atlas
+### Human Protein Atlas
 
 Currently, this one is quite hideous. I downloaded the protein and the RNA data from the [Human Protein Atlas](https://www.proteinatlas.org/). This function is basically used to get a general idea of what an unknown gene might be associated with. 
 
@@ -235,7 +115,221 @@ hpa("CD14")
 
 </details><hr><br><br>
 
-## Label transfer Heatmap
+
+## Processing{.tabset .tabset-fade}
+
+### Process data
+
+This function just summarises the standard processing of single cell RNA data. You can go in and uncomment the umap and tsne if you wish. 
+
+```{r}
+process <- function(dat=dat, umap=T, tsne=F, dimuse = 1:30, features=2000, verbose=F, reduction.name=NULL){
+  dat <- NormalizeData(dat, verbose=verbose)
+  dat <- FindVariableFeatures(dat, nfeatures=features, verbose=verbose)
+  dat <- ScaleData(dat, features=VariableFeatures(dat), verbose=verbose)
+  dat <- RunPCA(dat, verbose=verbose, reduction.name = paste0("pca", reduction.name))
+  if(umap) {
+    dat <- RunUMAP(dat, dims=dimuse, verbose=verbose, reduction = paste0("pca", reduction.name), reduction.name = paste0("umap", reduction.name))
+  }
+  if(tsne){
+     dat <- RunTSNE(dat, dims=dimuse, check_duplicates=F, verbose=verbose, reduction = paste0("pca", reduction.name),reduction.name = paste0("tsne", reduction.name))
+  } 
+  return(dat)
+}
+```
+
+<br><hr><details><summary>Example use:</summary>
+
+```{r message=FALSE, warning=FALSE, eval=F}
+
+seu_obj <- process(
+  seu_obj, 
+  umap=T, tsne = F, # can change these to generate UMAPs or TSNEs. Default is UMAP only as its quicker. 
+  dimuse = 1:30,    # can set 1:whatever dimensions you want to use
+  features = 2000,  # number of variable features to use. Adjust if using platforms like Xenium or CosMX
+  verbose= F,       # change to T if you want to see the output as its running. 
+  reduction.name = NULL # change this if you want to add a unique name to your reductions. E.g. if you're testing a number of dimensions, features, or are running this pre-integration
+)
+
+```
+
+</details><hr><br><br>
+
+## Tools{.tabset .tabset-fade}
+
+### check
+
+check is used to quickly check the data you're using for the genes. 
+
+A utility of this may be to quickly check if its `HLA.DR` or `HLA-DR`
+
+```{r message=FALSE, warning=FALSE, eval=F}
+check <- function(data, pattern = "CD") {
+  x=grep(pattern, rownames(data), value=T)
+  if(length(x)==0) {
+    cat(paste0("There are no genes in this data that match the pattern ", crayon::green(crayon::bold(pattern))))
+  } else {
+    print(x)
+  }
+}
+```
+
+<br><hr><details><summary>Example use:</summary>
+
+```{r message=FALSE, warning=FALSE, eval=F}
+check(data[[1]], "CD3") # put the object in first, then a pattern you want to look for
+check(data[[1]], "^CD3") # adding the ^ to the front tells it to search only for instances that start with...
+check(data[[1]], "^CD3[0-9]") # adding in square brackets after the first pattern, you can tell it that you only want to then include instances of CD3 that are followed by a number from 0-9
+check(data[[1]], "^IL2") # similar can be done for letters
+check(data[[1]], "^IL2[aA-zZ]") # similar can be done for letters```
+```
+
+</details><hr><br><br>
+
+### printMessage
+
+This is just a nice way of adding messages to functions. 
+
+Arguments:
+
+- `message` is a string of the message. Typically single line. 
+- `space` is how many spaces on each side of the message to include as a nice buffer
+- `theme` is for setting a predefined theme
+- `bg` is the background colour
+- `txt` is text colour
+- `bold` is a logical for bold text
+
+```{r message=FALSE, warning=FALSE, eval=T}
+printMessage <- function(message = "Message", space=4, theme=NULL, bg = "#FFFFFF",txt= "#BB0000", bold=T){
+  if(is.null(theme)){theme <- combine_ansi_styles(make_ansi_style(bg, bg = TRUE, bold = bold), txt)}
+  message=paste(paste(rep(" ", space), collapse=""), message, paste(rep(" ", space), collapse=""), collapse="")
+  cat(theme(paste(rep(" ", nchar(message)), collapse=""), "\n",message, '\n',paste(rep(" ", nchar(message)), collapse="")), "\n\n")
+}
+```
+
+### maxSize
+
+This is also just to change the maxSize of the globals which allows the comp to run more 
+
+```{r message=FALSE, warning=FALSE, eval=F}
+maxSize <- function(GB=3) {
+  options(future.globals.maxSize = GB * 1024^3) 
+}
+```
+
+### Top DE markers
+
+This is just summarised script for finding the top differentially expressed markers
+
+```{r}
+
+topm <- function(data, min.diff.pct = 0.01, n=40, logfc = 0.1) {
+  FindAllMarkers(data, only.pos=T, min.diff.pct = min.diff.pct, logfc.threshold = logfc) %>%
+    filter(p_val_adj <0.0001) %>%
+    group_by(cluster) %>%
+    top_n(n=n, wt = avg_log2FC)
+}
+
+```
+
+
+<br><hr><details><summary>Example use:</summary>
+
+```{r, message=F, warning=F, eval=F}
+top20markers <- topm(ref, 
+                     min.diff.pct = 0.1, 
+                     logfc = 0.2,
+                     n=20)
+knitr::kable(top20markers[1:10,])
+```
+
+</details><hr><br><br>
+
+## Plotting{.tabset .tabset-fade}
+
+### plotSankey
+
+This generates a sankey diagram using **Seurat data**. This might be useful to see how two vectors relate to each other. This was made by Brian Gloss. 
+
+An example of its use would be to transfer labels from one single cell dataset to another, and visualise how much of cluster aligns with the new annotations. And this can be done for multiple meta data columns. 
+
+```{r}
+plotSankey<-function(seuratObj,idvar=c("varRes.0.3","emt_res.0.3")){
+  require(flipPlots)
+  message('try install_github("Displayr/flipPlots") if this doesnt work')
+  require(dplyr)
+  seuratObj@meta.data[,match(idvar,colnames(seuratObj@meta.data))] %>% arrange(.[,1]) %>% group_by_all() %>% summarise(COUNT = n()) ->> my.data
+  #my.data<-as.factor(my.data[,1])
+  SankeyDiagram(my.data[, -grep("COUNT",colnames(my.data))],link.color = "Source",weights = my.data$COUNT,,max.categories = 100)
+}
+
+```
+
+<details><summary>Example use:</summary>
+
+This might look strange, but its because the data had been integrated and this is just looking at the old annotations (Integrated_05) and the new labels of just one dataset. 
+
+```{r message=FALSE, warning=FALSE, include=F, eval=F}
+seu_obj <- readRDS("/Users/thomasoneil/Library/CloudStorage/OneDrive-SharedLibraries-TheUniversityofSydney(Staff)/HIV Pathogenesis & Mucosal Immunology - Documents/Kirstie/Anja/merged_Martin_GCA-SB-HealthyAdult_20220119_annotated_TO.rds")
+seu_obj<-seu_obj[,!is.na(seu_obj$Integrated_05)]
+```
+
+
+```{r message=FALSE, warning=FALSE, eval=F}
+plotSankey(seu_obj[,seu_obj$Integrated_05!=0], 
+           c("merged_clusters_anno", 
+             "Integrated_05", 
+             "Age"))
+```
+
+![ ](assets/func1.png)
+
+</details><hr><br><br>
+
+### Proportion plots
+
+This is used to get proportions of some categorical value in groups. E.g. Clusters proportions of inflamed and uninflamed tissues. 
+
+```{r}
+proportions <- function(data, ident.1, ident.2, position) {
+  x<- FetchData(data,c(ident.1,ident.2))
+  colnames(x) <- c('ident.2', 'ident.1')
+  x%>% 
+    group_by(ident.1) %>%
+    mutate(prop=1/length(ident.2)) %>%
+    ungroup() %>%
+    group_by(ident.2,ident.1) %>%
+    summarise(totprop=sum(prop)) %>%
+    
+    ggplot(aes(x=ident.2,fill=ident.1,y=totprop)) +
+      geom_bar(position=position, stat='identity') + 
+      theme(axis.text.x =element_text(angle = 45,hjust=1))+
+      scale_y_continuous(name="Cluster Proportion")+ 
+      theme_classic()
+}
+```
+
+<details><summary>Example use:</summary>
+
+This might look strange, but its because the data had been integrated and this is just looking at the old annotations (Integrated_05) and the new labels of just one dataset. 
+
+```{r message=FALSE, warning=FALSE, eval=F}
+
+proportions(seu_obj, 
+            "Age", # x axis
+            "Integrated_05", # proportions
+            "fill") # or stack
+
+```
+
+![ ](assets/func2.png)
+
+</details><hr><br><br>
+
+
+## Analysis{.tabset .tabset-fade}
+
+### Label transfer Heatmap
 
 This one has a lot of options but does quite a bit under the hood. 
 
@@ -346,29 +440,221 @@ plotSankey(query, c("merged_clusters_anno", "predictedID"))
 
 </details><hr><br><br>
 
-## Top DE markers
 
-This is just summarised script for finding the top differentially expressed markers
+### Check Module Score
+
+This one also has a lot of options, and a lot is done under the hood. I wont show examples. But hopefully 
+
+It needs two RNA datasets tour query data, a reference data. There are then several options 
+
+- the identities you want to compare - default will just be the current `idents`. 
+- `norm` will let you choose whether to scale prediction scores by the max predicted score. Can be misleading, which is why the default is `false`.
+- `crow` and `ccol` are about clustering rows and columns by similarities. Turn these off if you have a preferred order you want. 
+- `return.plot` and `return.seurat` do not work together. If both `false` it will only return a plot. See example uses below. 
+- `col.name` will let you set a custom column name for `return.seurat`. E.g. predicted_GCA. 
+- `var.feat` is empty by default, which will use the reference variable features. Otherwise, you can specify features to use for integration. 
 
 ```{r}
-topm <- function(data, min.diff.pct = 0.01, n=40, logfc = 0.1) {
-  FindAllMarkers(data, only.pos=T, min.diff.pct = min.diff.pct, logfc.threshold = logfc) %>%
-    filter(p_val_adj <0.0001) %>%
-    group_by(cluster) %>%
-    top_n(n=n, wt = avg_log2FC)
+checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1, top=F, df_out=F, assay="SCT", output = c("plot","data"),compar=c(), useful_features=F, skip=T){
+  source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
+  # themes
+  error <- combine_ansi_styles(make_ansi_style("#8B0000", bg = TRUE, bold = TRUE), col_white)
+  warn <- combine_ansi_styles(make_ansi_style("#FFFF00", bg = TRUE, bold = TRUE), "#000000")
+  # errors ------------------------------------------------------------------
+  if(prod(is.character(c(name, output)), is.logical(c(top,useful_features,skip)), is.numeric(dq))==0){return(printMessage("Check arguments and try again!", theme=error))}
+  if(length(output) != 1 | sum(!output %in% c("plot", "data"))!=0) {return(cat(error("\n\tChoose one of the two outputs:\t\t   \n\t - \"data\" to add ModuleScore to data, or   \n\t -\"plot\" to just output plots\t\t   ")))}
+  if(!assay %in% names(data@assays)){return(printMessage("**Assay is not present in Seurat Object**", theme=error))} 
+  
+  # give them the information and the option to cancel before running
+  if(!skip){
+    cat(white(" - ",length(genes)),yellow("genes chosen to generate the module score \n"))
+    cat(white(" - "),yellow("You've chosen to name the Module Score:"),white(name), yellow(" \n"))
+    if(!top){
+      cat(white(" - "),yellow("You've chosen to choose a quantile threshold of",white(dq), "\n"))
+    } else {
+      cat(white(" - "),yellow("You've chosen to filter genes if they are"),white("highly variable \n"))
+    }
+    cat(white(" - ",assay),yellow("assay was chosen. \n"))
+    cat(white(" - "),yellow("You've chosen to output"),white(output), yellow(" \n"))
+    if(!skip) {
+      x=0
+      while(x<1) {
+        input <- readline(prompt = "Do you want to continue (Y/N): ")
+        if(input =="Y"){x=x+1}
+        else if(input =="N"){return(printMessage("Thanks for playing", theme=warn))} 
+        else{cat(error("  Try again  \n"))}
+      }
+    } else {cat(white(" - "),yellow("You've chosen to"), white("skip\n"))}
+  }
+  
+  genes <- genes[!duplicated(genes)]
+  genes <- na.omit(genes)
+  if(useful_features){cycle(seconds = runif(1, min = 1, max=8))}
+  
+  # Check which genes present in assay --------------------------------------
+  cat(bold(green("\n\nChecking genes are present:\n\n")))
+  if(useful_features){progress(max=3)}
+  
+  na=c(); mod <-c() #not in object/for module scoring
+  for(i in 1:length(genes)){
+    if(sum(grepl(paste0("^",genes[i],"$"), rownames(data@assays$SCT$data)))==0){
+      na <- c(na, genes[i])
+    } else {
+      mod <- c(mod, genes[i])
+    } 
+  }
+  
+  # return error and leave if after checking genes in data not greater than 2 
+  if(length(mod)<2){
+    return(printMessage(message="You do not have enough genes for a module score"), theme=error)
+  }
+  # print genes not found in the data
+  cat(bold(green("\nDONE!\n\n")))
+  
+  if (length(na) > 0){
+    cat(error("\n  **IMPORTANT**  "),
+        style_bold(col_yellow(paste0("\n\nGenes not in the dataset (", length(na) ,"/", length(genes) ,"): \n"))),
+        paste(paste(c(na), collapse=", ")))
+  }
+  # if top is F, use the quartile for filtering genes for module score
+  if(!top){
+    above <-c();below <- c()
+    exp <- rowMeans(data[[assay]]$data)
+    
+    cat(yellow("\n\n---------\n\nMean expression of all genes:", white(mean(exp)),
+               "\n\nQuantile Threshold chosen:", white(quantile(exp, probs = dq)), "\n\n---------\n"))
+    
+    df <- data.frame(gene=mod, mean=NA, thresh=NA)
+    #filter if means are above threshold
+    for(i in 1:length(mod)) {
+      mea <- mean(data[[assay]]$data[mod[i],])
+      if(df_out){df$mean[i] <- mea}
+      if(mea > quantile(exp, probs = dq)){
+        above <- c(above, mod[i])
+        if(df_out){df$thresh[i] <- "above"}
+      } else {
+        below <- c(below, mod[i])
+        if(df_out){df$thresh[i] <- "below"}
+      }
+    }
+    
+    # check that genes after filtering greater than 2 for module scoring
+    if(length(above)<2){
+      return(cat(warn(" \t\t\t\t\t\t  \n\t   After filtering per quantile\t\t  \n  you do not have enough genes for a module score \n\t\t\t\t\t\t  ")))
+    } 
+    
+    # print genes that didnt make the threshold
+    if (length(below) > 0){
+      cat(error("\n  **IMPORTANT**  "),
+          style_bold(col_yellow(paste0("\n\nGenes below quartile threshold ", dq," (", length(below) ,"/", length(mod) ,"): \n"))),
+          paste(paste(c(below), collapse=", ")))
+    }
+    # if top is T, only find genes in top Var features
+  } else {
+    above <- mod[mod %in% VariableFeatures(data, assay=assay)]
+    if(length(above)<2){
+      return(cat(warn(" \t\t\t\t\t\t  \n\t   After filtering per quantile\t\t  \n  you do not have enough genes for a module score \n\t\t\t\t\t\t  ")))
+    }
+    below <- mod[!mod %in% VariableFeatures(data, assay=assay)]
+    if(length(below) > 0) {
+      cat(error("\n  **IMPORTANT**  "),
+          style_bold(col_yellow(paste0("\n\nGenes not in Top Variable Features (", length(below) ,"/", length(mod) ,"): \n"))),
+          paste(paste(c(below), collapse=", ")))
+    }
+    if(df_out){ df <- data.frame(gene=mod, mean=NA, thresh=NA)
+    for(i in 1:nrow(df)) {
+      mea <- mean(data[[assay]]$data[mod[i],])
+      df$mean[i] <- mea
+      if(df$gene[i] %in% above){df$thresh[i] == "above"} else{df$thresh[i]=="below"}
+    }
+    }
+  }
+  
+  cat(bold(yellow("\n\nModule Score being Generated:\n\n")))
+  cycle(1)
+  if(useful_features){cycle(seconds = runif(1, min = 1, max=8))}
+  
+  if(!mean){
+    data <- AddModuleScore(data, features=above, name=name)
+    data@meta.data <- data@meta.data %>%
+      rename_with(~ substr(., 1, nchar(.) - 1), .cols = paste0(name,1))  
+  } else {
+    data@meta.data <- data@meta.data %>%
+      mutate(tmp=rowMeans(FetchData(data, above, layer='data', assay=assay))) %>%
+      rename_with(~ name, .cols = "tmp")  
+      }
+  # plot or data ------------------------------------------------------------
+  if(output == "plot") {
+    
+    if(length(compar)==0){
+      x=0
+      while(x<1) {
+        input <- readline(prompt = "Type a gene for comparison: ")
+        if(prod(input %in% rownames(data) | input %in% colnames(data@meta.data))){x=x+1} else {cat(error("  Try again  \n"))}
+      }
+    } else{
+      if(sum(grepl(compar, rownames(data)))){
+        input=compar
+      } else {input="CD3E"}
+    }
+    if(spatial){
+      p1 <- suppressMessages(SpatialFeaturePlot(data, name, alpha=c(0,0), assay=assay)+scale_fill_viridis_c(option="A")+NoLegend()+ggtitle("Tissue"))
+      max_value <- NA
+      suppressMessages(print(SpatialFeaturePlot(data, name, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option="A")+ ggtitle(paste("Module:", name))))
+      repeat {
+        max2 <- readline(prompt = "Change max threshold (type Y to continue): ")
+        if (toupper(max2) == "Y") {
+          p2 <- suppressMessages(SpatialFeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value) +
+                                   scale_fill_viridis_c(option = "A") + NoLegend()+ ggtitle(paste("Module:", name)))
+          break
+        } else if (!is.na(as.numeric(max2))) {
+          max_value <- as.numeric(max2)
+          suppressMessages(print(SpatialFeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value, assay=assay) +
+                                   scale_fill_viridis_c(option = "A") + ggtitle(paste("Module:", name))))
+        } else {
+          cat("Invalid input. Please enter a numeric value or 'Y' to continue.\n")
+        }
+      }
+      p3 <- suppressMessages(SpatialFeaturePlot(data, input, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option="A")+NoLegend() + ggtitle(paste("Gene:", input)))
+    } else {
+      p1 <- suppressMessages(FeaturePlot(data, name, alpha=c(0,0), assay=assay)+scale_fill_viridis_c(option="A")+NoLegend()+ggtitle("Tissue"))
+      max_value <- NA
+      suppressMessages(print(FeaturePlot(data, name, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option="A")+ ggtitle(paste("Module:", name))))
+      repeat {
+        max2 <- readline(prompt = "Change max threshold (type Y to continue): ")
+        if (toupper(max2) == "Y") {
+          p2 <- suppressMessages(FeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value, assay=assay) +
+                                   scale_fill_viridis_c(option = "A") + NoLegend()+ ggtitle(paste("Module:", name)))
+          break
+        } else if (!is.na(as.numeric(max2))) {
+          max_value <- as.numeric(max2)
+          suppressMessages(print(FeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value, assay=assay) +
+                                   scale_fill_viridis_c(option = "A") + ggtitle(paste("Module:", name))))
+        } else {
+          cat("Invalid input. Please enter a numeric value or 'Y' to continue.\n")
+        }
+      }
+      p3 <- suppressMessages(FeaturePlot(data, input, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option="A")+NoLegend() + ggtitle(paste("Gene:", input)))
+      
+    }
+    m <- data@meta.data %>% select(name)
+    data@meta.data <- data@meta.data %>%
+      mutate(moduleScore = ifelse(m>0, "pos", "neg"))
+    p4 <- VlnPlot(data, input, group.by="moduleScore")+NoLegend()
+    printMessage("Printing plots")
+    if(df_out){print(df)}
+    print(suppressMessages(plot_grid(p1,p2,p3,p4)))
+    return(p2)
+  } else {
+    if(df_out){print(df)}
+    return(data)
+  }
+  
+  if(useful_features) {
+    printMessage("Thank you for using the useful features", space=4, theme=warn)
+  }
+  rm(progress, cycle)
 }
 ```
 
-
-<br><hr><details><summary>Example use:</summary>
-
-```{r, message=F, warning=F, eval=F}
-top20markers <- topm(ref, 
-                     min.diff.pct = 0.1, 
-                     logfc = 0.2,
-                     n=20)
-knitr::kable(top20markers[1:10,])
-```
-
-</details><hr><br><br>
 <br><br><hr><br>
