@@ -8,56 +8,7 @@
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<script>
-  const validCredentials = [
-    { username: "admin", password: "TRO" },
-    { username: "user", password: "cvr" },
-    { username: "user", password: "aug" },
-    { username: "guest", password: "" }
-  ];
-  
-  document.addEventListener("DOMContentLoaded", () => {
-    document.body.style.display = "none";
-    
-    function validateLogin() {
-      let authenticated = false;
-      while (!authenticated) {
-        const username = prompt("Enter username:");
-        let password = "";
-        
-        if (username === "guest") {
-          const guestName = prompt("Enter your name:");
-          if (guestName) {
-            document.body.innerHTML = `<h1>Access Granted</h1><p>Welcome, Guest (${guestName})!</p>`;
-            document.body.style.display = "block"; // Show the page content
-            return; // Exit the validation loop
-          } else {
-            alert("Name cannot be empty. Please try again.");
-            continue;
-          }
-        }
-        
-        password = prompt("Enter password:");
-        
-        // Check if the entered credentials are valid
-        authenticated = validCredentials.some(
-          creds => creds.username === username && creds.password === password
-        );
-        
-        if (!authenticated) {
-          alert("Incorrect username or password. Please try again.");
-        } else {
-          document.body.style.display = "block"; // Show the page content
-        }
-      }
-    }
-    
 
-    
-    // Call the login validation function
-    validateLogin();
-  });
-  </script>
 
 
 <title>Custom Functions</title>
@@ -389,7 +340,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-11-26
+<strong>Last updated:</strong> 2024-11-27
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -520,15 +471,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree9f52153f022cf8b62360bf01ca847608580125b4targetblank9f52153a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree8c21c33658f604214edbd8e16d801e7a5be5e688targetblank8c21c33a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/9f52153f022cf8b62360bf01ca847608580125b4" target="_blank">9f52153</a>
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/8c21c33658f604214edbd8e16d801e7a5be5e688" target="_blank">8c21c33</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree9f52153f022cf8b62360bf01ca847608580125b4targetblank9f52153a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree8c21c33658f604214edbd8e16d801e7a5be5e688targetblank8c21c33a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -538,7 +489,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/9f52153f022cf8b62360bf01ca847608580125b4" target="_blank">9f52153</a>.
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/8c21c33658f604214edbd8e16d801e7a5be5e688" target="_blank">8c21c33</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -556,11 +507,16 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .RData
     Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
     Ignored:    data/.DS_Store
     Ignored:    data/merged_Martin_GCA-SB-HealthyAdult_20220119_annotated_TO.rds
     Ignored:    data/rmds/.DS_Store
     Ignored:    static/
+
+Unstaged changes:
+    Modified:   data/.functions.R
+    Modified:   data/.functions_dev.R
 
 </code></pre>
 <p>
@@ -606,6 +562,176 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DrThomasOneil/CVR-site/blob/8c21c33658f604214edbd8e16d801e7a5be5e688/analysis/functions.Rmd" target="_blank">8c21c33</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-27
+</td>
+<td>
+Update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/e5e0b02e26aeba1a16b4779431ae9b49a2865a98/docs/functions.html" target="_blank">e5e0b02</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-26
+</td>
+<td>
+Update functions.html
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/184aabcfc40eb55b689cd4c19dff1a066ddc2d4d/docs/functions.html" target="_blank">184aabc</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-26
+</td>
+<td>
+Update functions.html
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/110f7c38da14ec48f3b847153309e8e9e150c718/docs/functions.html" target="_blank">110f7c3</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-26
+</td>
+<td>
+Update functions.html
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/310b3727d0f1139f06edfaf12f4fc1ac2367a879/docs/functions.html" target="_blank">310b372</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-26
+</td>
+<td>
+Update functions.html
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/38685a27a21872512a84793bc376b3a3b74ebd92/docs/functions.html" target="_blank">38685a2</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-26
+</td>
+<td>
+Update functions.html
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/39c472901980eb1bfbafd33a03f86e03568fde83/docs/functions.html" target="_blank">39c4729</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-26
+</td>
+<td>
+Update functions.html
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/14d484d5f9850136caa5b99d1d6cd183484cdc61/docs/functions.html" target="_blank">14d484d</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-26
+</td>
+<td>
+Update functions.html
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/e4aa21afa2e9b8372381d5713910504f36e64d41/docs/functions.html" target="_blank">e4aa21a</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-26
+</td>
+<td>
+Update functions.html
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/fe35d25fb4d4bfb367695dc3c4f344835340da32/docs/functions.html" target="_blank">fe35d25</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1131,13 +1257,12 @@ instructions and example output.</p>
 <h2>Loading functions</h2>
 <p>Functions can be loaded using:</p>
 <pre class="r"><code>source(&quot;https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.functions.R&quot;)</code></pre>
-<div id="tom-to-do-soon" class="section level3">
-<h3>TOM TO DO SOON:</h3>
 <p>Organise by category: setup, tools, plotting, analysis, etc.</p>
 </div>
-</div>
-<div id="loadpack" class="section level2">
-<h2>loadPack</h2>
+<div id="setup" class="section level2 tabset tabset-fade">
+<h2 class="tabset tabset-fade">Setup</h2>
+<div id="loadpack" class="section level3">
+<h3>loadPack</h3>
 <p>This function runs automatically. It’ll load the packages that I
 typically use, which just saves me having to load packages manually
 everytime.</p>
@@ -1189,8 +1314,11 @@ knitr is loaded!
 dplyr is loaded!
 Seurat is loaded!
 SeuratObject is loaded!
-DoubletFinder has not been installed
-SeuratDisk is loaded!
+DoubletFinder has not been installed</code></pre>
+<pre><code>Registered S3 method overwritten by &#39;SeuratDisk&#39;:
+  method            from  
+  as.sparse.H5Group Seurat</code></pre>
+<pre><code>SeuratDisk is loaded!
 flipPlots is loaded!
 stringr is loaded!
 crayon is loaded!
@@ -1221,112 +1349,8 @@ You need to install:
 <hr>
 <p><br><br></p>
 </div>
-<div id="plotsankey" class="section level2">
-<h2>plotSankey</h2>
-<p>This generates a sankey diagram using <strong>Seurat data</strong>.
-This might be useful to see how two vectors relate to each other. This
-was made by Brian Gloss.</p>
-<p>An example of its use would be to transfer labels from one single
-cell dataset to another, and visualise how much of cluster aligns with
-the new annotations. And this can be done for multiple meta data
-columns.</p>
-<pre class="r"><code>plotSankey&lt;-function(seuratObj,idvar=c(&quot;varRes.0.3&quot;,&quot;emt_res.0.3&quot;)){
-  require(flipPlots)
-  message(&#39;try install_github(&quot;Displayr/flipPlots&quot;) if this doesnt work&#39;)
-  require(dplyr)
-  seuratObj@meta.data[,match(idvar,colnames(seuratObj@meta.data))] %&gt;% arrange(.[,1]) %&gt;% group_by_all() %&gt;% summarise(COUNT = n()) -&gt;&gt; my.data
-  #my.data&lt;-as.factor(my.data[,1])
-  SankeyDiagram(my.data[, -grep(&quot;COUNT&quot;,colnames(my.data))],link.color = &quot;Source&quot;,weights = my.data$COUNT,,max.categories = 100)
-}</code></pre>
-<details>
-<summary>
-Example use:
-</summary>
-<p>This might look strange, but its because the data had been integrated
-and this is just looking at the old annotations (Integrated_05) and the
-new labels of just one dataset.</p>
-<pre class="r"><code>plotSankey(seu_obj[,seu_obj$Integrated_05!=0], 
-           c(&quot;merged_clusters_anno&quot;, 
-             &quot;Integrated_05&quot;, 
-             &quot;Age&quot;))</code></pre>
-<p><img src="assets/func1.png" /></p>
-</details>
-<hr>
-<p><br><br></p>
-</div>
-<div id="proportion-plots" class="section level2">
-<h2>Proportion plots</h2>
-<p>This is used to get proportions of some categorical value in groups.
-E.g. Clusters proportions of inflamed and uninflamed tissues.</p>
-<pre class="r"><code>proportions &lt;- function(data, ident.1, ident.2, position) {
-  x&lt;- FetchData(data,c(ident.1,ident.2))
-  colnames(x) &lt;- c(&#39;ident.2&#39;, &#39;ident.1&#39;)
-  x%&gt;% 
-    group_by(ident.1) %&gt;%
-    mutate(prop=1/length(ident.2)) %&gt;%
-    ungroup() %&gt;%
-    group_by(ident.2,ident.1) %&gt;%
-    summarise(totprop=sum(prop)) %&gt;%
-    
-    ggplot(aes(x=ident.2,fill=ident.1,y=totprop)) +
-      geom_bar(position=position, stat=&#39;identity&#39;) + 
-      theme(axis.text.x =element_text(angle = 45,hjust=1))+
-      scale_y_continuous(name=&quot;Cluster Proportion&quot;)+ 
-      theme_classic()
-}</code></pre>
-<details>
-<summary>
-Example use:
-</summary>
-<p>This might look strange, but its because the data had been integrated
-and this is just looking at the old annotations (Integrated_05) and the
-new labels of just one dataset.</p>
-<pre class="r"><code>proportions(seu_obj, 
-            &quot;Age&quot;, # x axis
-            &quot;Integrated_05&quot;, # proportions
-            &quot;fill&quot;) # or stack</code></pre>
-<p><img src="assets/func2.png" /></p>
-</details>
-<hr>
-<p><br><br></p>
-</div>
-<div id="process-data" class="section level2">
-<h2>Process data</h2>
-<p>This function just summarises the standard processing of single cell
-RNA data. You can go in and uncomment the umap and tsne if you wish.</p>
-<pre class="r"><code>process &lt;- function(dat=dat, umap=T, tsne=F, dimuse = 1:30, features=2000, verbose=F, reduction.name=NULL){
-  dat &lt;- NormalizeData(dat, verbose=verbose)
-  dat &lt;- FindVariableFeatures(dat, nfeatures=features, verbose=verbose)
-  dat &lt;- ScaleData(dat, features=VariableFeatures(dat), verbose=verbose)
-  dat &lt;- RunPCA(dat, verbose=verbose, reduction.name = paste0(&quot;pca&quot;, reduction.name))
-  if(umap) {
-    dat &lt;- RunUMAP(dat, dims=dimuse, verbose=verbose, reduction = paste0(&quot;pca&quot;, reduction.name), reduction.name = paste0(&quot;umap&quot;, reduction.name))
-  }
-  if(tsne){
-     dat &lt;- RunTSNE(dat, dims=dimuse, check_duplicates=F, verbose=verbose, reduction = paste0(&quot;pca&quot;, reduction.name),reduction.name = paste0(&quot;tsne&quot;, reduction.name))
-  } 
-  return(dat)
-}</code></pre>
-<br>
-<hr>
-<details>
-<summary>
-Example use:
-</summary>
-<pre class="r"><code>seu_obj &lt;- process(
-  seu_obj, 
-  umap=T, tsne = F, # can change these to generate UMAPs or TSNEs. Default is UMAP only as its quicker. 
-  dimuse = 1:30,    # can set 1:whatever dimensions you want to use
-  features = 2000,  # number of variable features to use. Adjust if using platforms like Xenium or CosMX
-  verbose= F,       # change to T if you want to see the output as its running. 
-  reduction.name = NULL # change this if you want to add a unique name to your reductions. E.g. if you&#39;re testing a number of dimensions, features, or are running this pre-integration
-)</code></pre>
-</details>
-<hr>
-<p><br><br></p>
-</div>
-<div id="human-protein-atlas" class="section level2">
-<h2>Human Protein Atlas</h2>
+<div id="human-protein-atlas" class="section level3">
+<h3>Human Protein Atlas</h3>
 <p>Currently, this one is quite hideous. I downloaded the protein and
 the RNA data from the <a href="https://www.proteinatlas.org/">Human
 Protein Atlas</a>. This function is basically used to get a general idea
@@ -1372,8 +1396,206 @@ should be similar but stacked with tissues.</p>
 <hr>
 <p><br><br></p>
 </div>
-<div id="label-transfer-heatmap" class="section level2">
-<h2>Label transfer Heatmap</h2>
+</div>
+<div id="processing" class="section level2 tabset tabset-fade">
+<h2 class="tabset tabset-fade">Processing</h2>
+<div id="process-data" class="section level3">
+<h3>Process data</h3>
+<p>This function just summarises the standard processing of single cell
+RNA data. You can go in and uncomment the umap and tsne if you wish.</p>
+<pre class="r"><code>process &lt;- function(dat=dat, umap=T, tsne=F, dimuse = 1:30, features=2000, verbose=F, reduction.name=NULL){
+  dat &lt;- NormalizeData(dat, verbose=verbose)
+  dat &lt;- FindVariableFeatures(dat, nfeatures=features, verbose=verbose)
+  dat &lt;- ScaleData(dat, features=VariableFeatures(dat), verbose=verbose)
+  dat &lt;- RunPCA(dat, verbose=verbose, reduction.name = paste0(&quot;pca&quot;, reduction.name))
+  if(umap) {
+    dat &lt;- RunUMAP(dat, dims=dimuse, verbose=verbose, reduction = paste0(&quot;pca&quot;, reduction.name), reduction.name = paste0(&quot;umap&quot;, reduction.name))
+  }
+  if(tsne){
+     dat &lt;- RunTSNE(dat, dims=dimuse, check_duplicates=F, verbose=verbose, reduction = paste0(&quot;pca&quot;, reduction.name),reduction.name = paste0(&quot;tsne&quot;, reduction.name))
+  } 
+  return(dat)
+}</code></pre>
+<br>
+<hr>
+<details>
+<summary>
+Example use:
+</summary>
+<pre class="r"><code>seu_obj &lt;- process(
+  seu_obj, 
+  umap=T, tsne = F, # can change these to generate UMAPs or TSNEs. Default is UMAP only as its quicker. 
+  dimuse = 1:30,    # can set 1:whatever dimensions you want to use
+  features = 2000,  # number of variable features to use. Adjust if using platforms like Xenium or CosMX
+  verbose= F,       # change to T if you want to see the output as its running. 
+  reduction.name = NULL # change this if you want to add a unique name to your reductions. E.g. if you&#39;re testing a number of dimensions, features, or are running this pre-integration
+)</code></pre>
+</details>
+<hr>
+<p><br><br></p>
+</div>
+</div>
+<div id="tools" class="section level2 tabset tabset-fade">
+<h2 class="tabset tabset-fade">Tools</h2>
+<div id="check" class="section level3">
+<h3>check</h3>
+<p>check is used to quickly check the data you’re using for the
+genes.</p>
+<p>A utility of this may be to quickly check if its <code>HLA.DR</code>
+or <code>HLA-DR</code></p>
+<pre class="r"><code>check &lt;- function(data, pattern = &quot;CD&quot;) {
+  x=grep(pattern, rownames(data), value=T)
+  if(length(x)==0) {
+    cat(paste0(&quot;There are no genes in this data that match the pattern &quot;, crayon::green(crayon::bold(pattern))))
+  } else {
+    print(x)
+  }
+}</code></pre>
+<br>
+<hr>
+<details>
+<summary>
+Example use:
+</summary>
+<pre class="r"><code>check(data[[1]], &quot;CD3&quot;) # put the object in first, then a pattern you want to look for
+check(data[[1]], &quot;^CD3&quot;) # adding the ^ to the front tells it to search only for instances that start with...
+check(data[[1]], &quot;^CD3[0-9]&quot;) # adding in square brackets after the first pattern, you can tell it that you only want to then include instances of CD3 that are followed by a number from 0-9
+check(data[[1]], &quot;^IL2&quot;) # similar can be done for letters
+check(data[[1]], &quot;^IL2[aA-zZ]&quot;) # similar can be done for letters```</code></pre>
+</details>
+<hr>
+<p><br><br></p>
+</div>
+<div id="printmessage" class="section level3">
+<h3>printMessage</h3>
+<p>This is just a nice way of adding messages to functions.</p>
+<p>Arguments:</p>
+<ul>
+<li><code>message</code> is a string of the message. Typically single
+line.</li>
+<li><code>space</code> is how many spaces on each side of the message to
+include as a nice buffer</li>
+<li><code>theme</code> is for setting a predefined theme</li>
+<li><code>bg</code> is the background colour</li>
+<li><code>txt</code> is text colour</li>
+<li><code>bold</code> is a logical for bold text</li>
+</ul>
+<pre class="r"><code>printMessage &lt;- function(message = &quot;Message&quot;, space=4, theme=NULL, bg = &quot;#FFFFFF&quot;,txt= &quot;#BB0000&quot;, bold=T){
+  if(is.null(theme)){theme &lt;- combine_ansi_styles(make_ansi_style(bg, bg = TRUE, bold = bold), txt)}
+  message=paste(paste(rep(&quot; &quot;, space), collapse=&quot;&quot;), message, paste(rep(&quot; &quot;, space), collapse=&quot;&quot;), collapse=&quot;&quot;)
+  cat(theme(paste(rep(&quot; &quot;, nchar(message)), collapse=&quot;&quot;), &quot;\n&quot;,message, &#39;\n&#39;,paste(rep(&quot; &quot;, nchar(message)), collapse=&quot;&quot;)), &quot;\n\n&quot;)
+}</code></pre>
+</div>
+<div id="maxsize" class="section level3">
+<h3>maxSize</h3>
+<p>This is also just to change the maxSize of the globals which allows
+the comp to run more</p>
+<pre class="r"><code>maxSize &lt;- function(GB=3) {
+  options(future.globals.maxSize = GB * 1024^3) 
+}</code></pre>
+</div>
+<div id="top-de-markers" class="section level3">
+<h3>Top DE markers</h3>
+<p>This is just summarised script for finding the top differentially
+expressed markers</p>
+<pre class="r"><code>topm &lt;- function(data, min.diff.pct = 0.01, n=40, logfc = 0.1) {
+  FindAllMarkers(data, only.pos=T, min.diff.pct = min.diff.pct, logfc.threshold = logfc) %&gt;%
+    filter(p_val_adj &lt;0.0001) %&gt;%
+    group_by(cluster) %&gt;%
+    top_n(n=n, wt = avg_log2FC)
+}</code></pre>
+<br>
+<hr>
+<details>
+<summary>
+Example use:
+</summary>
+<pre class="r"><code>top20markers &lt;- topm(ref, 
+                     min.diff.pct = 0.1, 
+                     logfc = 0.2,
+                     n=20)
+knitr::kable(top20markers[1:10,])</code></pre>
+</details>
+<hr>
+<p><br><br></p>
+</div>
+</div>
+<div id="plotting" class="section level2 tabset tabset-fade">
+<h2 class="tabset tabset-fade">Plotting</h2>
+<div id="plotsankey" class="section level3">
+<h3>plotSankey</h3>
+<p>This generates a sankey diagram using <strong>Seurat data</strong>.
+This might be useful to see how two vectors relate to each other. This
+was made by Brian Gloss.</p>
+<p>An example of its use would be to transfer labels from one single
+cell dataset to another, and visualise how much of cluster aligns with
+the new annotations. And this can be done for multiple meta data
+columns.</p>
+<pre class="r"><code>plotSankey&lt;-function(seuratObj,idvar=c(&quot;varRes.0.3&quot;,&quot;emt_res.0.3&quot;)){
+  require(flipPlots)
+  message(&#39;try install_github(&quot;Displayr/flipPlots&quot;) if this doesnt work&#39;)
+  require(dplyr)
+  seuratObj@meta.data[,match(idvar,colnames(seuratObj@meta.data))] %&gt;% arrange(.[,1]) %&gt;% group_by_all() %&gt;% summarise(COUNT = n()) -&gt;&gt; my.data
+  #my.data&lt;-as.factor(my.data[,1])
+  SankeyDiagram(my.data[, -grep(&quot;COUNT&quot;,colnames(my.data))],link.color = &quot;Source&quot;,weights = my.data$COUNT,,max.categories = 100)
+}</code></pre>
+<details>
+<summary>
+Example use:
+</summary>
+<p>This might look strange, but its because the data had been integrated
+and this is just looking at the old annotations (Integrated_05) and the
+new labels of just one dataset.</p>
+<pre class="r"><code>plotSankey(seu_obj[,seu_obj$Integrated_05!=0], 
+           c(&quot;merged_clusters_anno&quot;, 
+             &quot;Integrated_05&quot;, 
+             &quot;Age&quot;))</code></pre>
+<p><img src="assets/func1.png" /></p>
+</details>
+<hr>
+<p><br><br></p>
+</div>
+<div id="proportion-plots" class="section level3">
+<h3>Proportion plots</h3>
+<p>This is used to get proportions of some categorical value in groups.
+E.g. Clusters proportions of inflamed and uninflamed tissues.</p>
+<pre class="r"><code>proportions &lt;- function(data, ident.1, ident.2, position) {
+  x&lt;- FetchData(data,c(ident.1,ident.2))
+  colnames(x) &lt;- c(&#39;ident.2&#39;, &#39;ident.1&#39;)
+  x%&gt;% 
+    group_by(ident.1) %&gt;%
+    mutate(prop=1/length(ident.2)) %&gt;%
+    ungroup() %&gt;%
+    group_by(ident.2,ident.1) %&gt;%
+    summarise(totprop=sum(prop)) %&gt;%
+    
+    ggplot(aes(x=ident.2,fill=ident.1,y=totprop)) +
+      geom_bar(position=position, stat=&#39;identity&#39;) + 
+      theme(axis.text.x =element_text(angle = 45,hjust=1))+
+      scale_y_continuous(name=&quot;Cluster Proportion&quot;)+ 
+      theme_classic()
+}</code></pre>
+<details>
+<summary>
+Example use:
+</summary>
+<p>This might look strange, but its because the data had been integrated
+and this is just looking at the old annotations (Integrated_05) and the
+new labels of just one dataset.</p>
+<pre class="r"><code>proportions(seu_obj, 
+            &quot;Age&quot;, # x axis
+            &quot;Integrated_05&quot;, # proportions
+            &quot;fill&quot;) # or stack</code></pre>
+<p><img src="assets/func2.png" /></p>
+</details>
+<hr>
+<p><br><br></p>
+</div>
+</div>
+<div id="analysis" class="section level2 tabset tabset-fade">
+<h2 class="tabset tabset-fade">Analysis</h2>
+<div id="label-transfer-heatmap" class="section level3">
+<h3>Label transfer Heatmap</h3>
 <p>This one has a lot of options but does quite a bit under the
 hood.</p>
 <p>It needs two RNA datasets tour query data, a reference data. There
@@ -1478,30 +1700,231 @@ plotSankey(query, c(&quot;merged_clusters_anno&quot;, &quot;predictedID&quot;))<
 <hr>
 <p><br><br></p>
 </div>
-<div id="top-de-markers" class="section level2">
-<h2>Top DE markers</h2>
-<p>This is just summarised script for finding the top differentially
-expressed markers</p>
-<pre class="r"><code>topm &lt;- function(data, min.diff.pct = 0.01, n=40, logfc = 0.1) {
-  FindAllMarkers(data, only.pos=T, min.diff.pct = min.diff.pct, logfc.threshold = logfc) %&gt;%
-    filter(p_val_adj &lt;0.0001) %&gt;%
-    group_by(cluster) %&gt;%
-    top_n(n=n, wt = avg_log2FC)
+<div id="check-module-score" class="section level3">
+<h3>Check Module Score</h3>
+<p>This one also has a lot of options, and a lot is done under the hood.
+I wont show examples. But hopefully</p>
+<p>It needs two RNA datasets tour query data, a reference data. There
+are then several options</p>
+<ul>
+<li>the identities you want to compare - default will just be the
+current <code>idents</code>.</li>
+<li><code>norm</code> will let you choose whether to scale prediction
+scores by the max predicted score. Can be misleading, which is why the
+default is <code>false</code>.</li>
+<li><code>crow</code> and <code>ccol</code> are about clustering rows
+and columns by similarities. Turn these off if you have a preferred
+order you want.</li>
+<li><code>return.plot</code> and <code>return.seurat</code> do not work
+together. If both <code>false</code> it will only return a plot. See
+example uses below.</li>
+<li><code>col.name</code> will let you set a custom column name for
+<code>return.seurat</code>. E.g. predicted_GCA.</li>
+<li><code>var.feat</code> is empty by default, which will use the
+reference variable features. Otherwise, you can specify features to use
+for integration.</li>
+</ul>
+<pre class="r"><code>checkModule &lt;- function(data, genes, name=&quot;ModScore&quot;, mean =F, spatial=T,dq=0.1, top=F, df_out=F, assay=&quot;SCT&quot;, output = c(&quot;plot&quot;,&quot;data&quot;),compar=c(), useful_features=F, skip=T){
+  source(&quot;https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R&quot;, local=T)
+  # themes
+  error &lt;- combine_ansi_styles(make_ansi_style(&quot;#8B0000&quot;, bg = TRUE, bold = TRUE), col_white)
+  warn &lt;- combine_ansi_styles(make_ansi_style(&quot;#FFFF00&quot;, bg = TRUE, bold = TRUE), &quot;#000000&quot;)
+  # errors ------------------------------------------------------------------
+  if(prod(is.character(c(name, output)), is.logical(c(top,useful_features,skip)), is.numeric(dq))==0){return(printMessage(&quot;Check arguments and try again!&quot;, theme=error))}
+  if(length(output) != 1 | sum(!output %in% c(&quot;plot&quot;, &quot;data&quot;))!=0) {return(cat(error(&quot;\n\tChoose one of the two outputs:\t\t   \n\t - \&quot;data\&quot; to add ModuleScore to data, or   \n\t -\&quot;plot\&quot; to just output plots\t\t   &quot;)))}
+  if(!assay %in% names(data@assays)){return(printMessage(&quot;**Assay is not present in Seurat Object**&quot;, theme=error))} 
+  
+  # give them the information and the option to cancel before running
+  if(!skip){
+    cat(white(&quot; - &quot;,length(genes)),yellow(&quot;genes chosen to generate the module score \n&quot;))
+    cat(white(&quot; - &quot;),yellow(&quot;You&#39;ve chosen to name the Module Score:&quot;),white(name), yellow(&quot; \n&quot;))
+    if(!top){
+      cat(white(&quot; - &quot;),yellow(&quot;You&#39;ve chosen to choose a quantile threshold of&quot;,white(dq), &quot;\n&quot;))
+    } else {
+      cat(white(&quot; - &quot;),yellow(&quot;You&#39;ve chosen to filter genes if they are&quot;),white(&quot;highly variable \n&quot;))
+    }
+    cat(white(&quot; - &quot;,assay),yellow(&quot;assay was chosen. \n&quot;))
+    cat(white(&quot; - &quot;),yellow(&quot;You&#39;ve chosen to output&quot;),white(output), yellow(&quot; \n&quot;))
+    if(!skip) {
+      x=0
+      while(x&lt;1) {
+        input &lt;- readline(prompt = &quot;Do you want to continue (Y/N): &quot;)
+        if(input ==&quot;Y&quot;){x=x+1}
+        else if(input ==&quot;N&quot;){return(printMessage(&quot;Thanks for playing&quot;, theme=warn))} 
+        else{cat(error(&quot;  Try again  \n&quot;))}
+      }
+    } else {cat(white(&quot; - &quot;),yellow(&quot;You&#39;ve chosen to&quot;), white(&quot;skip\n&quot;))}
+  }
+  
+  genes &lt;- genes[!duplicated(genes)]
+  genes &lt;- na.omit(genes)
+  if(useful_features){cycle(seconds = runif(1, min = 1, max=8))}
+  
+  # Check which genes present in assay --------------------------------------
+  cat(bold(green(&quot;\n\nChecking genes are present:\n\n&quot;)))
+  if(useful_features){progress(max=3)}
+  
+  na=c(); mod &lt;-c() #not in object/for module scoring
+  for(i in 1:length(genes)){
+    if(sum(grepl(paste0(&quot;^&quot;,genes[i],&quot;$&quot;), rownames(data@assays$SCT$data)))==0){
+      na &lt;- c(na, genes[i])
+    } else {
+      mod &lt;- c(mod, genes[i])
+    } 
+  }
+  
+  # return error and leave if after checking genes in data not greater than 2 
+  if(length(mod)&lt;2){
+    return(printMessage(message=&quot;You do not have enough genes for a module score&quot;), theme=error)
+  }
+  # print genes not found in the data
+  cat(bold(green(&quot;\nDONE!\n\n&quot;)))
+  
+  if (length(na) &gt; 0){
+    cat(error(&quot;\n  **IMPORTANT**  &quot;),
+        style_bold(col_yellow(paste0(&quot;\n\nGenes not in the dataset (&quot;, length(na) ,&quot;/&quot;, length(genes) ,&quot;): \n&quot;))),
+        paste(paste(c(na), collapse=&quot;, &quot;)))
+  }
+  # if top is F, use the quartile for filtering genes for module score
+  if(!top){
+    above &lt;-c();below &lt;- c()
+    exp &lt;- rowMeans(data[[assay]]$data)
+    
+    cat(yellow(&quot;\n\n---------\n\nMean expression of all genes:&quot;, white(mean(exp)),
+               &quot;\n\nQuantile Threshold chosen:&quot;, white(quantile(exp, probs = dq)), &quot;\n\n---------\n&quot;))
+    
+    df &lt;- data.frame(gene=mod, mean=NA, thresh=NA)
+    #filter if means are above threshold
+    for(i in 1:length(mod)) {
+      mea &lt;- mean(data[[assay]]$data[mod[i],])
+      if(df_out){df$mean[i] &lt;- mea}
+      if(mea &gt; quantile(exp, probs = dq)){
+        above &lt;- c(above, mod[i])
+        if(df_out){df$thresh[i] &lt;- &quot;above&quot;}
+      } else {
+        below &lt;- c(below, mod[i])
+        if(df_out){df$thresh[i] &lt;- &quot;below&quot;}
+      }
+    }
+    
+    # check that genes after filtering greater than 2 for module scoring
+    if(length(above)&lt;2){
+      return(cat(warn(&quot; \t\t\t\t\t\t  \n\t   After filtering per quantile\t\t  \n  you do not have enough genes for a module score \n\t\t\t\t\t\t  &quot;)))
+    } 
+    
+    # print genes that didnt make the threshold
+    if (length(below) &gt; 0){
+      cat(error(&quot;\n  **IMPORTANT**  &quot;),
+          style_bold(col_yellow(paste0(&quot;\n\nGenes below quartile threshold &quot;, dq,&quot; (&quot;, length(below) ,&quot;/&quot;, length(mod) ,&quot;): \n&quot;))),
+          paste(paste(c(below), collapse=&quot;, &quot;)))
+    }
+    # if top is T, only find genes in top Var features
+  } else {
+    above &lt;- mod[mod %in% VariableFeatures(data, assay=assay)]
+    if(length(above)&lt;2){
+      return(cat(warn(&quot; \t\t\t\t\t\t  \n\t   After filtering per quantile\t\t  \n  you do not have enough genes for a module score \n\t\t\t\t\t\t  &quot;)))
+    }
+    below &lt;- mod[!mod %in% VariableFeatures(data, assay=assay)]
+    if(length(below) &gt; 0) {
+      cat(error(&quot;\n  **IMPORTANT**  &quot;),
+          style_bold(col_yellow(paste0(&quot;\n\nGenes not in Top Variable Features (&quot;, length(below) ,&quot;/&quot;, length(mod) ,&quot;): \n&quot;))),
+          paste(paste(c(below), collapse=&quot;, &quot;)))
+    }
+    if(df_out){ df &lt;- data.frame(gene=mod, mean=NA, thresh=NA)
+    for(i in 1:nrow(df)) {
+      mea &lt;- mean(data[[assay]]$data[mod[i],])
+      df$mean[i] &lt;- mea
+      if(df$gene[i] %in% above){df$thresh[i] == &quot;above&quot;} else{df$thresh[i]==&quot;below&quot;}
+    }
+    }
+  }
+  
+  cat(bold(yellow(&quot;\n\nModule Score being Generated:\n\n&quot;)))
+  cycle(1)
+  if(useful_features){cycle(seconds = runif(1, min = 1, max=8))}
+  
+  if(!mean){
+    data &lt;- AddModuleScore(data, features=above, name=name)
+    data@meta.data &lt;- data@meta.data %&gt;%
+      rename_with(~ substr(., 1, nchar(.) - 1), .cols = paste0(name,1))  
+  } else {
+    data@meta.data &lt;- data@meta.data %&gt;%
+      mutate(tmp=rowMeans(FetchData(data, above, layer=&#39;data&#39;, assay=assay))) %&gt;%
+      rename_with(~ name, .cols = &quot;tmp&quot;)  
+      }
+  # plot or data ------------------------------------------------------------
+  if(output == &quot;plot&quot;) {
+    
+    if(length(compar)==0){
+      x=0
+      while(x&lt;1) {
+        input &lt;- readline(prompt = &quot;Type a gene for comparison: &quot;)
+        if(prod(input %in% rownames(data) | input %in% colnames(data@meta.data))){x=x+1} else {cat(error(&quot;  Try again  \n&quot;))}
+      }
+    } else{
+      if(sum(grepl(compar, rownames(data)))){
+        input=compar
+      } else {input=&quot;CD3E&quot;}
+    }
+    if(spatial){
+      p1 &lt;- suppressMessages(SpatialFeaturePlot(data, name, alpha=c(0,0), assay=assay)+scale_fill_viridis_c(option=&quot;A&quot;)+NoLegend()+ggtitle(&quot;Tissue&quot;))
+      max_value &lt;- NA
+      suppressMessages(print(SpatialFeaturePlot(data, name, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option=&quot;A&quot;)+ ggtitle(paste(&quot;Module:&quot;, name))))
+      repeat {
+        max2 &lt;- readline(prompt = &quot;Change max threshold (type Y to continue): &quot;)
+        if (toupper(max2) == &quot;Y&quot;) {
+          p2 &lt;- suppressMessages(SpatialFeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value) +
+                                   scale_fill_viridis_c(option = &quot;A&quot;) + NoLegend()+ ggtitle(paste(&quot;Module:&quot;, name)))
+          break
+        } else if (!is.na(as.numeric(max2))) {
+          max_value &lt;- as.numeric(max2)
+          suppressMessages(print(SpatialFeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value, assay=assay) +
+                                   scale_fill_viridis_c(option = &quot;A&quot;) + ggtitle(paste(&quot;Module:&quot;, name))))
+        } else {
+          cat(&quot;Invalid input. Please enter a numeric value or &#39;Y&#39; to continue.\n&quot;)
+        }
+      }
+      p3 &lt;- suppressMessages(SpatialFeaturePlot(data, input, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option=&quot;A&quot;)+NoLegend() + ggtitle(paste(&quot;Gene:&quot;, input)))
+    } else {
+      p1 &lt;- suppressMessages(FeaturePlot(data, name, alpha=c(0,0), assay=assay)+scale_fill_viridis_c(option=&quot;A&quot;)+NoLegend()+ggtitle(&quot;Tissue&quot;))
+      max_value &lt;- NA
+      suppressMessages(print(FeaturePlot(data, name, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option=&quot;A&quot;)+ ggtitle(paste(&quot;Module:&quot;, name))))
+      repeat {
+        max2 &lt;- readline(prompt = &quot;Change max threshold (type Y to continue): &quot;)
+        if (toupper(max2) == &quot;Y&quot;) {
+          p2 &lt;- suppressMessages(FeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value, assay=assay) +
+                                   scale_fill_viridis_c(option = &quot;A&quot;) + NoLegend()+ ggtitle(paste(&quot;Module:&quot;, name)))
+          break
+        } else if (!is.na(as.numeric(max2))) {
+          max_value &lt;- as.numeric(max2)
+          suppressMessages(print(FeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value, assay=assay) +
+                                   scale_fill_viridis_c(option = &quot;A&quot;) + ggtitle(paste(&quot;Module:&quot;, name))))
+        } else {
+          cat(&quot;Invalid input. Please enter a numeric value or &#39;Y&#39; to continue.\n&quot;)
+        }
+      }
+      p3 &lt;- suppressMessages(FeaturePlot(data, input, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option=&quot;A&quot;)+NoLegend() + ggtitle(paste(&quot;Gene:&quot;, input)))
+      
+    }
+    m &lt;- data@meta.data %&gt;% select(name)
+    data@meta.data &lt;- data@meta.data %&gt;%
+      mutate(moduleScore = ifelse(m&gt;0, &quot;pos&quot;, &quot;neg&quot;))
+    p4 &lt;- VlnPlot(data, input, group.by=&quot;moduleScore&quot;)+NoLegend()
+    printMessage(&quot;Printing plots&quot;)
+    if(df_out){print(df)}
+    print(suppressMessages(plot_grid(p1,p2,p3,p4)))
+    return(p2)
+  } else {
+    if(df_out){print(df)}
+    return(data)
+  }
+  
+  if(useful_features) {
+    printMessage(&quot;Thank you for using the useful features&quot;, space=4, theme=warn)
+  }
+  rm(progress, cycle)
 }</code></pre>
-<br>
-<hr>
-<details>
-<summary>
-Example use:
-</summary>
-<pre class="r"><code>top20markers &lt;- topm(ref, 
-                     min.diff.pct = 0.1, 
-                     logfc = 0.2,
-                     n=20)
-knitr::kable(top20markers[1:10,])</code></pre>
-</details>
-<hr>
-<br><br> <br><br>
+<br><br>
 <hr>
 <p><br></p>
 <br>
@@ -1532,23 +1955,23 @@ attached base packages:
 [8] methods   base     
 
 other attached packages:
- [1] scales_1.3.0                ggpubr_0.6.0               
- [3] readxl_1.4.3                ComplexHeatmap_2.20.0      
- [5] BiocParallel_1.38.0         scater_1.32.1              
- [7] scuttle_1.14.0              SingleCellExperiment_1.26.0
- [9] SummarizedExperiment_1.34.0 Biobase_2.64.0             
-[11] GenomicRanges_1.56.2        GenomeInfoDb_1.40.1        
-[13] IRanges_2.38.1              S4Vectors_0.42.1           
-[15] BiocGenerics_0.50.0         MatrixGenerics_1.16.0      
-[17] matrixStats_1.4.1           cowplot_1.1.3              
-[19] Matrix_1.7-1                crayon_1.5.3               
-[21] stringr_1.5.1               flipPlots_1.3.6            
-[23] SeuratDisk_0.0.0.9021       Seurat_5.1.0               
-[25] SeuratObject_5.0.2          sp_2.1-4                   
-[27] dplyr_1.1.4                 knitr_1.48                 
-[29] tidyr_1.3.1                 rmarkdown_2.28             
-[31] rstudioapi_0.17.0           ggplot2_3.5.1              
-[33] cli_3.6.3                   workflowr_1.7.1            
+ [1] ggpubr_0.6.0                readxl_1.4.3               
+ [3] ComplexHeatmap_2.20.0       BiocParallel_1.38.0        
+ [5] scater_1.32.1               scuttle_1.14.0             
+ [7] SingleCellExperiment_1.26.0 SummarizedExperiment_1.34.0
+ [9] Biobase_2.64.0              GenomicRanges_1.56.2       
+[11] GenomeInfoDb_1.40.1         IRanges_2.38.1             
+[13] S4Vectors_0.42.1            BiocGenerics_0.50.0        
+[15] MatrixGenerics_1.16.0       matrixStats_1.4.1          
+[17] cowplot_1.1.3               Matrix_1.7-1               
+[19] crayon_1.5.3                stringr_1.5.1              
+[21] flipPlots_1.3.6             SeuratDisk_0.0.0.9021      
+[23] Seurat_5.1.0                SeuratObject_5.0.2         
+[25] sp_2.1-4                    dplyr_1.1.4                
+[27] knitr_1.48                  tidyr_1.3.1                
+[29] rmarkdown_2.28              rstudioapi_0.17.0          
+[31] ggplot2_3.5.1               cli_3.6.3                  
+[33] workflowr_1.7.1            
 
 loaded via a namespace (and not attached):
   [1] fs_1.6.5                   spatstat.sparse_3.1-0     
@@ -1600,44 +2023,46 @@ loaded via a namespace (and not attached):
  [93] htmlTable_2.4.3            BiocNeighbors_1.22.0      
  [95] hdf5r_1.3.11               xml2_1.3.6                
  [97] DelayedArray_0.30.1        plotly_4.10.4             
- [99] checkmate_2.3.2            lmtest_0.9-40             
-[101] callr_3.7.6                digest_0.6.37             
-[103] goftest_1.2-3              spatstat.utils_3.1-0      
-[105] verbs_0.15.11              XVector_0.44.0            
-[107] htmltools_0.5.8.1          pkgconfig_2.0.3           
-[109] base64enc_0.1-3            sparseMatrixStats_1.16.0  
-[111] fastmap_1.2.0              GlobalOptions_0.1.2       
-[113] rlang_1.1.4                htmlwidgets_1.6.4         
-[115] UCSC.utils_1.0.0           shiny_1.9.1               
-[117] DelayedMatrixStats_1.26.0  farver_2.1.2              
-[119] jquerylib_0.1.4            zoo_1.8-12                
-[121] jsonlite_1.8.9             BiocSingular_1.20.0       
-[123] magrittr_2.0.3             Formula_1.2-5             
-[125] GenomeInfoDbData_1.2.12    dotCall64_1.2             
-[127] flipFormat_1.11.3          patchwork_1.3.0           
-[129] munsell_0.5.1              Rcpp_1.0.13               
-[131] viridis_0.6.5              reticulate_1.39.0         
-[133] stringi_1.8.4              zlibbioc_1.50.0           
-[135] MASS_7.3-61                plyr_1.8.9                
-[137] parallel_4.4.0             listenv_0.9.1             
-[139] ggrepel_0.9.6              deldir_2.0-4              
-[141] splines_4.4.0              tensor_1.5                
-[143] circlize_0.4.16            ps_1.8.0                  
-[145] igraph_2.1.1               spatstat.geom_3.3-3       
-[147] ggsignif_0.6.4             RcppHNSW_0.6.0            
-[149] reshape2_1.4.4             ScaledMatrix_1.12.0       
-[151] evaluate_1.0.1             foreach_1.5.2             
-[153] httpuv_1.6.15              networkD3_0.5.0           
-[155] RANN_2.6.2                 purrr_1.0.2               
-[157] polyclip_1.10-7            clue_0.3-65               
-[159] future_1.34.0              scattermore_1.2           
-[161] formattable_0.2.1          rsvd_1.0.5                
-[163] janitor_2.2.0              broom_1.0.7               
-[165] xtable_1.8-4               RSpectra_0.16-2           
-[167] rstatix_0.7.2              later_1.3.2               
-[169] viridisLite_0.4.2          tibble_3.2.1              
-[171] beeswarm_0.4.0             cluster_2.1.6             
-[173] timechange_0.3.0           globals_0.16.3            </code></pre>
+ [99] checkmate_2.3.2            scales_1.3.0              
+[101] lmtest_0.9-40              callr_3.7.6               
+[103] digest_0.6.37              goftest_1.2-3             
+[105] spatstat.utils_3.1-0       verbs_0.15.11             
+[107] XVector_0.44.0             htmltools_0.5.8.1         
+[109] pkgconfig_2.0.3            base64enc_0.1-3           
+[111] sparseMatrixStats_1.16.0   fastmap_1.2.0             
+[113] GlobalOptions_0.1.2        rlang_1.1.4               
+[115] htmlwidgets_1.6.4          UCSC.utils_1.0.0          
+[117] shiny_1.9.1                DelayedMatrixStats_1.26.0 
+[119] farver_2.1.2               jquerylib_0.1.4           
+[121] zoo_1.8-12                 jsonlite_1.8.9            
+[123] BiocSingular_1.20.0        magrittr_2.0.3            
+[125] Formula_1.2-5              GenomeInfoDbData_1.2.12   
+[127] dotCall64_1.2              flipFormat_1.11.3         
+[129] patchwork_1.3.0            munsell_0.5.1             
+[131] Rcpp_1.0.13                viridis_0.6.5             
+[133] reticulate_1.39.0          stringi_1.8.4             
+[135] zlibbioc_1.50.0            MASS_7.3-61               
+[137] plyr_1.8.9                 parallel_4.4.0            
+[139] listenv_0.9.1              ggrepel_0.9.6             
+[141] deldir_2.0-4               splines_4.4.0             
+[143] tensor_1.5                 circlize_0.4.16           
+[145] ps_1.8.0                   igraph_2.1.1              
+[147] spatstat.geom_3.3-3        ggsignif_0.6.4            
+[149] RcppHNSW_0.6.0             reshape2_1.4.4            
+[151] ScaledMatrix_1.12.0        evaluate_1.0.1            
+[153] foreach_1.5.2              httpuv_1.6.15             
+[155] networkD3_0.5.0            RANN_2.6.2                
+[157] purrr_1.0.2                polyclip_1.10-7           
+[159] clue_0.3-65                future_1.34.0             
+[161] scattermore_1.2            formattable_0.2.1         
+[163] rsvd_1.0.5                 janitor_2.2.0             
+[165] broom_1.0.7                xtable_1.8-4              
+[167] RSpectra_0.16-2            rstatix_0.7.2             
+[169] later_1.3.2                viridisLite_0.4.2         
+[171] tibble_3.2.1               beeswarm_0.4.0            
+[173] cluster_2.1.6              timechange_0.3.0          
+[175] globals_0.16.3            </code></pre>
+</div>
 </div>
 </div>
 </div>
