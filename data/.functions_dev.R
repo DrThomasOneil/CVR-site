@@ -23,7 +23,7 @@ loadPack <- function() {
   #FUTURE TOM: ADD PACKAGES HERE!
   packages1 <- c("ggplot2", "rstudioapi", "rmarkdown", 'tidyr', "cli", "knitr", "dplyr", "Seurat","SeuratObject",
                  "SeuratDisk", "flipPlots",'stringr', "crayon","Matrix", "cowplot", 'scater', "BiocParallel",
-                 "ComplexHeatmap","readxl", "ggpubr", "scales")#, "Test")
+                 "ComplexHeatmap","readxl", "ggpubr", "scales", "ggvenn")#, "Test")
 
   for (i in 1:length(packages1)){
     if(requireNamespace(packages1[i], quietly = TRUE)==F) {
@@ -90,7 +90,97 @@ process <- function(dat=dat, dimuse = 1:15, features=800, verbose=F, reduction.n
   dat <- RunTSNE(dat, dims=dimuse, check_duplicates=F, verbose=verbose, reduction = paste0("pca", reduction.name),reduction.name = paste0("tsne", reduction.name))
   return(dat)
 } #Y
+qcMe <- function(data, nfeat=200, ncount=NA, percent.mito = 5, assay="RNA", col_by= NULL, return.seurat=F, useful_features=F, process.dat=F) {
+  source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
+  if(useful_features){
+    cat("\nCollecting data:\n\n")
+    progress(2)
+  }
+  if(sum(grepl("percent.mt", colnames(data@meta.data)))==0){
+    data$percent.mt <- PercentageFeatureSet(dat, pattern="^MT-")
+  }
+  if(is.na(ncount)){ncount=1000000000}
+  if(useful_features){
+    cat("\nGenerating plots:\n")
+    cycle(3)
+  }
+  if(!is.null(col_by)) {
+    if(sum(grepl(col_by, Features(data))) ==0) {
+      col_by <- NULL
+    }
+  }
+  if(is.null(col_by)){
+    d=FetchData(data, c(paste0(c("nFeature_", "nCount_"), assay),"percent.mt"))
+    colnames(d) <- c("nFeature", "nCount", "per.mt")
+    p1=d %>%
+      mutate(`Percent Mito > 5` = ifelse(per.mt >percent.mito, T,F), `LowQuality` = ifelse(nFeature>nfeat & nCount<ncount, F,T) ) %>%
+      ggplot(aes_string(y="nCount", x="nFeature", colour="LowQuality"))+
+      geom_point()+
+      theme_pubclean()+
+      geom_vline(xintercept = 200)
+    p2=d %>%
+      mutate(`Percent Mito > 5` = ifelse(per.mt >percent.mito, T,F), `LowQuality` = ifelse(nFeature>nfeat & nCount<ncount, F,T) ) %>%
+      as_tibble()%>%
+      ggplot()+
+      geom_venn(aes(A=`Percent Mito > 5`, B = `LowQuality`))+
+      coord_fixed() +
+      theme_void()
+    d$filt = ifelse(d$per.mt<percent.mito & d$nFeature>nfeat & d$nCount<ncount, "keep", "throw")
 
+  } else {
+    d=FetchData(NormalizeData(data, verbose=F), c(paste0(c("nFeature_", "nCount_"), assay), "percent.mt", col_by))
+    colnames(d) <- c("nFeature", "nCount", "per.mt", col_by)
+    p1=d %>%
+      mutate(`Percent Mito > 5` = ifelse(per.mt >percent.mito, T,F), `LowQuality` = ifelse(nFeature<nfeat | nCount>ncount, T,F) ) %>%
+      ggplot(aes_string(y="nCount", x="nFeature", colour=col_by))+
+      geom_point()+
+      theme_pubclean()+
+      geom_vline(xintercept = 200)
+    p2=d %>%
+      mutate(`Percent Mito > 5` = ifelse(per.mt >percent.mito, T,F), `LowQuality` = ifelse(nFeature<nfeat | nCount>ncount, T,F) )# %>%
+    as_tibble()%>%
+      ggplot()+
+      geom_venn(aes(A=`Percent Mito > 5`, B = `LowQuality`))+
+      coord_fixed() +
+      theme_void()
+    d$filt = ifelse(d$per.mt<percent.mito & d$nFeature>nfeat & d$nCount<ncount, "keep", "throw")
+  }
+  p3 = suppressWarnings(VlnPlot(data, "percent.mt", pt.size=0.1, raster=F)+
+                          geom_hline(yintercept = percent.mito, size=2, color="red")+
+                          NoLegend()+
+                          ylab("Percent.mt")+
+                          coord_flip())+
+    ggtitle("")+
+    theme(axis.text.y = element_text(size=0))+
+    xlab("")
+
+  print(
+    plot_grid(plot_grid(p1,p2),p3, ncol=1, rel_heights = c(3,1))
+  )
+
+  data$filt = d$filt
+  warn <- combine_ansi_styles(make_ansi_style("#FFFF00", bg = TRUE, bold = TRUE), "#000000")
+  cat(warn("   Percentage of cells that pass QC:",round(100*(sum(d$per.mt<percent.mito & d$nFeature>nfeat & d$nCount<ncount)/nrow(d)),2), "  "))
+
+  if(process.dat) {
+    readline(prompt = "You chose to process the data. This generates new plots. Press any key to continue: ")
+    readline(prompt = "This can be computationally heavy. Click esc if you want to leave!")
+    if(ncol(data) >20000) {
+      cat(warn("  There are over 20,000 cells. Subsetting to 20,000.   "))
+      data1 <- process(subset(data, cells=sample(colnames(data), 20000)), dimuse = 1:10, features=2000, useful_features = useful_features)
+    }
+    data2 <- process(subset(data, subset = filt == "keep"), dimuse = 1:10, features=2000, useful_features = useful_features)
+    p1 <- UMAPPlot(data1, pt.size=2, group.by='filt', label=T, label.box=T)+NoLegend()+NoAxes()+ggtitle("Without Filtering")
+    p2 <- FeaturePlot(data1, pt.size=2, "percent.mt", order=T)+NoLegend()+NoAxes()+ggtitle("Percent.Mt")
+    p3 <- FeaturePlot(data1, pt.size=2, paste0("nCount_", assay, order=T))+NoLegend()+NoAxes()+ggtitle( paste0("nCount_", assay))
+    p4 <- UMAPPlot(data2, pt.size=2)+NoLegend()+NoAxes()+ggtitle("Filtered data")
+    plot_grid(p1,p2,p3,p4, ncol=2)
+  }
+
+  if(return.seurat){
+    return(data)
+  }
+}
 # Tools -------------------------------------------------------------------
 check <- function(data, pattern = "CD") {
   x=grep(pattern, rownames(data), value=T)
