@@ -8,7 +8,56 @@
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
+<script>
+  const validCredentials = [
+    { username: "admin", password: "TRO" },
+    { username: "user", password: "cvr" },
+    { username: "user", password: "aug" },
+    { username: "guest", password: "" }
+  ];
+  
+  document.addEventListener("DOMContentLoaded", () => {
+    document.body.style.display = "none";
+    
+    function validateLogin() {
+      let authenticated = false;
+      while (!authenticated) {
+        const username = prompt("Enter username:");
+        let password = "";
+        
+        if (username === "guest") {
+          const guestName = prompt("Enter your name:");
+          if (guestName) {
+            document.body.innerHTML = `<h1>Access Granted</h1><p>Welcome, Guest (${guestName})!</p>`;
+            document.body.style.display = "block"; // Show the page content
+            return; // Exit the validation loop
+          } else {
+            alert("Name cannot be empty. Please try again.");
+            continue;
+          }
+        }
+        
+        password = prompt("Enter password:");
+        
+        // Check if the entered credentials are valid
+        authenticated = validCredentials.some(
+          creds => creds.username === username && creds.password === password
+        );
+        
+        if (!authenticated) {
+          alert("Incorrect username or password. Please try again.");
+        } else {
+          document.body.style.display = "block"; // Show the page content
+        }
+      }
+    }
+    
 
+    
+    // Call the login validation function
+    validateLogin();
+  });
+  </script>
 
 
 <title>Custom Functions</title>
