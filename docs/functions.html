@@ -471,15 +471,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetreee4fbf6f43a5f2f40d4232093942ae51ff191731atargetblanke4fbf6fa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree67bed1309210452afbd3d97c4e50154d1dba0aa7targetblank67bed13a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/e4fbf6f43a5f2f40d4232093942ae51ff191731a" target="_blank">e4fbf6f</a>
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/67bed1309210452afbd3d97c4e50154d1dba0aa7" target="_blank">67bed13</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetreee4fbf6f43a5f2f40d4232093942ae51ff191731atargetblanke4fbf6fa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree67bed1309210452afbd3d97c4e50154d1dba0aa7targetblank67bed13a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -489,7 +489,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/e4fbf6f43a5f2f40d4232093942ae51ff191731a" target="_blank">e4fbf6f</a>.
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/67bed1309210452afbd3d97c4e50154d1dba0aa7" target="_blank">67bed13</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -515,6 +515,7 @@ Ignored files:
     Ignored:    static/
 
 Unstaged changes:
+    Modified:   data/.functions.R
     Modified:   data/.functions_dev.R
 
 </code></pre>
@@ -561,6 +562,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DrThomasOneil/CVR-site/blob/67bed1309210452afbd3d97c4e50154d1dba0aa7/analysis/functions.Rmd" target="_blank">67bed13</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-28
+</td>
+<td>
+Update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/293911d60dc3e27f522d543cd6fe37a287fc3882/docs/functions.html" target="_blank">293911d</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-28
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1483,6 +1518,123 @@ Example use:
 </details>
 <hr>
 <p><br><br></p>
+</div>
+<div id="qcme" class="section level3">
+<h3>qcMe</h3>
+<p>qcMe is just a rapid way to visualise QC metrics and return a seurat
+object with a new column called <code>filt</code></p>
+<p>The options are quite simple:</p>
+<ul>
+<li><code>data</code> will be your data</li>
+<li><code>nfeat</code> will be the minimum features you want each cell
+to have</li>
+<li><code>ncount</code> will be the max transcripts per cell that you
+choose. Can leave <code>NULL</code> if you dont want to set this.</li>
+<li><code>percent.mito</code> will be the cut off for cells that contain
+over a threshold of percent mitochondrial reads</li>
+<li><code>assay</code> will default to <code>RNA</code> but can be set
+to <code>SCT</code> or <code>Spatial</code> if the data has it.</li>
+<li><code>col_by</code> is if you want to colour the nFeat x nCount plot
+by a gene. This will just be visual only.</li>
+<li><code>return.seurat</code> will just let you return the data object
+with the <code>filt</code> column. So you can visualise without this
+first, and then return seurat</li>
+<li><code>process.dat</code> will process the data with some standard
+options and generate a UMAP and then process the filtered data and
+demonstrate the changes you might see if you use the options you select.
+It can take a long time, so be careful!</li>
+</ul>
+<pre class="r"><code>qcMe &lt;- function(data, nfeat=200, ncount=NA, percent.mito = 5, assay=&quot;RNA&quot;, col_by= NULL, return.seurat=F, useful_features=F, process.dat=F) {
+  source(&quot;https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R&quot;, local=T)
+  if(useful_features){
+    cat(&quot;\nCollecting data:\n\n&quot;)
+    progress(2)
+  }
+  if(sum(grepl(&quot;percent.mt&quot;, colnames(data@meta.data)))==0){
+    data$percent.mt &lt;- PercentageFeatureSet(dat, pattern=&quot;^MT-&quot;)
+  }
+  if(is.na(ncount)){ncount=1000000000}
+  if(useful_features){
+    cat(&quot;\nGenerating plots:\n&quot;)
+    cycle(3)
+  }
+  if(!is.null(col_by)) {
+    if(sum(grepl(col_by, Features(data))) ==0) {
+      col_by &lt;- NULL
+    }
+  }
+  if(is.null(col_by)){
+    d=FetchData(data, c(paste0(c(&quot;nFeature_&quot;, &quot;nCount_&quot;), assay),&quot;percent.mt&quot;))
+    colnames(d) &lt;- c(&quot;nFeature&quot;, &quot;nCount&quot;, &quot;per.mt&quot;)
+    p1=d %&gt;%
+      mutate(`Percent Mito &gt; 5` = ifelse(per.mt &gt;percent.mito, T,F), `LowQuality` = ifelse(nFeature&gt;nfeat &amp; nCount&lt;ncount, F,T) ) %&gt;%
+      ggplot(aes_string(y=&quot;nCount&quot;, x=&quot;nFeature&quot;, colour=&quot;LowQuality&quot;))+
+      geom_point()+
+      theme_pubclean()+
+      geom_vline(xintercept = 200)
+    p2=d %&gt;%
+      mutate(`Percent Mito &gt; 5` = ifelse(per.mt &gt;percent.mito, T,F), `LowQuality` = ifelse(nFeature&gt;nfeat &amp; nCount&lt;ncount, F,T) ) %&gt;%
+      as_tibble()%&gt;%
+      ggplot()+
+      geom_venn(aes(A=`Percent Mito &gt; 5`, B = `LowQuality`))+
+      coord_fixed() +
+      theme_void()
+    d$filt = ifelse(d$per.mt&lt;percent.mito &amp; d$nFeature&gt;nfeat &amp; d$nCount&lt;ncount, &quot;keep&quot;, &quot;throw&quot;)
+    
+  } else {
+    d=FetchData(NormalizeData(data, verbose=F), c(paste0(c(&quot;nFeature_&quot;, &quot;nCount_&quot;), assay), &quot;percent.mt&quot;, col_by)) 
+    colnames(d) &lt;- c(&quot;nFeature&quot;, &quot;nCount&quot;, &quot;per.mt&quot;, col_by)
+    p1=d %&gt;%
+      mutate(`Percent Mito &gt; 5` = ifelse(per.mt &gt;percent.mito, T,F), `LowQuality` = ifelse(nFeature&lt;nfeat | nCount&gt;ncount, T,F) ) %&gt;%
+      ggplot(aes_string(y=&quot;nCount&quot;, x=&quot;nFeature&quot;, colour=col_by))+
+      geom_point()+
+      theme_pubclean()+
+      geom_vline(xintercept = 200)
+    p2=d %&gt;%
+      mutate(`Percent Mito &gt; 5` = ifelse(per.mt &gt;percent.mito, T,F), `LowQuality` = ifelse(nFeature&lt;nfeat | nCount&gt;ncount, T,F) )# %&gt;%
+      as_tibble()%&gt;%
+      ggplot()+
+      geom_venn(aes(A=`Percent Mito &gt; 5`, B = `LowQuality`))+
+      coord_fixed() +
+      theme_void()
+    d$filt = ifelse(d$per.mt&lt;percent.mito &amp; d$nFeature&gt;nfeat &amp; d$nCount&lt;ncount, &quot;keep&quot;, &quot;throw&quot;)
+  }
+  p3 = suppressWarnings(VlnPlot(data, &quot;percent.mt&quot;, pt.size=0.1, raster=F)+
+                          geom_hline(yintercept = percent.mito, size=2, color=&quot;red&quot;)+
+    NoLegend()+
+    ylab(&quot;Percent.mt&quot;)+
+    coord_flip())+
+    ggtitle(&quot;&quot;)+
+    theme(axis.text.y = element_text(size=0))+
+    xlab(&quot;&quot;)
+  
+  print(
+    plot_grid(plot_grid(p1,p2),p3, ncol=1, rel_heights = c(3,1))
+  )
+  
+  data$filt = d$filt
+  warn &lt;- combine_ansi_styles(make_ansi_style(&quot;#FFFF00&quot;, bg = TRUE, bold = TRUE), &quot;#000000&quot;)
+  cat(warn(&quot;   Percentage of cells that pass QC:&quot;,round(100*(sum(d$per.mt&lt;percent.mito &amp; d$nFeature&gt;nfeat &amp; d$nCount&lt;ncount)/nrow(d)),2), &quot;  &quot;))
+  
+  if(process.dat) {
+    readline(prompt = &quot;You chose to process the data. This generates new plots. Press any key to continue: &quot;)
+    readline(prompt = &quot;This can be computationally heavy. Click esc if you want to leave!&quot;)
+    if(ncol(data) &gt;20000) {
+      cat(warn(&quot;  There are over 20,000 cells. Subsetting to 20,000.   &quot;))
+        data1 &lt;- process(subset(data, cells=sample(colnames(data), 20000)), dimuse = 1:10, features=2000, useful_features = useful_features)
+    }
+      data2 &lt;- process(subset(data, subset = filt == &quot;keep&quot;), dimuse = 1:10, features=2000, useful_features = useful_features)
+      p1 &lt;- UMAPPlot(data1, pt.size=2, group.by=&#39;filt&#39;, label=T, label.box=T)+NoLegend()+NoAxes()+ggtitle(&quot;Without Filtering&quot;)
+      p2 &lt;- FeaturePlot(data1, pt.size=2, &quot;percent.mt&quot;, order=T)+NoLegend()+NoAxes()+ggtitle(&quot;Percent.Mt&quot;)
+      p3 &lt;- FeaturePlot(data1, pt.size=2, paste0(&quot;nCount_&quot;, assay, order=T))+NoLegend()+NoAxes()+ggtitle( paste0(&quot;nCount_&quot;, assay))
+      p4 &lt;- UMAPPlot(data2, pt.size=2)+NoLegend()+NoAxes()+ggtitle(&quot;Filtered data&quot;)
+      plot_grid(p1,p2,p3,p4, ncol=2)
+  }
+  
+  if(return.seurat){
+    return(data)
+  }
+}</code></pre>
 </div>
 </div>
 <div id="tools" class="section level2 tabset tabset-fade">
