@@ -31,6 +31,8 @@ This site is information about me. It is also a collection of scripts, workflows
   #* experience
   #* awards
   #* history
-  #* etc
+  #* conferences
+  #* posters
+  #* etc 
 ```
 
