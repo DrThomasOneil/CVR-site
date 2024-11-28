@@ -24,3 +24,13 @@ This site is information about me. It is also a collection of scripts, workflows
   <hr>
   </div>
 
+```{r, include=F}
+#*to add
+  #* publications
+  #* workshops & engagements
+  #* experience
+  #* awards
+  #* history
+  #* etc
+```
+
