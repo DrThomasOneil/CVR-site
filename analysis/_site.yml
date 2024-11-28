@@ -14,9 +14,11 @@ navbar:
       - text: "Single Cell"
         href: workflow_sc.html
   - text: ShinyApps
-    href: apps.html
+    menu: 
+      - text: "Flow Integration"
+        href: apps.html
   right:
-  - text: Getting Started
+  - text: Getting Started in R
     href: start.html
   - icon: fab fa-github
     text: Source code
