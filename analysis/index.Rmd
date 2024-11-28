@@ -15,5 +15,9 @@ Go to:
   - [Single Cell RNA processing and analysis using public data](https://drthomasoneil.github.io/CVR-site/workflow_sc.html)
 - [ShinyApps](https://drthomasoneil.github.io/CVR-site/apps.html)
   - Flow Analysis using Spectre
+- Datasets
+  - Gut
+    - [Domanska et al. 2021](https://drthomasoneil.github.io/CVR-site/ds_Domanska.html)
 - [Getting Started](https://drthomasoneil.github.io/CVR-site/start.html)
 - [Github](https://github.com/DrThomasOneil/CVR-site) 
+ 

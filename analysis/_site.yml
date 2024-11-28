@@ -17,6 +17,10 @@ navbar:
     menu: 
       - text: "Flow Integration"
         href: apps.html
+  - text: "Datasets"
+    menu:
+      - text: "Domanska et al."
+        href: ds_Domanska.html
   right:
   - text: Getting Started in R
     href: start.html
