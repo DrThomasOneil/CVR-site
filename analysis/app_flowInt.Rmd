@@ -82,7 +82,7 @@ To get started, run the app using:
 
 <details><summary>App Window</summary>
 <br>
-![ ](assets/app1.png)
+![ ](assets/apps/app1.png)
 
 <hr>
 </details>
@@ -123,7 +123,7 @@ Some things to consider:
 
 <details><summary>View App:</summary>
 
-![ ](assets/app2.png)
+![ ](assets/apps/app2.png)
 <br><hr>
 </details>
 <br>

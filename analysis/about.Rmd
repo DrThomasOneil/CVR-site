@@ -36,3 +36,24 @@ This site is information about me. It is also a collection of scripts, workflows
   #* etc 
 ```
 
+# {.tabset .tabset-fade}
+
+## Publications
+
+NULL
+
+## Posters
+
+### Single Cell Biology
+
+*Cambridge, UK*
+[download](assets/about/SCB_OneilThomas.pdf)
+<embed src="assets/about/SCB_OneilThomas.pdf" width="100%" height="600px" type="application/pdf">
+
+
+
+## Recent academic engagements
+
+[ASI Systems Immunology SIG Spatial Analysis Workshop](https://ghar1821.github.io/asi_spatial_workshop_2024/index.html)
+
+

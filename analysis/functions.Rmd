@@ -111,7 +111,7 @@ source("https://raw.githubusercontent.com/tomoneil58/LabCode/main/HPA/HPA.R")
 hpa("CD14")
 ```
 
-![ ](assets/func3.png)
+![ ](assets/func/func3.png)
 
 </details><hr><br><br>
 
@@ -393,7 +393,7 @@ plotSankey(seu_obj[,seu_obj$Integrated_05!=0],
              "Age"))
 ```
 
-![ ](assets/func1.png)
+![ ](assets/func/func1.png)
 
 </details><hr><br><br>
 
@@ -433,7 +433,7 @@ proportions(seu_obj,
 
 ```
 
-![ ](assets/func2.png)
+![ ](assets/func/func2.png)
 
 </details><hr><br><br>
 
@@ -531,7 +531,7 @@ plot <- predictHeat(ref, query,
 
 ```
 
-![ ](assets/func4.png)
+![ ](assets/func/func4.png)
 
 Assign a new column called `predictedID` to the query dataset - the function outputs the plot anyways. But then we can use something like plotSankey to see how the cells were labelled. 
 
@@ -547,7 +547,7 @@ query <- predictHeat(ref, query,
 plotSankey(query, c("merged_clusters_anno", "predictedID"))
 ```
 
-![ ](assets/func5.png)
+![ ](assets/func/func5.png)
 
 </details><hr><br><br>
 

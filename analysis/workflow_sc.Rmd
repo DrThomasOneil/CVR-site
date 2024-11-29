@@ -186,7 +186,7 @@ table(OverThreshold=seu$percent.mt>30)
 
 ```
 
-![ ](assets/workflows/percentmt-1.png)
+![ ](assets/workflows/sc/percentmt-1.png)
  
 Another couple of metrics to look at are `nFeature` and `nCount`. **nFeature** is the number of unique features across the 36000 genes expressed in that cell. **nCount** is the total count of all genes expressed in that cell. We can use these in a few ways.
 
@@ -201,7 +201,7 @@ FeatureScatter(seu, "nFeature_RNA", "nCount_RNA", pt.size=0.1)+
   geom_text(label="Unique features: 500\nTotal features: 30,000", x=2500, y=38000 )
 ```
 
-![ ](assets/workflows/nCount&nFeature-1.png)
+![ ](assets/workflows/sc/nCount&nFeature-1.png)
 
 
 ```{r nCount&nFeature2, eval=F}
@@ -275,20 +275,20 @@ seu <- RunPCA(seu, verbose=F)
 PCAPlot(seu)
 ```
 
-![ ](assets/workflows/Processing1-1.png)
+![ ](assets/workflows/sc/Processing1-1.png)
 
 ```{r Processing3, eval=F}
 VizDimLoadings(seu, dims=1:2)
 ```
 
-![ ](assets/workflows/Processing1-2.png)
+![ ](assets/workflows/sc/Processing1-2.png)
 
 ```{r Processing4, eval=F}
 #print(seu[["pca"]], dims = 4, nfeatures = 5)
 PCAPlot(seu, dims=c(3,4))+geom_hline(yintercept = 0)
 ```
 
-![ ](assets/workflows/Processing1-3.png)
+![ ](assets/workflows/sc/Processing1-3.png)
 
 
 Elbow plots are one way to choose the number of dimensions to use from the PCA. The SD represents the variability in the genes across that dimensions. With lower variability, you get lower SD, and a more unique expression across the cells on those dimensions. So we can decide to use as many dimensions as we want. Too few and you may as well use the PCA itself for visualisations and clustering. Too many and you might introduce a lot of senseless noise. 
@@ -317,7 +317,7 @@ plot_grid(ncol=2,
 
 ```
 
-![ ](assets/workflows/ClusteringAndVis-1.png)
+![ ](assets/workflows/sc/ClusteringAndVis-1.png)
 
 ### Annotations
 
@@ -336,7 +336,7 @@ DotPlot(seu, c("CD3E", #T
 
 ```
 
-![ ](assets/workflows/Annotation-1.png)
+![ ](assets/workflows/sc/Annotation-1.png)
 
 ```{r Annotation2, eval=F}
 annotations = c(
@@ -373,7 +373,7 @@ plot_grid(ncol=2,
 
 ```
 
-![ ](assets/workflows/Visualisewithnewannotations-1.png)
+![ ](assets/workflows/sc/Visualisewithnewannotations-1.png)
 
 
 ### Vis: UMAPs
@@ -590,7 +590,7 @@ plot_grid(
 )
 ```
 
-![ ](assets/workflows/int.png)
+![ ](assets/workflows/sc/int.png)
 
 ```{r, eval=F}
 FetchData(data, c("ident","geo")) %>% group_by(ident) %>%
@@ -618,7 +618,7 @@ FetchData(data, c("ident","batch")) %>% group_by(ident) %>%
 
 ```
 
-![ ](assets/workflows/int3.png)
+![ ](assets/workflows/sc/int3.png)
 
 **Cluster 8,14, 20 needs to be investigated. If they are real clusters that could exist in those samples, then it is not a batch effect. If those clusters are identical but slightly different from the adjacent celltypes, then it is batch effects and a more rigorous attemp should be made, such as CCA or int-per-donor rather than by batch.**
 
