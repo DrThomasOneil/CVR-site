@@ -20,7 +20,7 @@ navbar:
   - text: "Datasets"
     menu:
       - text: "Domanska et al."
-        href: assets/ds/ds_Domanska.html
+ #       href: assets/ds/ds_Domanska.html
   right:
   - text: Getting Started in R
     href: start.html
