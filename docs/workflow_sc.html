@@ -299,7 +299,7 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="ds_Domanska.html">Domanska et al.</a>
+      <a href="assets/ds/ds_Domanska.html">Domanska et al.</a>
     </li>
   </ul>
 </li>
@@ -492,15 +492,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree95283b17da690004e5ea312db9790b4a6909eb63targetblank95283b1a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree393044a8cdd4e4fdb2fdf6120b5971888d74d646targetblank393044aa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/95283b17da690004e5ea312db9790b4a6909eb63" target="_blank">95283b1</a>
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/393044a8cdd4e4fdb2fdf6120b5971888d74d646" target="_blank">393044a</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree95283b17da690004e5ea312db9790b4a6909eb63targetblank95283b1a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomDrThomasOneilCVRsitetree393044a8cdd4e4fdb2fdf6120b5971888d74d646targetblank393044aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -510,7 +510,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/DrThomasOneil/CVR-site/tree/95283b17da690004e5ea312db9790b4a6909eb63" target="_blank">95283b1</a>.
+<a href="https://github.com/DrThomasOneil/CVR-site/tree/393044a8cdd4e4fdb2fdf6120b5971888d74d646" target="_blank">393044a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -534,9 +534,6 @@ Ignored files:
     Ignored:    data/merged_Martin_GCA-SB-HealthyAdult_20220119_annotated_TO.rds
     Ignored:    data/rmds/.DS_Store
     Ignored:    static/
-
-Unstaged changes:
-    Deleted:    analysis/apps.Rmd
 
 </code></pre>
 <p>
@@ -582,6 +579,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DrThomasOneil/CVR-site/blob/393044a8cdd4e4fdb2fdf6120b5971888d74d646/analysis/workflow_sc.Rmd" target="_blank">393044a</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-29
+</td>
+<td>
+Update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/48450fad82870b870def88b98109d1017845f7af/docs/workflow_sc.html" target="_blank">48450fa</a>
+</td>
+<td>
+DrThomasOneil
+</td>
+<td>
+2024-11-29
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1183,7 +1214,7 @@ VlnPlot(seu, &quot;percent.mt&quot;, pt.size=0.1, alpha=0.1)+
   geom_hline(yintercept = 30)
 
 table(OverThreshold=seu$percent.mt&gt;30)</code></pre>
-<p><img src="assets/workflows/percentmt-1.png" /></p>
+<p><img src="assets/workflows/sc/percentmt-1.png" /></p>
 <p>Another couple of metrics to look at are <code>nFeature</code> and
 <code>nCount</code>. <strong>nFeature</strong> is the number of unique
 features across the 36000 genes expressed in that cell.
@@ -1208,7 +1239,7 @@ transcripts in doublets.</p>
   geom_hline(yintercept = 30000)+
   geom_vline(xintercept = 500)+
   geom_text(label=&quot;Unique features: 500\nTotal features: 30,000&quot;, x=2500, y=38000 )</code></pre>
-<p><img src="assets/workflows/nCount&amp;nFeature-1.png" /></p>
+<p><img src="assets/workflows/sc/nCount&amp;nFeature-1.png" /></p>
 <pre class="r"><code>#label the points to throw
 seu$filter = ifelse(seu$nCount_RNA&lt;30000 &amp; seu$nFeature_RNA&gt;500, &quot;keep&quot;, &#39;throw&#39;)
 
@@ -1265,12 +1296,12 @@ seu &lt;- RunPCA(seu, verbose=F)
 
 #PCA visualisations
 PCAPlot(seu)</code></pre>
-<p><img src="assets/workflows/Processing1-1.png" /></p>
+<p><img src="assets/workflows/sc/Processing1-1.png" /></p>
 <pre class="r"><code>VizDimLoadings(seu, dims=1:2)</code></pre>
-<p><img src="assets/workflows/Processing1-2.png" /></p>
+<p><img src="assets/workflows/sc/Processing1-2.png" /></p>
 <pre class="r"><code>#print(seu[[&quot;pca&quot;]], dims = 4, nfeatures = 5)
 PCAPlot(seu, dims=c(3,4))+geom_hline(yintercept = 0)</code></pre>
-<p><img src="assets/workflows/Processing1-3.png" /></p>
+<p><img src="assets/workflows/sc/Processing1-3.png" /></p>
 <p>Elbow plots are one way to choose the number of dimensions to use
 from the PCA. The SD represents the variability in the genes across that
 dimensions. With lower variability, you get lower SD, and a more unique
@@ -1292,7 +1323,7 @@ plot_grid(ncol=2,
           UMAPPlot(seu, label=T, pt.size=1)+NoLegend()+NoAxes()+ggtitle(&quot;UMAP&quot;),
           TSNEPlot(seu, label=T, pt.size=1)+NoLegend()+NoAxes()+ggtitle(&quot;TSNE&quot;)
           )</code></pre>
-<p><img src="assets/workflows/ClusteringAndVis-1.png" /></p>
+<p><img src="assets/workflows/sc/ClusteringAndVis-1.png" /></p>
 </div>
 <div id="annotations" class="section level3">
 <h3>Annotations</h3>
@@ -1306,7 +1337,7 @@ plot_grid(ncol=2,
                &quot;PIGR&quot;, &quot;KRT8&quot;
                ))+
   RotatedAxis()</code></pre>
-<p><img src="assets/workflows/Annotation-1.png" /></p>
+<p><img src="assets/workflows/sc/Annotation-1.png" /></p>
 <pre class="r"><code>annotations = c(
   &quot;0&quot; = &quot;Epi&quot;,
   &quot;1&quot; = &quot;Epi2&quot;,
@@ -1333,7 +1364,8 @@ saveRDS(seu, &quot;data/sample1.rds&quot;)</code></pre>
           UMAPPlot(seu, label=T, pt.size=1, repel=F)+NoLegend()+NoAxes()+ggtitle(&quot;UMAP&quot;),
           TSNEPlot(seu, label=T, pt.size=1, repel=T)+NoLegend()+NoAxes()+ggtitle(&quot;TSNE&quot;)
           )</code></pre>
-<p><img src="assets/workflows/Visualisewithnewannotations-1.png" /></p>
+<p><img
+src="assets/workflows/sc/Visualisewithnewannotations-1.png" /></p>
 </div>
 <div id="vis-umaps" class="section level3">
 <h3>Vis: UMAPs</h3>
@@ -1539,7 +1571,7 @@ plot_grid(
   DimPlot(data, reduction = &quot;umap&quot;, group.by = &quot;geo&quot;, label=T)+NoLegend()+ggtitle(&quot;RPCA&quot;),
   DimPlot(data, reduction = &quot;umap.unintegrated&quot;, group.by = &quot;geo&quot;, label=T)+NoLegend()+ggtitle(&quot;No Int&quot;)
 )</code></pre>
-<p><img src="assets/workflows/int.png" /></p>
+<p><img src="assets/workflows/sc/int.png" /></p>
 <pre class="r"><code>FetchData(data, c(&quot;ident&quot;,&quot;geo&quot;)) %&gt;% group_by(ident) %&gt;%
     mutate(prop=1/length(ident)) %&gt;%
     ungroup() %&gt;%
@@ -1557,7 +1589,7 @@ plot_grid(
     ggplot(aes(x=ident,fill=batch,y=totprop)) +
     geom_bar(position=&#39;fill&#39;, stat=&#39;identity&#39;) + 
     theme(axis.text.x =element_text(angle = 45,hjust=1))+scale_y_continuous(name=&quot;Cluster Proportion&quot;)+ theme_classic()</code></pre>
-<p><img src="assets/workflows/int3.png" /></p>
+<p><img src="assets/workflows/sc/int3.png" /></p>
 <p><strong>Cluster 8,14, 20 needs to be investigated. If they are real
 clusters that could exist in those samples, then it is not a batch
 effect. If those clusters are identical but slightly different from the
