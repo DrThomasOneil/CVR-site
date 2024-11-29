@@ -11,10 +11,10 @@ Go to:
  
 - [About Me](https://drthomasoneil.github.io/CVR-site/about.html)
 - [Custom Functions](https://drthomasoneil.github.io/CVR-site/functions.html)
-- Workflows
+- **Workflows**
   - [Single Cell RNA processing and analysis using public data](https://drthomasoneil.github.io/CVR-site/workflow_sc.html)
-- [ShinyApps](https://drthomasoneil.github.io/CVR-site/apps.html)
-  - Flow Analysis using Spectre
+- **ShinyApps**
+  - [Flow Analysis using Spectre](https://drthomasoneil.github.io/CVR-site/app_flowInt.html)
 - Datasets
   - Gut
     - [Domanska et al. 2021](https://drthomasoneil.github.io/CVR-site/ds_Domanska.html)

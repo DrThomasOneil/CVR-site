@@ -16,7 +16,7 @@ navbar:
   - text: ShinyApps
     menu: 
       - text: "Flow Integration"
-        href: apps.html
+        href: app_flowInt.html
   - text: "Datasets"
     menu:
       - text: "Domanska et al."
