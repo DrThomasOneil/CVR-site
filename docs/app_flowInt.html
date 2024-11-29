@@ -11,7 +11,7 @@
 
 
 
-<title>About Me</title>
+<title>Flow Cytometry Integration</title>
 
 <script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -30,6 +30,7 @@
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
@@ -228,6 +229,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -318,9 +322,17 @@ $(document).ready(function () {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
-<h1 class="title toc-ignore">About Me</h1>
+
+<h1 class="title toc-ignore">Flow Cytometry Integration</h1>
 
 </div>
 
@@ -542,10 +554,11 @@ have uncommitted changes.
 
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/about.Rmd</code>) and HTML
-(<code>docs/about.html</code>) files. If you’ve configured a remote Git
-repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
-in the table below to view the files as they were in that past version.
+made to the R Markdown (<code>analysis/app_flowInt.Rmd</code>) and HTML
+(<code>docs/app_flowInt.html</code>) files. If you’ve configured a
+remote Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -571,10 +584,10 @@ Message
 <tbody>
 <tr>
 <td>
-html
+Rmd
 </td>
 <td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/8f1c3b03ad783746cd9174fc1b8788aa802ca82f/docs/about.html" target="_blank">8f1c3b0</a>
+<a href="https://github.com/DrThomasOneil/CVR-site/blob/aa234dd6b7466fcdf3ab8e387709213fee9918ed/analysis/app_flowInt.Rmd" target="_blank">aa234dd</a>
 </td>
 <td>
 DrThomasOneil
@@ -583,976 +596,7 @@ DrThomasOneil
 2024-11-29
 </td>
 <td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/d543983294d6421e05c9f88d5f02b94025ac7ac3/docs/about.html" target="_blank">d543983</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-28
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/df4f34929a9d0c16d8a84b853b5be3489eee3ca8/analysis/about.Rmd" target="_blank">df4f349</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-28
-</td>
-<td>
 Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/365a87048da5a3b7544e950faca1c1b8905482d3/docs/about.html" target="_blank">365a870</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-28
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/63bccfd54a1866778835eb483c0ca1b300fa41e3/docs/about.html" target="_blank">63bccfd</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-28
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/c1712802a00982246ee6ec8953a6dcf13547c412/analysis/about.Rmd" target="_blank">c171280</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-28
-</td>
-<td>
-Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/73f1db306dcf100f1f07b6d8c7ee352246a2114b/docs/about.html" target="_blank">73f1db3</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-28
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/293911d60dc3e27f522d543cd6fe37a287fc3882/docs/about.html" target="_blank">293911d</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-28
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/a599253e223c72352b34f50ffd0113d27a2c9c83/docs/about.html" target="_blank">a599253</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-27
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/fe35d25fb4d4bfb367695dc3c4f344835340da32/docs/about.html" target="_blank">fe35d25</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-26
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/c0363a3f6df5068a2fb15a244e06da44ec4af04e/docs/about.html" target="_blank">c0363a3</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-26
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/1b209b46af27b18364d13614f67c95d72dcc55fd/docs/about.html" target="_blank">1b209b4</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/5217986949a4a17821998c108e1165775ae80de2/docs/about.html" target="_blank">5217986</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/a706bd53bd2fb22a2409d0f423360602053e826a/analysis/about.Rmd" target="_blank">a706bd5</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/6e5880769a6c5e220d298281c0fa20c80473f6c5/docs/about.html" target="_blank">6e58807</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/b5edf53e38c14ae723a2ad8030bc6fa594636513/analysis/about.Rmd" target="_blank">b5edf53</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/ec67e7cccd00e03b2d2418d003ff9dd85b4c40bc/docs/about.html" target="_blank">ec67e7c</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/d6f999ae55c48d1494ef718dd98721c93528f8da/analysis/about.Rmd" target="_blank">d6f999a</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/e0991a346c81b213664a9d0ad81568766adde905/docs/about.html" target="_blank">e0991a3</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/490ea80ff004c4e85ecf3ad7292852209ebb197d/analysis/about.Rmd" target="_blank">490ea80</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/d35071d66ffca4c05fb3bb1404b9f171ed47c7cc/docs/about.html" target="_blank">d35071d</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/21ee73f527025cfab4845c8228ba289a3f11ead1/analysis/about.Rmd" target="_blank">21ee73f</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/7760ddbfb4b1abe7f3fd3505a2073a6169569a14/docs/about.html" target="_blank">7760ddb</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/2d957a5aab257ab4a8fbe7ba845de87666406781/docs/about.html" target="_blank">2d957a5</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/6c0a2c5d4d85e0ff82f07788dfdda8a86ba9b7df/analysis/about.Rmd" target="_blank">6c0a2c5</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/38104b412629ff3551d04be9ff85e7ff8d7dd502/docs/about.html" target="_blank">38104b4</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/9444cc8973ef355c2d3f074edd73884d5a5f13f5/analysis/about.Rmd" target="_blank">9444cc8</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/e9a36e0199172c5ba695ea541054db20f8918cf9/docs/about.html" target="_blank">e9a36e0</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/566e2055046718642ee1f96017efb6a75f72d624/docs/about.html" target="_blank">566e205</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/2486ea04b8171f99e9117f86dd7304258727fe95/analysis/about.Rmd" target="_blank">2486ea0</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-22
-</td>
-<td>
-Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/50a66605c6f16320de2f6431b1dc7ba42eef81a1/docs/about.html" target="_blank">50a6660</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/4ae72fdd053733dba606b98bf2f5f07862408c7e/docs/about.html" target="_blank">4ae72fd</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/e6f3b6114b1b159540902b76fa206cadd180138e/analysis/about.Rmd" target="_blank">e6f3b61</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-11
-</td>
-<td>
-Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/e13bbf00002cba7eadf043ef6ed78c85bd709f0b/docs/about.html" target="_blank">e13bbf0</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-11-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/274b37366cb4f2c3e58d0f46e5d34d2534e09a41/docs/about.html" target="_blank">274b373</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-16
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/2b49a4e944f37b40244b3538480131bcef8058a3/docs/about.html" target="_blank">2b49a4e</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-16
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/984244da32e640a649caee4eeceb5e8c140c5410/analysis/about.Rmd" target="_blank">984244d</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-16
-</td>
-<td>
-Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/f1b77856d592d769a3f5046603e0def686c6290b/docs/about.html" target="_blank">f1b7785</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-16
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/00814a15244591d923a0d791e4de0323fa18c726/analysis/about.Rmd" target="_blank">00814a1</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-16
-</td>
-<td>
-Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/55cb64128976ac40cebe60c39ce751121cdb12d7/docs/about.html" target="_blank">55cb641</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/14740d6ae1ed30de61645e927589ea99265b0c4e/docs/about.html" target="_blank">14740d6</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/d05f962d9cd033a976a1ddf57a3f62beb258dee3/docs/about.html" target="_blank">d05f962</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/e15a9790d600e6839e5b417a692019c718026c27/docs/about.html" target="_blank">e15a979</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/ccb41001bc218f1d310359fd192de660632bab71/docs/about.html" target="_blank">ccb4100</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/c6a226cb63cc3719ac0710685da1801f335aa787/docs/about.html" target="_blank">c6a226c</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/aa8d9996d5c4a60043f40cbdd50001b71831ae9a/analysis/about.Rmd" target="_blank">aa8d999</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/422e8062a2e1af128863ac5659ad2f096a6119aa/docs/about.html" target="_blank">422e806</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/ed05ec9c71b325cc943d7433c3263c7a6cae2a02/docs/about.html" target="_blank">ed05ec9</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/6aa27db1972a6a5cb17e228123b57ce09b00f1e8/docs/about.html" target="_blank">6aa27db</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/4f0af5535698dc3cd6efdd166d109ae1aace231b/docs/about.html" target="_blank">4f0af55</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/135af2d83c70d9b3e16982cf7e7248789cbe6f99/analysis/about.Rmd" target="_blank">135af2d</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/90f2487f0b1d2841b1468d17f879957f5a8302eb/docs/about.html" target="_blank">90f2487</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/da5b66db6663ca3b6035e8627a5655820f743c8c/docs/about.html" target="_blank">da5b66d</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/402f8cbb1ce821a44fdcc8de959d0f6f61702694/docs/about.html" target="_blank">402f8cb</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/7f59c95db0cb487774c29e7dbf5463a301b43d6d/docs/about.html" target="_blank">7f59c95</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-02
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/3ab3599c4ba92cca2ac4287406bbe71821524af1/analysis/about.Rmd" target="_blank">3ab3599</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-02
-</td>
-<td>
-Publish the updated files for myproject
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/DrThomasOneil/CVR-site/0d13959e7f82bd24a1b27db73beeebf9f5495fa3/docs/about.html" target="_blank">0d13959</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-02
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/DrThomasOneil/CVR-site/blob/ff68eab60d289de7498a09b758e1ecaf7acf4d86/analysis/about.Rmd" target="_blank">ff68eab</a>
-</td>
-<td>
-DrThomasOneil
-</td>
-<td>
-2024-10-02
-</td>
-<td>
-Start workflowr project.
 </td>
 </tr>
 </tbody>
@@ -1562,18 +606,179 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<hr />
-<div style="text-align: left;">
-<img src="assets/headshot.jpg" alt="Image" style="width: 2in; float: left; margin-right: 10px;">
-<div style="overflow: hidden; padding-top: 12%;">
-
-<div id="dr.-thomas-oneil" class="section level2">
-<h2>Dr. Thomas O’Neil</h2>
-<p><strong>Postdoctoral Researcher</strong><br />
-This site is information about me. It is also a collection of scripts,
-workflows and information about the regular analysis that I perform.</p>
-<hr>
+<div id="flow-cytometry-integration"
+class="section level1 tabset tabset-fade">
+<h1 class="tabset tabset-fade">Flow Cytometry Integration</h1>
+<p>I’ve built a flow cytometry app which automates a lot of the
+repetitive processes involved in the Spectre R package.</p>
+<p>Particularly, it allows you to set individual cofactors for scaling
+channel values. The default is to set a single cofactor, which may be
+comparable to setting the same axes setting in FlowJo for all channels.
+Each channel may need to be adjusted individually, and this app allows
+you to do this comparatively rapidly.</p>
+<p>The authors of the <a
+href="https://immunedynamics.io/spectre/cytometry/#tutorials">Spectre
+site</a> provide more details on how to use the app, such as
+transformations and choosing markers for clustering.</p>
+<div id="step-1-r-set-up" class="section level3">
+<h3>Step 1: R set up</h3>
+<p>I’ve made a template folder for this analysis: <a
+href="https://github.com/DrThomasOneil/CVR-site/raw/refs/heads/master/docs/assets/apps/flow_template.zip">download</a></p>
+<p>The folder structure when unzipped will be:</p>
+<pre class="r"><code>flow_template
+  |
+  |_app_flow.R
+  |
+  |_flow
+  |  |_sample1.csv
+  |  |_sample2.cs
+  |_meta
+  |_output</code></pre>
+<p><strong>Open the</strong> <code>app_flow.R</code>
+<strong>file.</strong></p>
+<p>Here you’ll see a few lines that you need to run first.</p>
+<p>To set your working directory:<br />
+<code>wd &lt;- dirname(rstudioapi::getActiveDocumentContext()$path)</code><br />
+<code>setwd(wd)</code></p>
+<p>In case you’ve buggered with the folder structure:<br />
+<code>if(!file.exists("flow")){dir.create("flow")}</code><br />
+<code>if(!file.exists("meta")){dir.create("meta")}</code><br />
+<code>if(!file.exists("output")){dir.create("output"); dir.create("output/rds"); dir.create("output/features")}</code></p>
+<p>And packages you’ll need to install and load:</p>
+<pre class="r"><code>library(Spectre)
+library(Seurat)
+library(ggplot2)
+library(shiny)
+library(DT)
+library(data.table)</code></pre>
 </div>
+<div id="step-2-add-flow-data-to-the-flow-folder"
+class="section level3">
+<h3>Step 2: Add flow data to the ‘flow’ folder</h3>
+<p>From FlowJo, you’ll want to export your parent population (e.g. CD4+
+T cells, MNPs, B cells, All Immune cells) as a csv.</p>
+<p>You’ll need to export as <strong>Scale values</strong>, and make sure
+you select compensated channels.</p>
+<p>Export/move these files to the <code>/flow</code> folder.</p>
+</div>
+<div id="step-3-adjust-cofactors-and-filters" class="section level3">
+<h3>Step 3: Adjust cofactors and filters</h3>
+<p>In the original Spectre script, you have the option to set a single
+cofactor. This is almost equivalent to setting the scale once in flowjo
+to apply to all channels. We know using tissue and different
+samples/batches sometimes requires drastically different
+transformations.</p>
+<p>The <a
+href="https://immunedynamics.io/spectre/cytometry/#tutorials">Spectre
+site</a> provides details on transformations</p>
+<p>To do this manually, I might think would be a bit of a nightmare. So
+I’ve made the first app so that you are able to view and set thresholds
+per marker per sample.</p>
+<p>To get started, run the app using:<br />
+<code>source("https://raw.githubusercontent.com/CVR-MucosalImmunology/Rshiny/refs/heads/main/flow_setup.R");shinyApp(ui,server);rm(ui,server)</code></p>
+<details>
+<summary>
+App Window
+</summary>
+<p><br> <img src="assets/app1.png" /></p>
+<hr>
+</details>
+<hr>
+<div id="how-to-use" class="section level4">
+<h4>How to use:</h4>
+<ol style="list-style-type: decimal">
+<li>You’ll first load in a sample by selecting one and clicking
+<strong>Update sample</strong>.</li>
+<li>This will load in the channels. Select the channel you want to
+adjust, and then a Y channel. Click both <strong>Update axes</strong>
+and <strong>Update plot</strong>.</li>
+<li>Adjust the <code>arcsinh cofactor</code> and <code>filter</code>
+values on the right for each channel. Adjust the filter to remove lower
+outlier values. Increasing the <code>cofactor</code> value squishes
+values into the negative more. You might notice that when you use a
+value that is two low, it starts to split the negative into two
+populations. This value therefore needs to be somewhat informed by the
+user.</li>
+<li>Once you’re happy with the threshold, click <code>Add Data</code>.
+You’ll notice that the table on the right hand side updates.</li>
+<li>Not every marker needs to be adjusted - just markers you wish to
+view after analysis (including markers you don’t plan on clustering
+with).</li>
+<li>Click <code>Save</code> when you’re done. This should then add a
+<code>.csv</code> file to the <code>meta/</code> folder in your root
+directory. If you want to come back and adjust any values, you have the
+option to do so by just directly editing this file.</li>
+<li>Repeat this for all samples you want to integrate!</li>
+</ol>
+<details>
+<summary>
+Notes:
+</summary>
+<ul>
+<li>You’ll notice two extra buttons. Phenotypic and Cluster marker.
+These are redundant and I’ll probably remove these at a later time.</li>
+<li>As I said in step 6, you can just directly adjust the csv’s in
+excel. Make sure not to change anything unnecessarily. The rpca app
+relies on this.</li>
+</ul>
+</details>
+</div>
+</div>
+<div id="step-4-rpca-integration" class="section level3">
+<h3>Step 4: RPCA integration</h3>
+<p>After you’ve set the co-factors and filters, you can run the rpca
+integration app.</p>
+<p><code>source("https://raw.githubusercontent.com/CVR-MucosalImmunology/Rshiny/refs/heads/main/flow_integration.R");shinyApp(ui,server);rm(ui,server)</code></p>
+<p>This app takes the files in the <code>flow/</code> and corresponding
+<code>meta/</code> folder. This is where it becomes very efficient.</p>
+<p>You can choose which samples you want to integrate. It’ll then load
+the markers to choose from. Click <strong>Run RPCA</strong> and wait.
+Depending on the number of samples, it may take a while. If you’re
+worried, go to the RStudio window and you’ll see the functions running
+in the background.</p>
+<p>Some things to consider:</p>
+<ul>
+<li>To run quickly, this function cuts the samples down to 6000 cells.
+If you want to run more cells, let me know and we can adjust the script
+to choose cell numbers, or change the code itself.<br />
+</li>
+<li>…</li>
+</ul>
+<details>
+<summary>
+View App:
+</summary>
+<img src="assets/app2.png" /> <br>
+<hr>
+</details>
+<p><br> To do this manually could take quite a while. Now you’re able to
+rapidly remove samples that aren’t working, remove or add markers to
+check how they alter the clustering, etc.</p>
+<div id="visualisation" class="section level4">
+<h4>Visualisation</h4>
+<p>You can now check where markers are lying on the Umap by selecting a
+marker and clicking <strong>Update</strong>.</p>
+</div>
+<div id="soms-clustering" class="section level4">
+<h4>SOMS clustering</h4>
+<p>You can also very rapidly test out different k cluster values. Change
+the <code>clusters</code> value and click <strong>Update K</strong>.</p>
+</div>
+<div id="export-data" class="section level4">
+<h4>Export data</h4>
+<p>When you’re happy with integration and SOMS clustering, you can
+export all data and graphs. Change the <code>prefix</code> to make the
+output files unique (in case you want to export more than once).</p>
+<p>What is exported is:</p>
+<ul>
+<li>Pre and post integration graphs<br />
+</li>
+<li>SOMS cluster umap<br />
+</li>
+<li>The expression plots of each marker used for clustering<br />
+</li>
+<li>The rmd of the data</li>
+</ul>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1615,6 +820,8 @@ loaded via a namespace (and not attached):
 [33] later_1.3.2       digest_0.6.37     R6_2.5.1          utf8_1.2.4       
 [37] pillar_1.9.0      callr_3.7.6       magrittr_2.0.3    bslib_0.8.0      
 [41] tools_4.4.0       cachem_1.1.0      getPass_0.2-4    </code></pre>
+</div>
+</div>
 </div>
 </div>
 
@@ -1665,6 +872,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
