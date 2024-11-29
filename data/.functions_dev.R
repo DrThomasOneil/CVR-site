@@ -224,7 +224,7 @@ plotSankey<-function(seuratObj,idvar=c("varRes.0.3","emt_res.0.3"), useful_featu
   #my.data<-as.factor(my.data[,1])
   SankeyDiagram(my.data[, -grep("COUNT",colnames(my.data))],link.color = "Source",weights = my.data$COUNT,,max.categories = 100)
 } #Y
-proportions <- function(data, ident.1, ident.2, position, useful_features=F, facet="") {
+proportions <- function(data, ident.1, ident.2, position="fill", useful_features=F, facet="") {
   source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.additional_functions.R", local=T)
   if(useful_features){
     cat("\nCollecting metadata:\n\n")
@@ -256,7 +256,7 @@ proportions <- function(data, ident.1, ident.2, position, useful_features=F, fac
       ggplot(aes(x=ident.2,fill=ident.1,y=totprop)) +
       geom_bar(position=position, stat='identity') + theme(axis.text.x =
                                                              element_text(angle = 45,hjust=1))+scale_y_continuous(name="Cluster
-      Proportion")+ theme_classic()
+      Proportion")+ theme_classic()+facet_wrap(~facet, scales="free_x")
   }
 
 } #Y
