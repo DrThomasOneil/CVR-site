@@ -24,7 +24,7 @@ loadPack <- function() {
   #FUTURE TOM: ADD PACKAGES HERE!
   packages1 <- c("ggplot2", "rstudioapi", "rmarkdown", 'tidyr', "cli", "knitr", "dplyr", "Seurat","SeuratObject",
                  "SeuratDisk", "flipPlots",'stringr', "crayon","Matrix", "cowplot", 'scater', "BiocParallel",
-                 "ComplexHeatmap","readxl", "ggpubr", "scales", "ggvenn")#, "Test")
+                 "ComplexHeatmap","readxl", "ggpubr", "scales", "ggvenn", "GEOquery")#, "Test")
 
   for (i in 1:length(packages1)){
     if(requireNamespace(packages1[i], quietly = TRUE)==F) {
