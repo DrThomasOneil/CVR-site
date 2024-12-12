@@ -345,7 +345,7 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
   # themes
   error <- combine_ansi_styles(make_ansi_style("#8B0000", bg = TRUE, bold = TRUE), col_white)
   warn <- combine_ansi_styles(make_ansi_style("#FFFF00", bg = TRUE, bold = TRUE), "#000000")
-  # errors ------------------------------------------------------------------
+  # errors
   if(prod(is.character(c(name, output)), is.logical(c(top,useful_features,skip)), is.numeric(dq))==0){return(printMessage("Check arguments and try again!", theme=error))}
   if(length(output) != 1 | sum(!output %in% c("plot", "data"))!=0) {return(cat(error("\n\tChoose one of the two outputs:\t\t   \n\t - \"data\" to add ModuleScore to data, or   \n\t -\"plot\" to just output plots\t\t   ")))}
   if(!assay %in% names(data@assays)){return(printMessage("**Assay is not present in Seurat Object**", theme=error))}
@@ -376,13 +376,13 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
   genes <- na.omit(genes)
   if(useful_features){cycle(seconds = runif(1, min = 1, max=8))}
 
-  # Check which genes present in assay --------------------------------------
+  # Check which genes present in assay
   cat(bold(green("\n\nChecking genes are present:\n\n")))
   if(useful_features){progress(max=3)}
 
   na=c(); mod <-c() #not in object/for module scoring
   for(i in 1:length(genes)){
-    if(sum(grepl(paste0("^",genes[i],"$"), rownames(data@assays$SCT$data)))==0){
+    if(sum(grepl(paste0("^",genes[i],"$"), rownames(data[[assay]]$data)))==0){
       na <- c(na, genes[i])
     } else {
       mod <- c(mod, genes[i])
@@ -391,7 +391,7 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
 
   # return error and leave if after checking genes in data not greater than 2
   if(length(mod)<2){
-    return(printMessage(message="You do not have enough genes for a module score"), theme=error)
+    return(printMessage(message="You do not have enough genes for a module score", theme=error))
   }
   # print genes not found in the data
   cat(bold(green("\nDONE!\n\n")))
@@ -467,8 +467,8 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
     data@meta.data <- data@meta.data %>%
       mutate(tmp=rowMeans(FetchData(data, above, layer='data', assay=assay))) %>%
       rename_with(~ name, .cols = "tmp")
-      }
-  # plot or data ------------------------------------------------------------
+  }
+  # plot or data
   if(output == "plot") {
 
     if(length(compar)==0){
@@ -502,24 +502,23 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
       }
       p3 <- suppressMessages(SpatialFeaturePlot(data, input, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option="A")+NoLegend() + ggtitle(paste("Gene:", input)))
     } else {
-      p1 <- suppressMessages(FeaturePlot(data, name, alpha=c(0,0), assay=assay)+scale_fill_viridis_c(option="A")+NoLegend()+ggtitle("Tissue"))
       max_value <- NA
-      suppressMessages(print(FeaturePlot(data, name, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option="A")+ ggtitle(paste("Module:", name))))
+      suppressMessages(print(FeaturePlot(data, name)+scale_fill_viridis_c(option="A")+ ggtitle(paste("Module:", name))))
       repeat {
         max2 <- readline(prompt = "Change max threshold (type Y to continue): ")
         if (toupper(max2) == "Y") {
-          p2 <- suppressMessages(FeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value, assay=assay) +
+          p2 <- suppressMessages(FeaturePlot(data, name, max.cutoff = max_value) +
                                    scale_fill_viridis_c(option = "A") + NoLegend()+ ggtitle(paste("Module:", name)))
           break
         } else if (!is.na(as.numeric(max2))) {
           max_value <- as.numeric(max2)
-          suppressMessages(print(FeaturePlot(data, name, alpha = c(0, 1), max.cutoff = max_value, assay=assay) +
+          suppressMessages(print(FeaturePlot(data, name, max.cutoff = max_value) +
                                    scale_fill_viridis_c(option = "A") + ggtitle(paste("Module:", name))))
         } else {
           cat("Invalid input. Please enter a numeric value or 'Y' to continue.\n")
         }
       }
-      p3 <- suppressMessages(FeaturePlot(data, input, alpha=c(0,1), assay=assay)+scale_fill_viridis_c(option="A")+NoLegend() + ggtitle(paste("Gene:", input)))
+      p3 <- suppressMessages(FeaturePlot(data, input)+scale_fill_viridis_c(option="A")+NoLegend() + ggtitle(paste("Gene:", input)))
 
     }
     m <- data@meta.data %>% select(name)
@@ -528,7 +527,7 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
     p4 <- VlnPlot(data, input, group.by="moduleScore")+NoLegend()
     printMessage("Printing plots")
     if(df_out){print(df)}
-    print(suppressMessages(plot_grid(p1,p2,p3,p4)))
+    print(suppressMessages(plot_grid(p2,p3,p4)))
     return(p2)
   } else {
     if(df_out){print(df)}
@@ -540,6 +539,7 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
   }
   rm(progress, cycle)
 }
+
 
 # Troll -------------------------------------------------------------------
 # progress <- function(max=3) {
