@@ -24,7 +24,7 @@ loadPack <- function() {
   #FUTURE TOM: ADD PACKAGES HERE!
   packages1 <- c("ggplot2", "rstudioapi", "rmarkdown", 'tidyr', "cli", "knitr", "dplyr", "Seurat","SeuratObject",
                  "SeuratDisk", "flipPlots",'stringr', "crayon","Matrix", "cowplot", 'scater', "BiocParallel",
-                 "ComplexHeatmap","readxl", "ggpubr", "scales", "ggvenn", "GEOquery")#, "Test")
+                 "ComplexHeatmap","readxl", "ggpubr", "scales", "ggvenn", "GEOquery", "SeuratWrappers")#, "Test")
 
   for (i in 1:length(packages1)){
     if(requireNamespace(packages1[i], quietly = TRUE)==F) {
@@ -52,6 +52,55 @@ loadPack <- function() {
 loadPack()
 source("https://raw.githubusercontent.com/tomoneil58/LabCode/main/HPA/HPA.R") #Y
 #theme_set(theme_classic())
+newProject <- function(dir = "~/Desktop", name = "newProject") {
+  # Ensure the directory exists
+  if (!dir.exists(dir)) {
+    stop("The specified directory does not exist.")
+  }
+
+  # Create the new project directory
+  project_path <- file.path(dir, name)
+  if (dir.exists(project_path)) {
+    stop("The project directory already exists.")
+  }
+  dir.create(project_path)
+
+  # Define the content for the RMarkdown file
+  rmd_content <-
+    '---
+title: "Title"
+date: "`r Sys.Date()`"
+author: "Thomas O\'Neil (thomas.oneil@sydney.edu.au)"
+output:
+  html_document:
+    fig_caption: yes
+    number_sections: no
+    embed-resources: true
+    theme: flatly
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_folding: hide
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=F, message = F)
+source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/.functions_dev.R")
+```
+<h4> My [GitHub](https://drthomasoneil.github.io/CVR-site/index.html) </h4>
+
+  # Introduction{.tabset .tabset-fade}
+  '
+
+  rmd_path <- file.path(project_path, "script.rmd")
+  writeLines(rmd_content, con = rmd_path)
+
+  message("New project created at: ", project_path)
+}
+
 
 # Processing --------------------------------------------------------------
 process <- function(dat=dat, dimuse = 1:15, features=800, verbose=F, reduction.name=NULL, useful_features=F){
@@ -183,6 +232,16 @@ qcMe <- function(data, nfeat=200, ncount=NA, percent.mito = 5, assay="RNA", col_
   }
 }
 # Tools -------------------------------------------------------------------
+done<- function(message='done!') {
+  letters <- readRDS(url("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/master/data/letters/letters.rds"))
+  message <- tolower(message)
+  chars <- str_split(message, "")[[1]]
+  message <- do.call(cbind, lapply(chars, function(char) letters[[char]]))
+  cat("\n\n");for(i in 1:8) {
+    cat(message[i,],"\n")
+  };cat("\n")
+}
+
 check <- function(data, pattern = "CD") {
   x=grep(pattern, rownames(data), value=T)
   if(length(x)==0) {
@@ -190,15 +249,18 @@ check <- function(data, pattern = "CD") {
   } else {
     print(x)
   }
-} #TODO
+}
+
 printMessage <- function(message = "Message", space=4, theme=NULL, bg = "#FFFFFF",txt= "#BB0000", bold=T){
   if(is.null(theme)){theme <- combine_ansi_styles(make_ansi_style(bg, bg = TRUE, bold = bold), txt)}
   message=paste(paste(rep(" ", space), collapse=""), message, paste(rep(" ", space), collapse=""), collapse="")
   cat(theme(paste(rep(" ", nchar(message)), collapse=""), "\n",message, '\n',paste(rep(" ", nchar(message)), collapse="")), "\n\n")
 }
+
 maxSize <- function(GB=3) {
   options(future.globals.maxSize = GB * 1024^3)
 }
+
 topm <- function(data, min.diff.pct = 0.01, n=40, logfc = 0.1) {
   FindAllMarkers(data, only.pos=T, min.diff.pct = min.diff.pct, logfc.threshold = logfc) %>%
     filter(p_val_adj <0.0001) %>%
@@ -540,7 +602,14 @@ checkModule <- function(data, genes, name="ModScore", mean =F, spatial=T,dq=0.1,
   rm(progress, cycle)
 }
 
-
+{
+done("beep")
+done("boop")
+done("beep")
+cat("\n\n")
+done("happy")
+done("coding")
+}
 # Troll -------------------------------------------------------------------
 # progress <- function(max=3) {
 #
