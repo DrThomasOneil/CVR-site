@@ -1,3 +1,6 @@
+#####
+
+{
 letters <- list()
 
    ####
@@ -514,29 +517,32 @@ letters[["z"]] <- c(
     ###
 
 letters[["!"]] <- c(
-  " ","#","#","#","#","#"," ",
-  " ","#","#","#","#","#"," ",
-  " ","#","#","#","#","#"," ",
-  " ","#","#","#","#","#"," ",
-  " "," ","#","#","#"," "," ",
-  " "," "," "," "," "," "," ",
-  " "," ","#","#","#"," "," ",
-  " "," ","#","#","#"," "," "
+  "#","#","#","#","#"," ",
+  "#","#","#","#","#"," ",
+  "#","#","#","#","#"," ",
+  "#","#","#","#","#"," ",
+  " ","#","#","#"," "," ",
+  " "," "," "," "," "," ",
+  " ","#","#","#"," "," ",
+  " ","#","#","#"," "," "
 )
+}
+
+for(i in 1:length(letters)) {
+  letters[[i]] <- matrix(letters[[i]], 
+                         ncol=length(letters[[i]])/8,byrow = T) 
+}
 
 saveRDS(letters, "/Users/thomasoneil/Documents/GitHub/CVR-site/data/letters/letters.rds")
 
-for(i in 1:26) {
-  letters[[i]] <- matrix(letters[[i]], 
-                         ncol=11,byrow = T) 
-}
 
-string <- 'test'
+
+string <- 'test!'
 
 chars <- str_split(string, "")[[1]]
 
 string <- do.call(cbind, lapply(chars, function(char) letters[[char]]))
 
 cat("\n\n");for(i in 1:8) {
-  cat(d[i,]," ",o[i,]," ",n[i,]," ",e[i,],"\n")
+  cat(string[i,], "\n")
 };cat("\n")
