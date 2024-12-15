@@ -64,7 +64,11 @@ newProject <- function(dir = "~/Desktop", name = "newProject") {
     stop("The project directory already exists.")
   }
   dir.create(project_path)
-
+  dir.create(paste0(project_path, "/raw"))
+  dir.create(paste0(project_path, "/data"))
+  dir.create(paste0(project_path, "/plots"))
+  dir.create(paste0(project_path, "/scripts"))
+  dir.create(paste0(project_path, "/other"))
   # Define the content for the RMarkdown file
   rmd_content <-
     '---
@@ -95,12 +99,11 @@ source("https://raw.githubusercontent.com/DrThomasOneil/CVR-site/refs/heads/mast
   # Introduction{.tabset .tabset-fade}
   '
 
-  rmd_path <- file.path(project_path, "script.rmd")
+  rmd_path <- file.path(project_path, "start.rmd")
   writeLines(rmd_content, con = rmd_path)
 
   message("New project created at: ", project_path)
 }
-
 
 # Processing --------------------------------------------------------------
 process <- function(dat=dat, dimuse = 1:15, features=800, verbose=F, reduction.name=NULL, useful_features=F){
