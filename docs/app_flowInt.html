@@ -3,7 +3,32 @@
 <html>
 
 <head>
+<script>
+  // Set the valid password
+  const validPassword = "pw"; 
+  
+  document.addEventListener("DOMContentLoaded", () => {
+    document.body.style.display = "none"; 
+  
+    function validatePassword() {
+      let authenticated = false;
 
+      while (!authenticated) {
+        const password = prompt("Enter password:");
+  
+        if (password === validPassword) {
+          document.body.style.display = "block"; 
+          authenticated = true; // Exit the loop
+        } else {
+          alert("Incorrect password. Please try again.");
+        }
+      }
+    }
+  
+      // Call the password validation function
+    validatePassword();
+  });
+</script>
 <meta charset="utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
