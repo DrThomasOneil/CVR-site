@@ -1,1 +1,1 @@
-https://paypal.me/drthomasoneil?country.x=AU&locale.x=en_AU|CNMZSD|OAZQ-ATSSNM
+https://paypal.me/drthomasoneil?country.x=AU&locale.x=en_AU+CNMZSD+OAZQ-ATSSNM
