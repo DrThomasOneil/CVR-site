@@ -2,4 +2,4 @@ roadmap,key,size,rating,theme,download,foldername,descript
 Getting Started,gen1,1GB,1,General,,Getting Started,Getting Started
 TEST2,gen2,2GB,3,General,,test2,Test2
 TEST3,gen3,20MB,4,General,,test3,Test3
-Python,bil1,5MB,3,Bilingual,,python,Intro to python
+Python,bil1,5MB,3,Bilingual,https://github.com/DrThomasOneil/CVR-site/raw/refs/heads/master/docs/assets/python.zip,python,Intro to python
